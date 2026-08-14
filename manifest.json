@@ -10,7 +10,6 @@
     "sidePanel",
     "scripting",
     "contextMenus",
-    "activeTab",
     "tabs",
     "alarms",
     "notifications"
@@ -63,18 +62,6 @@
     }
   },
   "options_page": "options.html",
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "gate.html",
-        "gate.css",
-        "gate.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
-  ],
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",

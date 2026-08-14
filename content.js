@@ -112,7 +112,8 @@
   }
 
   function esc(s) {
-    return (s || "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+    return (s || "").replace(/[&<>"']/g, (c) => map[c]);
   }
 
   function doTranslate(text, rect) {

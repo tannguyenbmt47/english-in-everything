@@ -11,13 +11,14 @@
   --vi-bg: #f5f8ff;
   --accent: #2563eb;
   --error: #dc2626;
-  --ok: #16a34a;
+  --ok: #15803d;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #1a1a1a;
     --fg: #e7e7ea;
     --muted: #9ca3af;
+    --ok: #4ade80; --error: #f87171;
     --border: #333;
     --primary: #3b82f6;
     --card: #242426;

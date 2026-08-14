@@ -2,8 +2,13 @@
 // script (trang web bất kỳ) và context menu.
 importScripts("config.js", "translator.js", "vocab.js", "notes.js", "todo.js", "cache.js");
 
-// Dọn cache bản dịch quá hạn (>3 tuần) khi service worker khởi động.
-trCachePurge();
+// Dọn cache quá hạn MỖI NGÀY MỘT LẦN. Trước đây gọi thẳng ở top-level, mà
+// service worker MV3 thức dậy theo từng lần chuyển tab/tải trang -> cứ vài chục
+// giây lại đọc toàn bộ chrome.storage (vài MB) rồi vứt đi.
+chrome.alarms.create("cache-purge", { periodInMinutes: 1440 });
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "cache-purge") trCachePurge();
+});
 
 // Phím tắt: mở nhanh side panel / dịch đoạn đang bôi đen.
 chrome.commands.onCommand.addListener(async (command, tab) => {
@@ -22,7 +27,9 @@ chrome.commands.onCommand.addListener(async (command, tab) => {
 // ============================================================
 // NHẮC VIỆC HẰNG NGÀY — thông báo hệ thống đúng giờ đã đặt (mặc định 11h).
 // ============================================================
-const REMINDER_DEFAULT = { enabled: true, items: [{ time: "11:00", text: "Task cứng hằng ngày — bắt tay làm ngay!" }] };
+// Mặc định TẮT: đây là nhánh chạy TRƯỚC cả kiểm tra "cổng học có bật không",
+// nên bật sẵn đồng nghĩa với việc cướp tab của người vừa cài, chưa bật gì cả.
+const REMINDER_DEFAULT = { enabled: false, items: [] };
 
 async function getReminders() {
   const r = await chrome.storage.local.get("reminders");
@@ -203,10 +210,10 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       const translated = await runWithTimeout((signal) => translatePlain({ config, text, signal }), 30000);
       sendToTab(tab.id, { type: "pvt-show-result", title: "Bản dịch", text: translated, term: text });
     } else if (info.menuItemId === "pvt-vocab") {
-      await addVocab({ term: text, meaning: "", source: tab.url }); // lưu ngay
+      await addVocab({ term: text, meaning: "", source: safeOrigin(tab.url) }); // lưu ngay
       sendToTab(tab.id, { type: "pvt-toast", text: `✓ Đã lưu: ${text} — đang tra nghĩa…` });
       const entry = await lookupEntry(config, text, "");
-      await addVocab({ term: text, source: tab.url, ...entry });
+      await addVocab({ term: text, source: safeOrigin(tab.url), ...entry });
       sendToTab(tab.id, { type: "pvt-toast", text: `📖 ${text}${entry.phonetic ? " " + entry.phonetic : ""}: ${entry.meaning}` });
     }
   } catch (err) {
@@ -214,23 +221,47 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   }
 });
 
+// Nguồn của một từ vựng: chỉ giữ origin. URL đầy đủ hay kèm query chứa token
+// phiên đăng nhập, mà nó nằm lại trong kho từ vựng vĩnh viễn.
+function safeOrigin(url) {
+  try { return new URL(url).origin; } catch { return String(url || ""); }
+}
+
 // Chạy một tác vụ có giới hạn thời gian; hết giờ sẽ hủy và báo lỗi rõ ràng.
 function runWithTimeout(fn, ms) {
   const controller = new AbortController();
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => {
       controller.abort();
       reject(new Error(`Quá thời gian chờ máy chủ (${Math.round(ms / 1000)}s). Kiểm tra mạng, API key hoặc thử model khác.`));
-    }, ms)
-  );
-  return Promise.race([Promise.resolve(fn(controller.signal)), timeout]);
+    }, ms);
+  });
+  // clearTimeout: không dọn thì timer + AbortController còn sống thêm 30-60s,
+  // giữ service worker thức dậy vô ích sau khi việc đã xong.
+  return Promise.race([Promise.resolve(fn(controller.signal)), timeout]).finally(() => clearTimeout(timer));
 }
 
 // Nhận yêu cầu từ content script / side panel.
+// Loại yêu cầu hợp lệ. "saveVocab" là thao tác CỤC BỘ nên không đòi API key —
+// trước đây requireConfig() chạy trước mọi nhánh, ai chưa nhập key thì lưu từ
+// cũng hỏng. Việc lọc msg.type sớm cũng để listener này không cướp phản hồi
+// của listener pomodoro (Chrome chỉ nhận sendResponse ĐẦU TIÊN).
+const RPC_TYPES = new Set(["translate", "lookup", "lookupMany", "collocations", "compare", "mnemonic", "lookupWord", "saveVocab"]);
+const MAX_RPC_TEXT = 20000;
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  // Chỉ phục vụ chính extension này, và chỉ những loại đã biết.
+  if (sender.id !== chrome.runtime.id) return;
+  if (!msg || !RPC_TYPES.has(msg.type)) return;
+  if (typeof msg.text === "string" && msg.text.length > MAX_RPC_TEXT) {
+    sendResponse({ ok: false, error: "Đoạn văn bản quá dài." });
+    return true;
+  }
   (async () => {
     try {
-      const config = await requireConfig();
+      // saveVocab lưu được ngay cả khi chưa có API key; các loại còn lại thì cần.
+      const config = msg.type === "saveVocab" ? await getConfig() : await requireConfig();
       if (msg.type === "translate") {
         const cached = await trCacheGet("plain", config.model, config.translatePrompt, msg.text);
         if (cached) { sendResponse({ ok: true, text: cached, cached: true }); return; }
@@ -258,13 +289,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse({ ok: true, entry });
       } else if (msg.type === "saveVocab") {
         // Lưu NGAY để không mất từ; phản hồi tức thì.
-        await addVocab({ term: msg.term, meaning: msg.meaning || "", context: msg.context, source: msg.source });
+        const src = safeOrigin(msg.source);
+        await addVocab({ term: msg.term, meaning: msg.meaning || "", context: msg.context, source: src });
         sendResponse({ ok: true, meaning: msg.meaning || "", pending: !msg.meaning });
         // Tra cứu ở nền (nghĩa + từ điển) rồi cập nhật + báo lại cho tab.
-        if (!msg.meaning) {
+        if (!msg.meaning && config.apiKey) {
           try {
             const entry = await lookupEntry(config, msg.term, msg.context);
-            await addVocab({ term: msg.term, context: msg.context, source: msg.source, ...entry });
+            await addVocab({ term: msg.term, context: msg.context, source: src, ...entry });
             if (sender.tab?.id) sendToTab(sender.tab.id, { type: "pvt-vocab-updated", term: msg.term, ...entry });
           } catch (e) {
             if (sender.tab?.id) sendToTab(sender.tab.id, { type: "pvt-vocab-updated", term: msg.term, meaning: "(chưa tra được nghĩa — " + e.message + ")" });
@@ -477,14 +509,19 @@ function matchedSocialSite(url, sites) {
 }
 
 // Kiểm tra & chặn một tab. Dùng cho cả khi điều hướng lẫn khi chuyển tab.
-async function maybeGate(tabId, url) {
+// onSwitch = true khi chỉ vì người dùng đổi tab / quay lại cửa sổ, chứ không
+// phải họ chủ động mở trang mới. Lúc đó chỉ giữ lại cổng mạng xã hội (đây mới
+// là đường lách thật: mở sẵn Facebook ở tab khác rồi bấm sang). Các cổng còn
+// lại chặn theo URL bất kỳ, áp vào lúc đổi tab thì mọi tab đang mở đều bị thay
+// URL — mất form đang gõ dở, mất vị trí đọc, mất cả state của SPA.
+async function maybeGate(tabId, url, onSwitch = false) {
   if (!url || !/^https?:\/\//i.test(url)) return;
   const gateBase = chrome.runtime.getURL("gate.html");
   if (url.startsWith(gateBase)) return;
 
   // Nhắc việc đang chờ -> CHẶN mọi trang (độc lập với cổng học), cho tới khi xác nhận.
   // Nếu có thời lượng "rời máy" và đã hết giờ -> tự gỡ chặn.
-  const rp = (await chrome.storage.local.get("reminderPending")).reminderPending;
+  const rp = onSwitch ? null : (await chrome.storage.local.get("reminderPending")).reminderPending;
   if (rp) {
     if (rp.awayUntil && Date.now() >= rp.awayUntil) {
       await chrome.storage.local.remove("reminderPending");
@@ -502,6 +539,7 @@ async function maybeGate(tabId, url) {
 
   // 0) VIỆC CẦN LÀM — bắt lập danh sách trước tiên trong ngày.
   if (
+    !onSwitch &&
     s.todoEnabled &&
     now.getHours() >= s.startHour &&
     st.todoDoneDate !== today &&
@@ -513,6 +551,7 @@ async function maybeGate(tabId, url) {
 
   // 1) Cổng HẰNG NGÀY: chặn SUỐT CẢ NGÀY cho tới khi hoàn thành phiên học của ngày đó.
   if (
+    !onSwitch &&
     s.morningEnabled &&
     now.getHours() >= s.startHour &&
     st.morningDoneDate !== today &&
@@ -523,7 +562,7 @@ async function maybeGate(tabId, url) {
   }
 
   // 1.5) NHẬT KÝ: từ journalHour (mặc định 21h) hoặc còn nợ ngày trước -> bắt viết.
-  if (s.journalEnabled && Date.now() > (st.morningSnoozeUntil || 0) && (await journalRequiredDates(s)).length) {
+  if (!onSwitch && s.journalEnabled && Date.now() > (st.morningSnoozeUntil || 0) && (await journalRequiredDates(s)).length) {
     chrome.tabs.update(tabId, { url: `${gateBase}?mode=journal&next=${encodeURIComponent(url)}` }).catch(() => {});
     return;
   }
@@ -551,7 +590,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   try {
     const tab = await chrome.tabs.get(tabId);
-    maybeGate(tabId, tab.url);
+    maybeGate(tabId, tab.url, true);
   } catch { /* tab đã đóng */ }
 });
 
@@ -560,6 +599,6 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
   if (windowId === chrome.windows.WINDOW_ID_NONE) return;
   try {
     const [tab] = await chrome.tabs.query({ active: true, windowId });
-    if (tab) maybeGate(tab.id, tab.url);
+    if (tab) maybeGate(tab.id, tab.url, true);
   } catch { /* bỏ qua */ }
 });

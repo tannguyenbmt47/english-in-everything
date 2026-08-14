@@ -1445,8 +1445,20 @@ function wordHint(term) {
   const letters = term.replace(/[^A-Za-zÀ-ỹ]/g, "").length;
   return parts.join("   /   ") + `  ·  ${letters} chữ cái`;
 }
+// So khớp đáp án phải GIỐNG HỆT cổng học, nếu không cùng một câu trả lời sẽ
+// được chấm đúng ở màn này và sai ở màn kia — kéo theo trừ oan điểm SM-2.
+// Bỏ qua khác biệt dấu nháy cong, gạch nối, khoảng trắng thừa.
 function normAnswer(s) {
-  return (s || "").trim().toLowerCase().replace(/[.,!?;:"']/g, "");
+  return String(s || "").normalize("NFC").trim().toLowerCase()
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
+    .replace(/[.,!?;:"'\u2019\u201d\u201c]/g, "")
+    .replace(/\s+/g, " ");
+}
+function looseAnswer(s) {
+  return normAnswer(s).replace(/[-\s]/g, "");
+}
+function sameAnswerSp(a, b) {
+  return normAnswer(a) === normAnswer(b) || looseAnswer(a) === looseAnswer(b);
 }
 
 el.quizBtn.addEventListener("click", startQuiz);
@@ -1712,7 +1724,7 @@ async function answerMC(opt, btn) {
     btn.classList.add("correct");
     quiz.correct++;
     feedbackOK();
-    await reviewVocab(w.term, true);
+    await reviewVocab(w.term, true, true); // trắc nghiệm = nhận diện
   } else {
     btn.classList.add("wrong");
     [...el.quizOptions.children].forEach((b) => { if (b.textContent === correctText) b.classList.add("correct"); });
@@ -1729,7 +1741,7 @@ el.quizSubmit.addEventListener("click", async () => {
   const ans = normAnswer(el.quizInput.value);
   el.quizInput.disabled = true;
   el.quizSubmit.classList.add("hidden");
-  if (ans && ans === normAnswer(w.term)) { quiz.correct++; feedbackOK(); await reviewVocab(w.term, true); }
+  if (ans && sameAnswerSp(el.quizInput.value, w.term)) { quiz.correct++; feedbackOK(); await reviewVocab(w.term, true); }
   else { feedbackNo(w); quiz.wrong.push(w); await reviewVocab(w.term, false); }
   el.quizNext.classList.remove("hidden");
 });
@@ -2779,8 +2791,10 @@ async function dailyRoutine() {
 }
 
 // ---------- Tiện ích ----------
+// Escape cả " và ' — nội dung do model sinh có đi vào giá trị thuộc tính (href).
+const ESC_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 function escapeHtml(s) {
-  return String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  return String(s).replace(/[&<>"']/g, (c) => ESC_MAP[c]);
 }
 
 // Render Markdown -> HTML tối giản, an toàn (escape trước, chỉ hỗ trợ các phần
@@ -2796,7 +2810,9 @@ function renderMarkdown(md) {
     t = t.replace(/`([^`]+)`/g, "<code>$1</code>");
     t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     t = t.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
-    t = t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // Chỉ nhận http(s) và cấm mọi ký tự có thể thoát khỏi href="..." — model trả về
+    // link là chuyện thường, và tài liệu người dùng nạp có thể prompt-inject.
+    t = t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)"\'<>]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
     return t;
   };
   let html = "";
@@ -2878,6 +2894,7 @@ function setStatus(msg, isError = false) {
 checkApiKey();
 refreshVocabCount();
 refreshKB();
-trCachePurge(); // dọn bản dịch cache quá 3 tuần
+// (Việc dọn cache do service worker chạy 1 lần/ngày — không gọi lại ở đây,
+// mỗi lượt gọi là một lần đọc toàn bộ chrome.storage.)
 // Lưu ý: việc BẮT BUỘC (to-do, học, nhật ký) được cưỡng chế ở TRANG WEB
 // qua gate.html, không popup trong sidebar nữa.

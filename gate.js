@@ -4,10 +4,20 @@
 // trước khi được đi tiếp. Câu sai bị đẩy lại cuối hàng đợi.
 // ============================================================
 
+// Trang này không bao giờ được chạy trong iframe: nếu còn nằm trong
+// web_accessible_resources, một trang bất kỳ có thể nhúng nó để tự chạy phiên
+// học ngầm (đốt API key của người dùng) hoặc clickjacking nút "Bỏ qua".
+if (window.top !== window.self) {
+  document.documentElement.remove();
+  throw new Error("gate.html không được phép chạy trong iframe");
+}
+
 const params = new URLSearchParams(location.search);
 const VALID_MODES = ["morning", "social", "todo", "journal", "reminder"];
 const MODE = VALID_MODES.includes(params.get("mode")) ? params.get("mode") : "morning";
-const NEXT = params.get("next") || "";
+// Chỉ nhận http(s): tránh biến trang chặn thành bàn đạp chuyển hướng tùy ý.
+const NEXT_RAW = params.get("next") || "";
+const NEXT = /^https?:\/\//i.test(NEXT_RAW) ? NEXT_RAW : "";
 
 const el = {
   title: document.getElementById("gTitle"),
@@ -110,8 +120,11 @@ function shuffle(a) {
   }
   return a;
 }
+// Escape ĐỦ cho cả nội dung văn bản lẫn giá trị thuộc tính: thiếu " và ' là
+// mở đường chèn thuộc tính khi chuỗi do model/người dùng sinh nằm trong attr.
+const ESC_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 function esc(s) {
-  return String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ESC_MAP[c]);
 }
 async function getSettings() {
   const r = await chrome.storage.local.get("gateSettings");
@@ -567,7 +580,7 @@ function renderGateJournalDone(done) {
   el.jrDone.innerHTML = "";
   if (!done.length) return;
   el.jrDone.innerHTML =
-    `<div class="g-done-head">✅ Việc bạn đã hoàn thành hôm đó (${done.length}) — đã điền sẵn bên dưới</div>` +
+    `<div class="g-donelist-head">✅ Việc bạn đã hoàn thành hôm đó (${done.length}) — đã điền sẵn bên dưới</div>` +
     "<ul>" + done.map((t) => `<li>${esc(t.text)}</li>`).join("") + "</ul>";
 }
 
@@ -833,7 +846,7 @@ async function askMorningCount(s) {
   el.countOpts.innerHTML = "";
   choices.forEach((n) => {
     const b = document.createElement("button");
-    b.className = "g-count" + (n === floor ? " active" : "");
+    b.className = "g-count-opt" + (n === floor ? " active" : "");
     b.textContent = n === list.length && n !== floor ? `Tất cả (${n})` : String(n);
     b.dataset.n = String(n);
     b.addEventListener("click", () => {
@@ -844,7 +857,7 @@ async function askMorningCount(s) {
   });
 
   onClick(el.startBtn, async () => {
-    const active = el.countOpts.querySelector(".g-count.active");
+    const active = el.countOpts.querySelector(".g-count-opt.active");
     const n = Math.max(floor, parseInt(active?.dataset.n, 10) || floor);
     await buildMorning(s, n, list);
     return LOCK; // phiên đã dựng xong: bấm lại sẽ dựng chồng hàng đợi thứ hai
@@ -922,11 +935,15 @@ async function buildMorning(s, vocabCount, list) {
 
 // ---------- Hiển thị ----------
 let recallOn = true;   // đang ở chế độ gõ đáp án?
+// Đúng ngay lần đầu, tự nhớ ra, khác hẳn đúng sau khi đã xem lựa chọn hoặc đã
+// sai một lần. Cờ này quyết định chấm chất lượng 5 hay 3 cho SM-2.
+let usedHelp = false;
 let mustCopy = false;  // đang bắt chép lại đáp án đúng sau khi sai?
 
 function render() {
   const q = queue[0];
   mustCopy = false;
+  usedHelp = false;
   confuseToken++; // bỏ kết quả tra "nhầm từ" của câu trước nếu về muộn
   hintToken++;    // ... gợi ý nghĩa cũng vậy
   el.type.textContent = q.typeLabel;
@@ -1225,6 +1242,7 @@ function updateCounter() {
 el.hint.addEventListener("click", () => {
   const q = queue[0];
   if (!q || !q.options) return;
+  usedHelp = true; // đã nhìn lựa chọn thì không còn là tự nhớ ra nữa
   el.options.classList.remove("hidden");
   el.options.innerHTML = "";
   q.options.forEach((o) => {
@@ -1279,7 +1297,7 @@ async function handleSubmit() {
     el.hint.classList.add("hidden");
     solved++;
     queue.shift();
-    if (q.kind === "vocab") { try { await reviewVocab(q.term, true); } catch {} }
+    if (q.kind === "vocab") { try { await reviewVocab(q.term, true, usedHelp || q.failed); } catch {} }
     if (q.fromMistake) { try { await markMistakeResult(q.mistakeId, true); } catch {} }
     updateCounter();
     el.next.classList.remove("hidden");
@@ -1293,6 +1311,7 @@ async function handleSubmit() {
     `✗ Đáp án đúng: <b>${esc(q.answer)}</b>` +
     (q.explain ? `<span class="g-explain">${esc(q.explain)}</span>` : "") +
     `<span class="g-explain">Gõ lại đáp án đúng để ghi nhớ rồi bấm Kiểm tra.</span>`;
+  q.failed = true; // lần đúng sau đó chỉ tính là "khó", không phải tự nhớ ra
   mustCopy = true;
   el.input.value = "";
   el.input.focus();
@@ -1319,7 +1338,8 @@ async function answer(opt, btn, q) {
     el.feedback.innerHTML = "✓ Chính xác!" + (q.explain ? `<span class="g-explain">${esc(q.explain)}</span>` : "");
     solved++;
     queue.shift();
-    if (q.kind === "vocab") { try { await reviewVocab(q.term, true); } catch {} }
+    // Chọn A/B/C/D là NHẬN DIỆN, bằng chứng nhớ yếu hơn tự gõ ra -> không thưởng ease.
+    if (q.kind === "vocab") { try { await reviewVocab(q.term, true, true); } catch {} }
     if (q.fromMistake) { try { await markMistakeResult(q.mistakeId, true); } catch {} }
   } else {
     btn.classList.add("wrong");

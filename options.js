@@ -159,7 +159,9 @@ async function load() {
 }
 
 // ---------- Nhắc việc hằng ngày ----------
-const REMINDER_DEFAULT = { enabled: true, items: [{ time: "11:00", text: "Làm việc nhà Phước giao — rời khỏi máy!", awayMin: 30 }] };
+// Giữ khớp với REMINDER_DEFAULT trong background.js — lệch nhau thì trang cấu
+// hình hiện một đằng, service worker lên lịch một nẻo.
+const REMINDER_DEFAULT = { enabled: false, items: [] };
 async function loadReminders() {
   const r = await chrome.storage.local.get("reminders");
   const rem = r.reminders || REMINDER_DEFAULT;

@@ -159,9 +159,9 @@ const GRAMMAR_DATA = [
 <tr><td>Quá khứ hoàn thành</td><td>S + had + V3</td><td>before, after, by the time</td></tr>
 <tr><td>QK hoàn thành tiếp diễn</td><td>S + had been + V-ing</td><td>for/since (trước một mốc QK)</td></tr>
 <tr><td>Tương lai đơn</td><td>S + will + V</td><td>tomorrow, soon, I think/promise</td></tr>
-<tr><td>Tương lai gần</td><td>S + be going to + V</td><td>kế hoạch, dấu hiệu hiện tại</td></tr>
 <tr><td>Tương lai tiếp diễn</td><td>S + will be + V-ing</td><td>at this time tomorrow</td></tr>
 <tr><td>Tương lai hoàn thành</td><td>S + will have + V3</td><td>by + mốc tương lai</td></tr>
+<tr><td>TL hoàn thành tiếp diễn</td><td>S + will have been + V-ing</td><td>by + mốc TL, nhấn thời lượng</td></tr>
 </table></div>
 <h4>Nguyên tắc chọn thì</h4>
 <p>Đừng học vẹt công thức. Hãy tự hỏi ba câu: (1) Hành động thuộc mốc thời gian nào? (2) Nó <b>đang diễn ra</b> hay đã <b>hoàn tất</b>? (3) Có <b>nhấn mạnh sự kéo dài</b> không? Trả lời xong là bạn khoanh vùng được thì cần dùng. Ba nhóm chi tiết ngay bên dưới sẽ giải thích cặn kẽ từng thì.</p>`,
@@ -255,7 +255,7 @@ const GRAMMAR_DATA = [
 <li><b>Lời hứa/đề nghị:</b> <span class="gr-ex">I <b>will help</b> you with your homework.</span></li>
 </ul>
 
-<h4>2. Tương lai gần (be going to)</h4>
+<h4>2. Tương lai gần (be going to) — cấu trúc, không nằm trong 12 thì</h4>
 <p><b>Cấu trúc:</b> <span class="gr-formula">S + am/is/are + going to + V</span></p>
 <p>Khác với <i>will</i>, cấu trúc này dùng cho <b>kế hoạch đã định trước</b> hoặc <b>dự đoán có bằng chứng ở hiện tại</b>:</p>
 <ul>
@@ -449,6 +449,7 @@ const GRAMMAR_DATA = [
 <ul>
 <li>Tính từ <b>ngắn</b> (1 âm tiết): thêm <b>-er + than</b>: <span class="gr-ex">taller than, faster than.</span></li>
 <li>Tính từ <b>dài</b> (≥2 âm tiết): <b>more + adj + than</b>: <span class="gr-ex">more expensive than, more important than.</span></li>
+<li><b>Ngoại lệ quan trọng</b> — tính từ <b>2 âm tiết</b> kết thúc bằng <b>-y, -le, -ow, -er</b> vẫn thêm <b>-er</b> (không dùng <i>more</i>): <span class="gr-ex">happy → happi<b>er</b>, easy → easi<b>er</b>, busy → busi<b>er</b>, simple → simpl<b>er</b>, narrow → narrow<b>er</b>, clever → clever<b>er</b>. <i>(Viết "more happy" là sai — đây là nhóm cực kỳ thông dụng.)</i></span></li>
 </ul>
 <h4>So sánh nhất (superlative)</h4>
 <ul>
@@ -657,7 +658,7 @@ const GRAMMAR_DATA = [
 <tr><td>Lexical Resource</td><td>vốn từ đa dạng, chính xác, collocation</td></tr>
 <tr><td>Grammatical Range & Accuracy</td><td>đa dạng & chính xác cấu trúc câu</td></tr>
 </table></div>
-<p><b>Speaking</b> thay tiêu chí 1 bằng <b>Fluency & Coherence</b> và thêm <b>Pronunciation</b>.</p>
+<p><b>Speaking</b> cũng có <b>4</b> tiêu chí, nhưng khác Writing: <b>Fluency & Coherence</b> (thay cho cả Task Response lẫn Coherence & Cohesion), <b>Lexical Resource</b>, <b>Grammatical Range & Accuracy</b>, và <b>Pronunciation</b>.</p>
 <p class="gr-note">Muốn lên band: giảm lỗi lặp cấu trúc, tăng câu phức đúng ngữ pháp, dùng từ vựng học thuật đúng ngữ cảnh.</p>`,
       },
       {

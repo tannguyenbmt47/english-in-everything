@@ -6,12 +6,15 @@
   --surface: #f3f4f6;
   --card: #f9fafb;
   --primary: #2563eb;
-  --ok: #16a34a;
-  --error: #dc2626;
+  --ok: #15803d;
+  --error: #b91c1c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1a1a1a; --fg: #e7e7ea; --muted: #9ca3af; --border: #333;
+    /* --ok/--error phải khai báo lại: bản sáng (#16a34a/#dc2626) trên nền tối chỉ
+     đạt ~3.2:1, mà đó lại là màu của dòng "✗ Đáp án đúng" — chữ quan trọng nhất. */
+  --ok: #4ade80; --error: #f87171;
+  --bg: #1a1a1a; --fg: #e7e7ea; --muted: #9ca3af; --border: #333;
     --surface: #202022; --card: #242426; --primary: #3b82f6;
   }
 }
@@ -98,13 +101,13 @@ body {
 
 /* Chọn khối lượng trước phiên học buổi sáng */
 .g-counts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
-.g-count {
+.g-count-opt {
   min-width: 64px; padding: 12px 18px; border: 1px solid var(--border); border-radius: 12px;
   background: var(--bg); color: var(--fg); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
 }
-.g-count:hover { border-color: var(--primary); }
-.g-count.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.g-count-opt:hover { border-color: var(--primary); }
+.g-count-opt.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 #gStartBtn { width: 100%; }
 
 .g-rem-done { color: #16a34a; font-weight: 700; margin-top: 12px; }
@@ -166,13 +169,13 @@ body {
 .g-opt.ghost { opacity: 0.75; cursor: default; }
 
 /* Việc đã tick xong hôm đó, kéo tự động từ danh sách việc sang nhật ký. */
-.g-done {
+.g-donelist {
   margin: 10px 0; padding: 10px 12px; text-align: left;
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
 }
-.g-done-head { font-size: 12.5px; font-weight: 700; color: var(--ok); margin-bottom: 4px; }
-.g-done ul { margin: 0; padding-left: 18px; }
-.g-done li { font-size: 13.5px; line-height: 1.55; color: var(--fg); }
+.g-donelist-head { font-size: 12.5px; font-weight: 700; color: var(--ok); margin-bottom: 4px; }
+.g-donelist ul { margin: 0; padding-left: 18px; }
+.g-donelist li { font-size: 13.5px; line-height: 1.55; color: var(--fg); }
 
 /* Cụm đi chung của từ trừu tượng: mỗi cụm một dòng, chỗ trống nổi rõ để mắt
    bám vào vị trí từ cần điền chứ không đọc lướt. */
@@ -226,3 +229,16 @@ body {
 .g-done-icon { font-size: 56px; margin-bottom: 12px; }
 .g-done h2 { margin: 0 0 8px; }
 .g-done p { color: var(--muted); margin: 0 0 24px; }
+
+/* Nút đang chờ việc nền (dựng phiên học, gọi AI) — trước đây bị disable mà
+   trông y hệt lúc bấm được, người dùng tưởng hỏng nên bấm đi bấm lại. */
+.g-btn:disabled { opacity: 0.55; cursor: progress; }
+.g-btn:disabled::after {
+  content: ""; display: inline-block; width: 12px; height: 12px; margin-left: 8px;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  vertical-align: -2px; animation: g-spin 0.7s linear infinite;
+}
+@keyframes g-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

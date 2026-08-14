@@ -179,11 +179,23 @@ const VOCAB_EXTRA = ["phonetic", "audio", "pos", "definition", "example", "kind"
 // hình ảnh nào, hình thức lại na ná nhau, nên học rời "từ → nghĩa" là quên ngay;
 // phải học bằng CỤM ĐI CHUNG và câu ngữ cảnh. Nhận diện qua hậu tố danh/tính từ
 // trừu tượng — đúng đặc trưng của lớp từ này.
-const ABSTRACT_SUFFIX = /(ation|ution|ition|tion|sion|ity|ance|ence|ancy|ency|acy|ment|ism|ness|ship|hood|ure|ive|ory|ary|al)$/;
+const ABSTRACT_SUFFIX = /(ation|ution|ition|tion|sion|ity|ance|ence|ancy|ency|acy|ment|ism|ness|ship|hood|ive|ory|al)$/;
+
+// Đuôi -al/-ive/-ory bắt được appraisal, residential, initiative, advisory —
+// nhưng cũng quét trúng cả một rổ từ RẤT cụ thể. Chặn riêng nhóm đó.
+// (-ure bị bỏ hẳn khỏi danh sách vì picture/future/nature/furniture/structure
+// đều là từ cụ thể, hình dung được ngay.)
+const CONCRETE_WORDS = new Set([
+  "animal", "capital", "hospital", "festival", "material", "digital", "native",
+  "local", "total", "final", "metal", "signal", "medal", "manual", "annual",
+  "terminal", "central", "normal", "several", "general", "special", "social",
+  "personal", "national", "global", "original", "physical", "musical", "hotel",
+]);
 
 function isAbstractTerm(term) {
   const t = String(term || "").trim().toLowerCase();
-  return /^[a-z]{6,}$/.test(t) && ABSTRACT_SUFFIX.test(t);
+  if (!/^[a-z]{6,}$/.test(t) || CONCRETE_WORDS.has(t)) return false;
+  return ABSTRACT_SUFFIX.test(t);
 }
 
 async function addVocab(entry) {
@@ -258,27 +270,39 @@ function ensureSrs(v) {
   return v;
 }
 
+// Phần TÍNH TOÁN thuần của SM-2, tách riêng để bản xem trước trên nút và bản
+// ghi thật không bao giờ lệch nhau nữa (trước đây preview nhân 0.6/1.3 cho
+// "Khó"/"Dễ" còn bản thật thì không -> nút hiện 18 ngày mà lưu 30 ngày).
 // quality: 0–5. Dưới 3 = quên. 3 = khó, 4 = được, 5 = dễ.
+function nextSrs(v, quality) {
+  const q = Math.max(0, Math.min(5, quality));
+  const ease = typeof v.ease === "number" ? v.ease : 2.5;
+  if (q < 3) {
+    // Quên: học lại sớm, giảm nhẹ hệ số dễ — KHÔNG xóa sạch tiến độ như hộp cũ.
+    return { lapses: (v.lapses || 0) + 1, reps: 0, interval: 0, ease: Math.max(MIN_EASE, ease - 0.2) };
+  }
+  const reps = (v.reps || 0) + 1;
+  let interval;
+  if (reps === 1) interval = 1;
+  else if (reps === 2) interval = 6;
+  else interval = Math.max(1, Math.round((v.interval || 1) * ease));
+  if (q === 3) interval = Math.max(1, Math.round(interval * 0.6)); // "Khó" -> ngắn hơn
+  if (q === 5) interval = Math.round(interval * 1.3); // "Dễ" -> dài hơn
+  return {
+    lapses: v.lapses || 0,
+    reps,
+    interval,
+    ease: Math.max(MIN_EASE, ease + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))),
+  };
+}
+
 async function reviewVocabSM2(term, quality) {
   const list = await getVocab();
   const v = list.find((x) => x.term.toLowerCase() === term.toLowerCase());
   if (!v) return list;
   ensureSrs(v);
   const q = Math.max(0, Math.min(5, quality));
-
-  if (q < 3) {
-    // Quên: học lại sớm, giảm nhẹ hệ số dễ — KHÔNG xóa sạch tiến độ như hộp cũ.
-    v.lapses = (v.lapses || 0) + 1;
-    v.reps = 0;
-    v.interval = 0;
-    v.ease = Math.max(MIN_EASE, v.ease - 0.2);
-  } else {
-    v.reps = (v.reps || 0) + 1;
-    if (v.reps === 1) v.interval = 1;
-    else if (v.reps === 2) v.interval = 6;
-    else v.interval = Math.max(1, Math.round((v.interval || 1) * v.ease));
-    v.ease = Math.max(MIN_EASE, v.ease + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)));
-  }
+  Object.assign(v, nextSrs(v, q));
 
   v.due = Date.now() + (v.interval > 0 ? v.interval * DAY_MS : 10 * 60 * 1000);
   v.reviewedAt = Date.now();
@@ -290,22 +314,21 @@ async function reviewVocabSM2(term, quality) {
   return list;
 }
 
-// Tương thích code cũ (quiz, cổng học): đúng = 4, sai = 2.
-async function reviewVocab(term, known) {
-  return reviewVocabSM2(term, known ? 4 : 2);
+// Đúng/sai -> chất lượng SM-2.
+// LƯU Ý: q=4 làm hệ số dễ ĐỨNG YÊN (0.1 - 1×0.10 = 0), nên nếu mọi câu đúng đều
+// chấm 4 thì ease chỉ có đường đi xuống: sai 6 lần là chạm sàn 1.3 vĩnh viễn và
+// từ đó lịch ôn không bao giờ giãn ra được nữa. Đúng ngay lần đầu, không dùng
+// gợi ý -> q=5 (ease +0.1). Đúng nhưng có trợ giúp / đã sai trước đó -> q=3.
+async function reviewVocab(term, known, helped) {
+  if (!known) return reviewVocabSM2(term, 2);
+  return reviewVocabSM2(term, helped ? 3 : 5);
 }
 
-// Xem trước khoảng cách ôn nếu chọn mức q (để hiện lên nút).
+// Xem trước khoảng cách ôn nếu chọn mức q (để hiện lên nút) — cùng công thức
+// với lúc ghi thật, nên con số trên nút luôn đúng.
 function srsPreview(v, q) {
   if (q < 3) return "10 phút";
-  const e = typeof v.ease === "number" ? v.ease : 2.5;
-  const reps = (v.reps || 0) + 1;
-  let interval;
-  if (reps === 1) interval = 1;
-  else if (reps === 2) interval = 6;
-  else interval = Math.max(1, Math.round((v.interval || 1) * e));
-  if (q === 3) interval = Math.max(1, Math.round(interval * 0.6)); // "Khó" -> ngắn hơn
-  if (q === 5) interval = Math.round(interval * 1.3); // "Dễ" -> dài hơn
+  const interval = nextSrs(v, q).interval;
   return interval >= 30 ? (interval / 30).toFixed(1) + " tháng" : interval + " ngày";
 }
 

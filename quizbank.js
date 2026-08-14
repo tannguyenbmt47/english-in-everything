@@ -70,7 +70,7 @@ const IELTS_BANK = [
   { q: "Which sentence is grammatically correct?", o: ["There are less cars than before.", "There are fewer cars than before.", "There is fewer cars.", "There are little cars."], a: 1, e: "'fewer' cho danh từ đếm được." },
   { q: "Best paraphrase of 'The number of tourists rose sharply':", o: ["Tourists went up a bit", "There was a sharp increase in tourist numbers", "Tourists were sharp", "The tourists rise sharp"], a: 1, e: "Danh từ hóa: a sharp increase in…" },
   { q: "Choose the best word: Governments must ___ the gap between rich and poor.", o: ["narrow", "short", "small", "low"], a: 0, e: "Collocation: narrow the gap." },
-  { q: "Choose the best word: Air pollution is largely ___ to vehicle emissions.", o: ["because", "due", "caused", "attributed"], a: 3, e: "Collocation: be attributed to." },
+  { q: "Choose the best word: Air pollution is largely ___ to vehicle emissions.", o: ["because", "owing", "blamed", "attributed"], a: 3, e: "Collocation: be attributed to. (Bỏ phương án \"due\" vì \"is largely due to\" cũng đúng.)" },
   { q: "In Listening, if the answer limit is 'NO MORE THAN TWO WORDS', writing three words will be:", o: ["accepted", "marked wrong", "half correct", "ignored"], a: 1, e: "Vượt giới hạn từ → sai." },
   { q: "Choose the best conclusion opener for Task 2:", o: ["So that's all", "In conclusion", "By the way", "Anyway"], a: 1, e: "'In conclusion' trang trọng, chuẩn học thuật." },
 ];
