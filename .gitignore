@@ -1,0 +1,14 @@
+# Bản sao lưu chrome.storage — CHỨA API KEY và toàn bộ dữ liệu học cá nhân.
+# Tuyệt đối không đưa lên repo public.
+backup/
+*storage-backup*.json
+
+# Rác hệ điều hành / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Cấu hình cục bộ của công cụ (chứa đường dẫn riêng của máy, không liên quan repo)
+.claude/

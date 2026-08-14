@@ -1,0 +1,97 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #6b7280;
+  --border: #d1d5db;
+  --primary: #2563eb;
+  --primary-fg: #ffffff;
+  --field-bg: #f9fafb;
+  --ok: #16a34a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e1e;
+    --fg: #e5e7eb;
+    --muted: #9ca3af;
+    --border: #3f3f46;
+    --primary: #3b82f6;
+    --field-bg: #27272a;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+}
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+h1 { margin: 0 0 4px; font-size: 24px; }
+.sub { margin: 0 0 28px; color: var(--muted); }
+.field { margin-bottom: 24px; }
+.field > label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+input[type="text"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+textarea { resize: vertical; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+input[type="range"] { width: 100%; }
+input:focus, textarea:focus { outline: 2px solid var(--primary); outline-offset: 0; border-color: transparent; }
+small { display: block; margin-top: 6px; color: var(--muted); font-size: 12.5px; }
+.row { display: flex; gap: 8px; align-items: center; }
+.row input { flex: 1; }
+button {
+  padding: 9px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--field-bg);
+  color: var(--fg);
+  cursor: pointer;
+}
+button:hover { filter: brightness(0.97); }
+button.primary {
+  background: var(--primary);
+  color: var(--primary-fg);
+  border-color: var(--primary);
+  font-weight: 600;
+}
+button.ghost { background: transparent; }
+.actions { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+.status { font-size: 14px; }
+.status.ok { color: var(--ok); font-weight: 600; }
+
+.gate-status {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  color: var(--muted);
+}
+
+.prompts-more { margin-bottom: 24px; border: 1px solid var(--border); border-radius: 8px; padding: 4px 14px; }
+.prompts-more > summary { cursor: pointer; padding: 8px 0; font-weight: 600; }
+.prompts-more .field { margin: 16px 0; }
+.field > label input[type="checkbox"] { margin-right: 6px; vertical-align: middle; }

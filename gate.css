@@ -1,0 +1,228 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --surface: #f3f4f6;
+  --card: #f9fafb;
+  --primary: #2563eb;
+  --ok: #16a34a;
+  --error: #dc2626;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a; --fg: #e7e7ea; --muted: #9ca3af; --border: #333;
+    --surface: #202022; --card: #242426; --primary: #3b82f6;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  padding: 40px 20px;
+}
+.hidden { display: none !important; }
+
+.gate { width: 100%; max-width: 640px; }
+.g-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.g-head h1 { font-size: 24px; margin: 0 0 4px; }
+.g-sub { margin: 0; color: var(--muted); font-size: 14px; }
+.g-skip {
+  border: 1px solid var(--border); background: transparent; color: var(--muted);
+  font: inherit; font-size: 12.5px; padding: 6px 12px; border-radius: 8px; cursor: pointer; flex-shrink: 0;
+}
+.g-skip:hover { color: var(--fg); border-color: var(--muted); }
+
+.g-progress { height: 8px; background: var(--surface); border-radius: 4px; margin: 20px 0 6px; overflow: hidden; }
+.g-bar { height: 100%; width: 0; background: var(--primary); transition: width 0.35s; }
+.g-count { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+
+.g-card {
+  border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px;
+  background: var(--card); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.g-type {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--primary); margin-bottom: 14px;
+}
+.g-q { font-size: 20px; margin-bottom: 22px; word-break: break-word; }
+.g-q .g-word { font-size: 30px; font-weight: 700; display: block; }
+.g-q .g-ipa { font-size: 15px; color: var(--muted); font-weight: 400; }
+
+/* Đề bài nhiều lớp (key word transformation, word formation…):
+   mỗi phần một khối để mắt bám được, thay vì một khối chữ dài. */
+.g-task {
+  display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; margin-bottom: 12px;
+}
+.g-lead { font-size: 16px; color: var(--muted); line-height: 1.55; margin-bottom: 12px; }
+.g-lead:only-child, .g-task + .g-lead:last-child { font-size: 19px; color: var(--fg); margin-bottom: 0; }
+.g-sentence {
+  font-size: 18px; line-height: 1.6; padding: 12px 14px; margin-bottom: 10px;
+  background: var(--surface); border-radius: 12px; border-left: 3px solid var(--border);
+}
+.g-sentence.target { border-left-color: var(--primary); }
+.g-sentence:last-child { margin-bottom: 0; }
+.g-role {
+  display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+}
+.g-keyword { margin: 0 0 10px; padding-left: 2px; }
+.g-keyword b {
+  font-size: 15px; letter-spacing: 0.06em; color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border-radius: 8px; padding: 3px 10px;
+}
+.g-gap {
+  display: inline-block; width: 88px; vertical-align: baseline;
+  border-bottom: 2px solid var(--primary); margin: 0 4px;
+}
+.g-options { display: flex; flex-direction: column; gap: 10px; }
+.g-opt {
+  text-align: left; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg); color: var(--fg); font: inherit; font-size: 15px; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.g-opt:hover:not(:disabled) { border-color: var(--primary); }
+.g-opt:disabled { cursor: default; }
+.g-opt.correct { background: color-mix(in srgb, #16a34a 16%, transparent); border-color: #16a34a; }
+.g-opt.wrong { background: color-mix(in srgb, #dc2626 14%, transparent); border-color: #dc2626; }
+
+/* Chọn khối lượng trước phiên học buổi sáng */
+.g-counts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.g-count {
+  min-width: 64px; padding: 12px 18px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg); color: var(--fg); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.g-count:hover { border-color: var(--primary); }
+.g-count.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+#gStartBtn { width: 100%; }
+
+.g-rem-done { color: #16a34a; font-weight: 700; margin-top: 12px; }
+
+/* Bài giảng ngữ pháp */
+.g-lesson-title { font-size: 20px; margin: 8px 0 12px; }
+.g-weak-tag {
+  display: inline-block; font-size: 11px; font-weight: 700; vertical-align: middle;
+  background: #dc2626; color: #fff; padding: 2px 8px; border-radius: 10px; margin-right: 6px;
+}
+.g-lesson-body {
+  max-height: 52vh; overflow-y: auto; font-size: 14.5px; line-height: 1.7;
+  border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: var(--bg);
+}
+.g-lesson-body h4 { font-size: 14px; margin: 14px 0 4px; color: var(--primary); }
+.g-lesson-body ul { margin: 6px 0; padding-left: 20px; }
+.g-lesson-body li { margin: 4px 0; }
+.g-lesson-body p { margin: 7px 0; }
+.g-lesson-body table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 8px 0; }
+.g-lesson-body th, .g-lesson-body td { border: 1px solid var(--border); padding: 5px 8px; text-align: left; vertical-align: top; }
+.g-lesson-body th { background: var(--surface); }
+.g-lesson-body .gr-ex { display: block; padding: 6px 10px; margin: 6px 0; background: var(--surface); border-radius: 6px; }
+.g-lesson-body .gr-formula { font-family: ui-monospace, Menlo, monospace; background: var(--surface); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+.g-lesson-body .gr-note { font-size: 13px; color: var(--muted); font-style: italic; border-left: 3px solid var(--border); padding-left: 8px; }
+.g-lesson-body .gr-scroll { overflow-x: auto; }
+#gLessonDone { width: 100%; margin-top: 14px; }
+
+/* Chế độ NHỚ LẠI — gõ đáp án */
+.g-inputwrap { margin-top: 4px; }
+#gInput {
+  width: 100%; padding: 14px 16px; box-sizing: border-box;
+  border: 2px solid var(--border); border-radius: 12px;
+  background: var(--bg); color: var(--fg); font: inherit; font-size: 18px;
+  letter-spacing: 0.02em;
+}
+#gInput:focus { outline: none; border-color: var(--primary); }
+#gInput:disabled { opacity: 0.7; }
+.g-inputrow { display: flex; gap: 8px; margin-top: 10px; }
+.g-inputrow .g-btn { flex: 1; }
+.g-hint {
+  margin-top: 14px; font-family: ui-monospace, Menlo, monospace;
+  font-size: 17px; letter-spacing: 1px; color: var(--primary);
+}
+/* Gợi ý NGHĨA của từ cần điền — chữ cái đầu + số ô chưa đủ để nghĩ ra từ. */
+.g-mean-hint {
+  margin-top: 8px; font-size: 13.5px; color: var(--muted);
+  border-left: 3px solid var(--border); padding-left: 10px;
+}
+.g-mean-hint b { color: var(--fg); font-weight: 600; }
+.g-fix {
+  display: block; margin-top: 10px; padding: 0; border: 0; background: none;
+  color: var(--muted); font: inherit; font-size: 12.5px; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.g-fix:hover { color: var(--primary); }
+.g-mean { font-size: 21px; font-weight: 600; }
+.g-pos { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.g-def { font-size: 14px; color: var(--muted); font-style: italic; margin-top: 6px; }
+.g-opt.ghost { opacity: 0.75; cursor: default; }
+
+/* Việc đã tick xong hôm đó, kéo tự động từ danh sách việc sang nhật ký. */
+.g-done {
+  margin: 10px 0; padding: 10px 12px; text-align: left;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+}
+.g-done-head { font-size: 12.5px; font-weight: 700; color: var(--ok); margin-bottom: 4px; }
+.g-done ul { margin: 0; padding-left: 18px; }
+.g-done li { font-size: 13.5px; line-height: 1.55; color: var(--fg); }
+
+/* Cụm đi chung của từ trừu tượng: mỗi cụm một dòng, chỗ trống nổi rõ để mắt
+   bám vào vị trí từ cần điền chứ không đọc lướt. */
+.g-colloc { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.g-colloc b { font-weight: 600; font-size: 15px; }
+
+/* Khối "mẹo nhớ" / "phân biệt 2 từ": nhiều dòng, đọc kỹ -> tách hẳn ra khỏi
+   dòng phản hồi đúng/sai, và không nhuộm đỏ theo .g-feedback.no. */
+.g-tip {
+  margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+  background: var(--surface); color: var(--fg); font-weight: 400;
+  font-size: 13.5px; line-height: 1.55; text-align: left;
+}
+.g-tip b { display: block; margin-bottom: 4px; color: var(--fg); }
+.g-tip span { display: block; margin-top: 2px; color: var(--muted); }
+
+.g-feedback { min-height: 24px; margin-top: 18px; font-size: 14px; }
+.g-feedback.ok { color: var(--ok); font-weight: 600; }
+.g-feedback.no { color: var(--error); }
+.g-feedback .g-explain { color: var(--muted); font-weight: 400; display: block; margin-top: 4px; font-size: 13.5px; }
+
+.g-btn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--fg);
+  font: inherit; font-size: 15px; padding: 12px 20px; border-radius: 10px; cursor: pointer;
+}
+.g-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+#gNext { width: 100%; margin-top: 16px; }
+
+/* Việc cần làm & Nhật ký trong trang chặn */
+.g-compose { display: flex; gap: 8px; margin-bottom: 16px; }
+.g-compose input {
+  flex: 1; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--bg); color: var(--fg); font: inherit; font-size: 15px;
+}
+.g-list { margin-bottom: 14px; }
+.g-empty { color: var(--muted); font-style: italic; text-align: center; padding: 16px 0; margin: 0; }
+.g-item { display: flex; align-items: center; gap: 10px; padding: 11px 4px; border-bottom: 1px solid var(--border); }
+.g-item.done .g-item-text { text-decoration: line-through; color: var(--muted); }
+.g-item-text { flex: 1; font-size: 15px; word-break: break-word; }
+.g-item-tag { font-size: 11px; color: #d97706; white-space: nowrap; }
+.g-item-del { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 6px; }
+.g-item-del:hover { background: var(--surface); color: var(--error); }
+#gTodoDone, #gJrSave { width: 100%; margin-top: 8px; }
+#gJrText {
+  width: 100%; min-height: 160px; padding: 14px; box-sizing: border-box; resize: vertical;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--fg);
+  font: inherit; font-size: 15px; line-height: 1.6;
+}
+
+.g-done { text-align: center; padding: 40px 20px; }
+.g-done-icon { font-size: 56px; margin-bottom: 12px; }
+.g-done h2 { margin: 0 0 8px; }
+.g-done p { color: var(--muted); margin: 0 0 24px; }

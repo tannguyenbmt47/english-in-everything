@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn Before You Scroll</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <header class="topbar">
+    <strong>📄→🇻🇳</strong>
+    <div class="topbar-actions">
+      <button id="openBtn" class="icon-act" title="Mở file PDF">📄</button>
+      <button id="webBtn" class="icon-act" title="Dịch trang web đang mở">🌐</button>
+      <button id="pasteBtn" class="icon-act" title="Dán văn bản để dịch">📋</button>
+      <button id="pomoBtn" class="icon-act" title="Pomodoro (đồng hồ tập trung)">🍅</button>
+      <button id="helpBtn" class="icon-act" title="Hướng dẫn sử dụng">❔</button>
+      <button id="settingsBtn" class="icon-act" title="Cấu hình">⚙️</button>
+    </div>
+    <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden />
+  </header>
+
+  <nav class="tabs">
+    <button id="tabTranslate" class="tab active"><span class="tab-ic">📖</span><span class="tab-tx">Dịch</span></button>
+    <button id="tabQA" class="tab"><span class="tab-ic">💬</span><span class="tab-tx">Hỏi đáp</span></button>
+    <button id="tabVocab" class="tab"><span class="tab-ic">🔤</span><span class="tab-tx">Từ vựng</span><span id="vocabCount" class="badge">0</span></button>
+    <button id="tabGrammar" class="tab"><span class="tab-ic">📐</span><span class="tab-tx">Ngữ pháp</span></button>
+    <button id="tabNotes" class="tab"><span class="tab-ic">🗒️</span><span class="tab-tx">Sổ tay</span></button>
+  </nav>
+
+  <div id="warn" class="warn hidden">
+    Chưa có API key. <a href="#" id="warnSettings">Mở cấu hình</a> để nhập OpenAI API Key.
+  </div>
+
+  <!-- ============ TAB DỊCH ============ -->
+  <section id="viewTranslate" class="view">
+    <section id="dropzone" class="dropzone">
+      <div class="dz-inner">
+        <div class="dz-icon">📄</div>
+        <p><strong>Kéo thả PDF</strong> vào đây, bấm <em>Mở PDF</em>,<br />hoặc <em>Dịch web</em> để dịch trang đang mở.</p>
+        <p><button id="pdfUrlBtn" class="btn">PDF từ URL…</button>
+          <button id="pasteBtn2" class="btn">Dán văn bản…</button></p>
+        <p class="dz-hint">Đang xem PDF (vd arxiv.org/pdf/…)? Bấm <em>Dịch web</em> — extension sẽ tự tải PDF về và xử lý.<br />Mẹo: bôi đen chữ trên bất kỳ trang web nào để dịch nhanh hoặc lưu từ vựng.</p>
+      </div>
+    </section>
+
+    <div id="toolbar" class="toolbar hidden">
+      <div class="toolbar-row">
+        <span id="docName" class="doc-name"></span>
+        <div class="seg-control" id="viewMode">
+          <button data-mode="both" class="active">Song ngữ</button>
+          <button data-mode="vi">Tiếng Việt</button>
+          <button data-mode="src">Gốc</button>
+        </div>
+      </div>
+      <div class="toolbar-row">
+        <button id="translateAllBtn" class="btn primary">Dịch toàn bộ</button>
+        <button id="stopBtn" class="btn ghost hidden">Dừng</button>
+        <span class="spacer"></span>
+        <button id="copyAllBtn" class="btn ghost" title="Sao chép toàn bộ bản dịch">⧉ Chép</button>
+      </div>
+    </div>
+
+    <div id="layoutInfo" class="layout-info hidden"></div>
+    <div id="progress" class="progress hidden"><div id="progressBar" class="progress-bar"></div></div>
+    <main id="pages" class="pages"></main>
+  </section>
+
+  <!-- ============ TAB HỎI ĐÁP ============ -->
+  <section id="viewQA" class="view hidden">
+    <div id="qaEmpty" class="qa-empty">
+      <div class="qa-empty-icon">💬</div>
+      <p>Mở một tài liệu ở tab <b>Dịch</b>, rồi quay lại đây để hỏi đáp về nội dung.</p>
+    </div>
+    <div id="qaChat" class="qa-chat hidden">
+      <div class="qa-bar">
+        <div class="seg-control" id="qaScope">
+          <button data-scope="doc" class="active">Tài liệu</button>
+          <button data-scope="kb">Kho</button>
+          <button data-scope="free">Tự do</button>
+        </div>
+        <button id="kbBtn" class="btn ghost" title="Kho tri thức / nạp dữ liệu">📚 <span id="kbCount">0</span></button>
+        <button id="qaClearBtn" class="btn ghost" title="Xóa lịch sử trò chuyện">🗑</button>
+      </div>
+      <div id="qaMessages" class="qa-messages"></div>
+      <div id="qaSuggest" class="qa-suggest"></div>
+      <div class="qa-input">
+        <textarea id="qaText" rows="1" placeholder="Hỏi về tài liệu… (Enter để gửi)"></textarea>
+        <button id="qaSend" class="btn primary">Gửi</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB TỪ VỰNG ============ -->
+  <section id="viewVocab" class="view hidden">
+    <div class="study-dash">
+      <div class="sd-row">
+        <div class="sd-goal">
+          <div class="sd-goal-num"><span id="sdToday">0</span>/<span id="sdGoal">50</span></div>
+          <div class="sd-goal-label">từ mới hôm nay</div>
+        </div>
+        <div class="sd-stats">
+          <div class="sd-stat"><b id="sdStreak">0</b><span>🔥 streak</span></div>
+          <div class="sd-stat"><b id="sdDue">0</b><span>cần ôn</span></div>
+          <div class="sd-stat"><b id="sdTotal">0</b><span>tổng từ</span></div>
+        </div>
+      </div>
+      <div class="sd-bar"><div id="sdBar" class="sd-bar-fill"></div></div>
+      <div class="sd-actions">
+        <select id="ieltsTopic" title="Chủ đề IELTS">
+          <option>Ngẫu nhiên</option>
+          <option>Education</option>
+          <option>Environment</option>
+          <option>Technology</option>
+          <option>Health</option>
+          <option>Work &amp; Business</option>
+          <option>Society</option>
+          <option>Science</option>
+          <option>Travel &amp; Tourism</option>
+          <option>Media</option>
+          <option>Crime &amp; Law</option>
+          <option>Art &amp; Culture</option>
+        </select>
+        <select id="ieltsKind" title="Loại nội dung nạp">
+          <option value="word">Từ vựng</option>
+          <option value="collocation">Collocation</option>
+          <option value="idiom">Thành ngữ (idiom)</option>
+          <option value="proverb">Tục ngữ</option>
+        </select>
+        <button id="ieltsBtn" class="btn primary">＋ Nạp</button>
+      </div>
+      <div class="sd-actions sd-actions2">
+        <button id="quizBtn" class="btn">📝 Kiểm tra</button>
+        <button id="dailyBtn" class="btn">🎯 Đề hôm nay</button>
+        <button id="statsBtn" class="btn">📊 Thống kê</button>
+      </div>
+      <div id="ieltsStatus" class="sd-status"></div>
+    </div>
+
+    <div class="lookup-bar">
+      <input type="text" id="lookupInput" placeholder="Tra cứu một từ tiếng Anh…" spellcheck="false" />
+      <button id="lookupBtn" class="btn primary">Tra</button>
+    </div>
+    <div id="lookupResult" class="lookup-result hidden"></div>
+
+    <details class="manual-add">
+      <summary>＋ Thêm thủ công (từ / collocation / thành ngữ / tục ngữ)</summary>
+      <input type="text" id="maTerm" placeholder="Từ hoặc cụm (vd: make a decision)" spellcheck="false" />
+      <input type="text" id="maMeaning" placeholder="Nghĩa tiếng Việt (để trống = AI tự tra)" />
+      <div class="ma-row">
+        <select id="maKind">
+          <option value="word">Từ vựng</option>
+          <option value="collocation">Collocation</option>
+          <option value="idiom">Thành ngữ</option>
+          <option value="proverb">Tục ngữ</option>
+        </select>
+        <button id="maAdd" class="btn primary">＋ Thêm vào kho</button>
+      </div>
+      <div id="maStatus" class="ma-status"></div>
+    </details>
+    <div class="vocab-toolbar">
+      <input type="search" id="vocabSearch" placeholder="Tìm trong từ đã lưu…" />
+      <button id="reviewBtn" class="btn primary">Ôn tập</button>
+      <button id="exportBtn" class="btn ghost" title="Xuất CSV">Xuất</button>
+    </div>
+    <main id="vocabList" class="vocab-list"></main>
+  </section>
+
+  <!-- ============ TAB SỔ TAY (GHI CHÚ / NHẬT KÝ) ============ -->
+  <section id="viewNotes" class="view hidden">
+    <div class="notes-bar">
+      <button id="openJournal" class="btn">📔 Nhật ký</button>
+      <button id="openTodo" class="btn">✅ Việc cần làm</button>
+    </div>
+
+    <div class="note-compose">
+      <input type="text" id="noteTitleInput" class="note-title-input" placeholder="Tiêu đề (để trống thì lấy dòng đầu)" />
+      <textarea id="noteInput" placeholder="Viết một ghi chú nhanh…"></textarea>
+      <button id="noteAdd" class="btn primary">Thêm ghi chú</button>
+    </div>
+    <main id="notesList" class="notes-list"></main>
+  </section>
+
+  <!-- ============ TAB NGỮ PHÁP ============ -->
+  <section id="viewGrammar" class="view hidden">
+    <div class="gr-search"><input type="search" id="grammarSearch" placeholder="Tìm chủ đề (thì, điều kiện, Writing Task 2…)" /></div>
+    <main id="grammarBody" class="gr-body"></main>
+  </section>
+
+  <div id="status" class="statusbar"></div>
+
+  <!-- ============ DÁN VĂN BẢN ============ -->
+  <div id="pasteModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head">
+        <strong>Dán văn bản cần dịch</strong>
+        <button id="pasteClose" class="fc-close">✕</button>
+      </div>
+      <textarea id="pasteText" placeholder="Dán đoạn văn bản (tiếng Anh…) vào đây rồi bấm Nạp & dịch."></textarea>
+      <div class="modal-actions">
+        <label class="chk"><input type="checkbox" id="pasteAuto" checked /> Dịch ngay sau khi nạp</label>
+        <button id="pasteLoad" class="btn primary">Nạp &amp; dịch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ POMODORO ============ -->
+  <div id="pomoModal" class="modal hidden">
+    <div class="modal-card pomo-card">
+      <div class="modal-head">
+        <strong>🍅 Pomodoro</strong>
+        <button id="pomoClose" class="fc-close">✕</button>
+      </div>
+      <input type="text" id="pomoTask" class="pomo-task" placeholder="🎯 Phiên này làm gì? (vd: viết mở bài Task 2)" spellcheck="false" />
+      <div id="pomoPhase" class="pomo-phase"></div>
+      <div id="pomoTime" class="pomo-time">25:00</div>
+      <div id="pomoRound" class="pomo-round"></div>
+      <div class="pomo-actions">
+        <button id="pomoToggle" class="btn primary">Bắt đầu</button>
+        <button id="pomoSkip" class="btn">Bỏ qua ⏭</button>
+        <button id="pomoReset" class="btn ghost">Đặt lại</button>
+      </div>
+      <div class="pomo-set">
+        <label>Làm <input type="number" id="pomoWork" min="1" max="120" /> phút</label>
+        <label>Nghỉ <input type="number" id="pomoBreak" min="1" max="60" /> phút</label>
+      </div>
+      <div class="pomo-note">Đồng hồ chạy nền; số phút còn lại hiện trên icon extension. Đóng cửa sổ này vẫn chạy.</div>
+    </div>
+  </div>
+
+  <!-- ============ HƯỚNG DẪN SỬ DỤNG ============ -->
+  <div id="helpModal" class="modal hidden">
+    <div class="modal-card help-card">
+      <div class="modal-head">
+        <strong>❔ Hướng dẫn sử dụng</strong>
+        <button id="helpClose" class="fc-close">✕</button>
+      </div>
+      <div class="help-body">
+        <p class="help-lead">Extension giúp <b>đọc/dịch tài liệu</b> và <b>học tiếng Anh</b>. Trước tiên vào ⚙️ nhập <b>OpenAI API Key</b> — hầu hết tính năng AI cần nó.</p>
+
+        <details open><summary>🚀 Bắt đầu nhanh</summary>
+          <ol>
+            <li>Bấm ⚙️ → dán <b>API Key</b>, chọn <b>Model</b> → Lưu.</li>
+            <li>Bấm biểu tượng extension để mở <b>side panel</b> (hoặc phím <b>Ctrl/⌘ + Shift + Y</b>).</li>
+            <li>Mở PDF (📄), dịch trang web (🌐) hoặc dán văn bản (📋) để bắt đầu.</li>
+          </ol>
+        </details>
+
+        <details><summary>📖 Dịch tài liệu</summary>
+          <ul>
+            <li><b>📄 Mở PDF</b> / <b>🌐 Dịch web</b> (đang xem PDF trên web cũng bấm nút này) / <b>📋 Văn bản</b>.</li>
+            <li>Bấm <b>Dịch toàn bộ</b> hoặc dịch từng đoạn; nút <b>↻</b> để dịch lại một đoạn.</li>
+            <li>Chế độ xem: <b>Song ngữ / Tiếng Việt / Gốc</b>. Bôi đen chữ để <b>Dịch nhanh</b> hoặc <b>＋ Từ vựng</b>.</li>
+            <li>Bản dịch được <b>cache 3 tuần</b> nên mở lại không tốn phí. Đặt <b>Bảng thuật ngữ</b> trong ⚙️ để dịch nhất quán.</li>
+          </ul>
+        </details>
+
+        <details><summary>💬 Hỏi đáp</summary>
+          <ul>
+            <li><b>Tài liệu</b>: hỏi về nội dung đang mở. <b>Kho</b>: RAG trên nhiều tài liệu đã nạp (📚). <b>Tự do</b>: chat như ChatGPT.</li>
+            <li>Nút 💬 trên mỗi đoạn để hỏi nhanh về đoạn đó. 🗑 xoá lịch sử.</li>
+          </ul>
+        </details>
+
+        <details><summary>🔤 Từ vựng &amp; học IELTS</summary>
+          <ul>
+            <li><b>Tra cứu</b> một từ (phiên âm, audio, nghĩa). Bôi đen khi đọc để lưu tự động.</li>
+            <li><b>＋ Nạp từ IELTS</b>: AI tạo bộ từ theo chủ đề (tự bỏ từ trùng). <b>📝 Kiểm tra</b>: quiz có chấm điểm.</li>
+            <li><b>🎯 Đề hôm nay</b>: đề Writing/Speaking + chấm bài AI. <b>📊 Thống kê</b>: mức nhớ, chuỗi ngày, sổ lỗi, <b>lộ trình học</b>.</li>
+            <li>Ôn theo <b>lặp lại ngắt quãng (SM-2)</b>: chọn Quên/Khó/Được/Dễ; sai thì tự quay lại sớm.</li>
+          </ul>
+        </details>
+
+        <details><summary>📐 Ngữ pháp &amp; 🗒️ Sổ tay</summary>
+          <ul>
+            <li><b>Ngữ pháp</b>: tra cứu ngữ pháp + quy tắc/chiến lược IELTS (cố định, không cần mạng).</li>
+            <li><b>Sổ tay</b>: ghi chú nhanh · <b>Nhật ký</b> (lịch tháng, có AI sửa tiếng Anh) · <b>Việc cần làm</b>.</li>
+          </ul>
+        </details>
+
+        <details><summary>🔒 Học thụ động (tùy chọn — mặc định TẮT)</summary>
+          <p>Bật trong ⚙️ để trình duyệt <b>chặn trang</b> bắt học trước khi lướt:</p>
+          <ul>
+            <li><b>Việc cần làm</b> → <b>Học từ vựng/ngữ pháp</b> → <b>Nhật ký</b> (tối, có bù ngày thiếu).</li>
+            <li><b>Mạng xã hội</b>: trả bài IELTS mỗi lần vào (giới hạn số lần/ngày).</li>
+            <li><b>Chế độ nhớ lại</b>: bắt gõ đáp án thay vì chọn — nhớ lâu hơn.</li>
+          </ul>
+        </details>
+
+        <details><summary>⌨️ Phím tắt &amp; mẹo</summary>
+          <ul>
+            <li><b>Ctrl/⌘ + Shift + Y</b>: mở side panel. <b>Ctrl/⌘ + Shift + D</b>: dịch đoạn đang bôi đen.</li>
+            <li>Đổi phím tại <code>brave://extensions/shortcuts</code>.</li>
+            <li>Dữ liệu lưu cục bộ trong trình duyệt; API key chỉ gửi tới endpoint bạn cấu hình.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ THỐNG KÊ ============ -->
+  <div id="statsModal" class="modal hidden">
+    <div class="modal-card st-card">
+      <div class="modal-head">
+        <strong>📊 Thống kê học tập</strong>
+        <button id="stClose" class="fc-close">✕</button>
+      </div>
+
+      <div class="st-kpis">
+        <div class="st-kpi"><b id="stStreak">0</b><span>🔥 chuỗi ngày</span></div>
+        <div class="st-kpi"><b id="stTotal">0</b><span>tổng từ</span></div>
+        <div class="st-kpi"><b id="stDue">0</b><span>đến hạn</span></div>
+        <div class="st-kpi"><b id="stAcc">–</b><span>độ chính xác</span></div>
+      </div>
+
+      <div class="st-sec">
+        <div class="st-title">Mức độ nhớ</div>
+        <div id="stBar" class="st-stack"></div>
+        <div id="stLevels" class="st-levels"></div>
+      </div>
+
+      <div class="st-sec">
+        <div class="st-title">7 ngày gần đây</div>
+        <div id="stChart" class="st-chart"></div>
+        <div class="st-legend"><i style="background:#3b82f6"></i> từ mới <i style="background:#16a34a"></i> lượt ôn</div>
+      </div>
+
+      <div class="st-sec">
+        <div class="st-title">📈 Lộ trình &amp; gợi ý học</div>
+        <div id="stRoadInfo" class="st-retest"></div>
+        <button id="stRoadBtn" class="btn primary">Phân tích &amp; lập lộ trình</button>
+        <div id="stRoadResult" class="st-road"></div>
+      </div>
+
+      <div class="st-sec">
+        <div class="st-title">🧹 Dọn từ đáng ngờ</div>
+        <div id="stCleanInfo" class="st-retest"></div>
+        <button id="stCleanBtn" class="btn ghost">Quét &amp; xoá từ rác (mảnh câu, không phải từ/collocation)</button>
+        <div id="stBaseInfo" class="st-retest"></div>
+        <button id="stBaseBtn" class="btn ghost">Đưa về dạng gốc (knocked back → knock back)</button>
+      </div>
+
+      <div class="st-sec">
+        <div class="st-title">🩹 Sổ lỗi sai</div>
+        <div id="stMistakeInfo" class="st-retest"></div>
+        <button id="stMistakeBtn" class="btn primary">Ôn lại câu từng sai</button>
+      </div>
+
+      <div class="st-sec">
+        <div class="st-title">Kiểm tra lại định kỳ</div>
+        <div id="stRetestInfo" class="st-retest"></div>
+        <button id="stRetestBtn" class="btn primary">🔁 Kiểm tra lại tổng hợp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ NHẬT KÝ (popup + lịch) ============ -->
+  <div id="journalModal" class="modal hidden">
+    <div class="modal-card jr-card">
+      <div class="modal-head">
+        <strong>📔 Nhật ký</strong>
+        <button id="jrClose" class="fc-close">✕</button>
+      </div>
+      <div id="jrRequired" class="jr-required hidden"></div>
+
+      <div class="jr-cal">
+        <div class="jr-cal-head">
+          <button id="jrPrev" class="jr-nav">‹</button>
+          <span id="jrMonth"></span>
+          <button id="jrNext" class="jr-nav">›</button>
+        </div>
+        <div class="jr-week"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+        <div id="jrGrid" class="jr-grid"></div>
+        <div class="jr-legend"><i class="dot has"></i> đã viết <i class="dot miss"></i> còn thiếu</div>
+      </div>
+
+      <div class="jr-editor">
+        <div id="jrDateLabel" class="journal-date"></div>
+        <div id="jrDone" class="jr-done hidden"></div>
+        <textarea id="journalInput" placeholder="Hôm nay bạn học/làm được gì? (thử viết bằng tiếng Anh để luyện tập)"></textarea>
+        <div class="journal-actions">
+          <button id="journalSave" class="btn primary">Lưu</button>
+          <button id="journalFix" class="btn" title="Nhờ AI sửa lỗi tiếng Anh">✍️ Sửa tiếng Anh</button>
+          <button id="journalDel" class="btn ghost">Xóa</button>
+        </div>
+        <div id="journalFixResult" class="journal-fix"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VIỆC CẦN LÀM ============ -->
+  <div id="todoModal" class="modal hidden">
+    <div class="modal-card td-card">
+      <div class="modal-head">
+        <strong>✅ Việc cần làm hôm nay</strong>
+        <button id="tdClose" class="fc-close">✕</button>
+      </div>
+      <div class="td-compose">
+        <input type="text" id="todoInput" placeholder="Thêm việc… (Enter để lưu)" />
+        <button id="todoAdd" class="btn primary">Thêm</button>
+      </div>
+      <div id="todoList" class="td-list"></div>
+      <div class="modal-actions">
+        <button id="todoClearDone" class="btn ghost">Xóa việc đã xong</button>
+        <button id="todoDone" class="btn primary">Xong</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ĐỀ IELTS HÔM NAY ============ -->
+  <div id="ieltsDaily" class="modal hidden">
+    <div class="modal-card id-card">
+      <div class="modal-head">
+        <strong>🎯 Đề IELTS hôm nay</strong>
+        <button id="idClose" class="fc-close">✕</button>
+      </div>
+      <div id="idDate" class="id-date"></div>
+      <div class="id-actions">
+        <button id="idFresh" class="btn">✨ Đề mới (AI)</button>
+        <button id="idFromUrl" class="btn">🌐 Lấy từ URL</button>
+      </div>
+      <div id="idSrcNote" class="id-srcnote"></div>
+
+      <div class="id-section">
+        <div class="id-h">✍️ Writing Task 2 <span class="id-note">(≥250 từ · ~40 phút)</span></div>
+        <div id="idWriting" class="id-body"></div>
+        <textarea id="idEssay" placeholder="Viết/dán bài luận của bạn vào đây rồi bấm 'Chấm với AI'…"></textarea>
+        <button id="idScore" class="btn primary">Chấm bài với AI</button>
+        <div id="idScoreResult" class="id-result"></div>
+      </div>
+
+      <div class="id-section">
+        <div class="id-h">🗣️ Speaking</div>
+        <div id="idSpeaking" class="id-body"></div>
+      </div>
+
+      <div class="id-section">
+        <div class="id-h">📖 Reading (sinh bằng AI)</div>
+        <button id="idGenReading" class="btn">Tạo đề đọc + câu hỏi</button>
+        <div id="idReading" class="id-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ KIỂM TRA (QUIZ) ============ -->
+  <div id="quiz" class="modal hidden">
+    <div class="quiz-card">
+      <button id="quizClose" class="fc-close">✕</button>
+      <div id="quizProgress" class="quiz-progress"></div>
+      <div id="quizSetup" class="quiz-setup hidden">
+        <div class="quiz-type">Chọn số câu</div>
+        <div id="quizSetupInfo" class="quiz-setup-info"></div>
+        <div id="quizCountOpts" class="quiz-counts"></div>
+        <button id="quizStart" class="btn primary">Bắt đầu</button>
+      </div>
+      <div id="quizPanel">
+        <div id="quizType" class="quiz-type"></div>
+        <div id="quizQ" class="quiz-q"></div>
+        <div id="quizOptions" class="quiz-options"></div>
+        <input id="quizInput" class="quiz-input hidden" type="text" placeholder="Nhập từ…" spellcheck="false" autocomplete="off" />
+        <div id="quizFeedback" class="quiz-feedback"></div>
+        <button id="quizSubmit" class="btn primary hidden">Kiểm tra</button>
+        <button id="quizNext" class="btn primary hidden">Tiếp →</button>
+      </div>
+      <div id="quizResult" class="quiz-result hidden"></div>
+    </div>
+  </div>
+
+  <!-- ============ KHO TRI THỨC (RAG) ============ -->
+  <div id="kbModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head">
+        <strong>📚 Kho tri thức (RAG)</strong>
+        <button id="kbClose" class="fc-close">✕</button>
+      </div>
+      <p class="modal-desc">Nạp nhiều tài liệu vào kho; khi hỏi, hệ thống tìm các đoạn liên quan nhất bằng embedding để trả lời và trích nguồn.</p>
+      <div class="kb-add">
+        <button id="kbAddCurrent" class="btn">＋ Tài liệu đang mở</button>
+        <button id="kbAddPaste" class="btn">＋ Dán văn bản</button>
+        <button id="kbAddUrl" class="btn">＋ PDF từ URL</button>
+      </div>
+      <div id="kbStatus" class="kb-status"></div>
+      <div id="kbSources" class="kb-sources"></div>
+      <div class="modal-actions">
+        <button id="kbClear" class="btn ghost">Xóa tất cả</button>
+        <button id="kbDone" class="btn primary">Xong</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FLASHCARD ÔN TẬP ============ -->
+  <div id="flashcard" class="flashcard hidden">
+    <div class="fc-card">
+      <button id="fcClose" class="fc-close">✕</button>
+
+      <div id="fcSetup" class="fc-setup hidden">
+        <div class="fc-setup-title">Ôn bao nhiêu từ?</div>
+        <div id="fcSetupInfo" class="fc-setup-info"></div>
+        <div id="fcCountOpts" class="fc-counts"></div>
+        <button id="fcStart" class="btn primary">Bắt đầu ôn</button>
+      </div>
+
+      <div id="fcReview">
+        <div id="fcProgress" class="fc-progress"></div>
+        <div id="fcTerm" class="fc-term"></div>
+        <div id="fcMeaning" class="fc-meaning hidden"></div>
+        <div id="fcContext" class="fc-context"></div>
+        <div class="fc-actions">
+          <button id="fcReveal" class="btn primary">Hiện nghĩa</button>
+          <div id="fcGrade" class="fc-grade hidden">
+            <button id="fcAgain" class="btn grade-again">Quên<small></small></button>
+            <button id="fcHard" class="btn grade-hard">Khó<small></small></button>
+            <button id="fcGood" class="btn grade-good">Được<small></small></button>
+            <button id="fcEasy" class="btn grade-easy">Dễ<small></small></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="lib/pdf.min.js"></script>
+  <script src="config.js"></script>
+  <script src="cache.js"></script>
+  <script src="vocab.js"></script>
+  <script src="notes.js"></script>
+  <script src="todo.js"></script>
+  <script src="mistakes.js"></script>
+  <script src="grammar.js"></script>
+  <script src="ielts.js"></script>
+  <script src="rag.js"></script>
+  <script src="layout.js"></script>
+  <script src="translator.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

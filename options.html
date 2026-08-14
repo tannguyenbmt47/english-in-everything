@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cấu hình – Learn Before You Scroll</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>⚙️ Cấu hình</h1>
+    <p class="sub">Thiết lập OpenAI API để dịch paper sang tiếng Việt.</p>
+
+    <div class="field">
+      <label for="apiKey">OpenAI API Key</label>
+      <div class="row">
+        <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" spellcheck="false" />
+        <button type="button" id="toggleKey" class="ghost">Hiện</button>
+      </div>
+      <small>Khóa được lưu cục bộ trong trình duyệt (chrome.storage.local), không gửi đi đâu ngoài API bạn cấu hình.</small>
+    </div>
+
+    <div class="field">
+      <label for="baseUrl">Base URL (API endpoint)</label>
+      <input type="text" id="baseUrl" placeholder="https://api.openai.com/v1" spellcheck="false" />
+      <small>Giữ mặc định nếu dùng OpenAI. Có thể đổi sang endpoint tương thích (Azure, OpenRouter, proxy nội bộ...).</small>
+    </div>
+
+    <div class="field">
+      <label for="model">Model</label>
+      <input type="text" id="model" list="modelList" placeholder="gpt-4o-mini" spellcheck="false" />
+      <datalist id="modelList">
+        <option value="gpt-5.6-sol">Frontier — việc chuyên môn phức tạp</option>
+        <option value="gpt-5.6-terra">Cân bằng trí tuệ &amp; chi phí</option>
+        <option value="gpt-5.6-luna">Tối ưu chi phí</option>
+        <option value="gpt-5.5-pro"></option>
+        <option value="gpt-5.5"></option>
+        <option value="gpt-5.4-pro"></option>
+        <option value="gpt-5.4"></option>
+        <option value="gpt-5.4-mini"></option>
+        <option value="gpt-5.4-nano"></option>
+        <option value="gpt-5.3-chat-latest"></option>
+        <option value="gpt-5.2-pro"></option>
+        <option value="gpt-5.2"></option>
+        <option value="gpt-5.1"></option>
+        <option value="gpt-5-pro"></option>
+        <option value="gpt-5"></option>
+        <option value="gpt-5-mini"></option>
+        <option value="gpt-5-nano"></option>
+        <option value="gpt-4.1"></option>
+        <option value="gpt-4.1-mini"></option>
+        <option value="gpt-4.1-nano"></option>
+        <option value="o3"></option>
+        <option value="o3-pro"></option>
+        <option value="o3-mini"></option>
+        <option value="o4-mini"></option>
+        <option value="o1"></option>
+        <option value="o1-pro"></option>
+        <option value="gpt-4o"></option>
+        <option value="gpt-4o-mini"></option>
+        <option value="gpt-4-turbo"></option>
+        <option value="gpt-4"></option>
+        <option value="gpt-3.5-turbo"></option>
+      </datalist>
+      <small>Chọn từ gợi ý hoặc gõ tên model bất kỳ mà endpoint hỗ trợ.</small>
+    </div>
+
+    <div class="field">
+      <label for="gradeModel">Model dùng khi <b>chấm bài</b></label>
+      <input type="text" id="gradeModel" list="modelList" placeholder="gpt-5.6-luna" spellcheck="false" />
+      <small>Áp dụng cho "Chấm bài với AI" (Writing Task 2) và "Sửa tiếng Anh" trong Nhật ký. Để trống = dùng model chính ở trên.</small>
+    </div>
+
+    <div class="field">
+      <label for="ttsProvider">Phát âm (TTS)</label>
+      <select id="ttsProvider">
+        <option value="auto">Tự động — giọng trình duyệt, lỗi thì dùng OpenAI</option>
+        <option value="browser">Chỉ giọng trình duyệt (miễn phí)</option>
+        <option value="openai">Chỉ OpenAI TTS (chất lượng cao, tốn phí)</option>
+      </select>
+      <small>Brave thường chặn giọng trình duyệt do chống fingerprinting. Nếu không nghe được, chọn <b>OpenAI TTS</b> hoặc tắt Shields cho trang.</small>
+      <div class="row" style="margin-top:8px">
+        <span>Giọng</span>
+        <input type="text" id="ttsVoice" list="voiceList" style="width:130px" />
+        <datalist id="voiceList">
+          <option value="alloy"></option><option value="echo"></option><option value="fable"></option>
+          <option value="onyx"></option><option value="nova"></option><option value="shimmer"></option>
+        </datalist>
+        <span>Model</span>
+        <input type="text" id="ttsModel" style="width:130px" placeholder="tts-1" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="glossary">Bảng thuật ngữ (ép dịch nhất quán)</label>
+      <textarea id="glossary" rows="6" spellcheck="false"
+        placeholder="attention = cơ chế chú ý&#10;embedding = vector nhúng&#10;fine-tuning = tinh chỉnh"></textarea>
+      <small>Mỗi dòng một cặp <code>tiếng Anh = tiếng Việt</code>. Thuật ngữ nào xuất hiện trong đoạn sẽ được ép dịch đúng như vậy — hết cảnh mỗi đoạn dịch một kiểu.</small>
+    </div>
+
+    <div class="field">
+      <label for="concurrency">Số đoạn dịch song song: <span id="concVal">3</span></label>
+      <input type="range" id="concurrency" min="1" max="6" step="1" />
+      <small>Cao hơn = dịch cả tài liệu nhanh hơn, nhưng dễ chạm giới hạn tốc độ của API. Khuyến nghị 3.</small>
+    </div>
+
+    <div class="field">
+      <label for="dailyGoal">Mục tiêu từ vựng mỗi ngày</label>
+      <input type="number" id="dailyGoal" min="5" max="200" step="5" />
+      <small>Số từ mới mục tiêu học mỗi ngày (dùng cho thanh tiến độ & nút "Nạp từ IELTS").</small>
+    </div>
+
+    <div class="field">
+      <label><input type="checkbox" id="remEnabled" /> ⏰ Nhắc việc hằng ngày (chặn toàn màn hình đúng giờ)</label>
+      <textarea id="remList" rows="4" spellcheck="false" placeholder="11:00 | Làm việc nhà Phước giao | 30&#10;21:30 | Viết nhật ký"></textarea>
+      <small>Mỗi dòng: <code>GIỜ:PHÚT | nội dung | số phút chặn</code>. Số phút chặn = bắt <b>rời khỏi máy</b> bấy nhiêu phút (bỏ trống hoặc 0 = chỉ cần bấm xác nhận). Vd <code>11:00 | Làm việc nhà Phước giao | 30</code> → 11h chặn máy 30 phút.</small>
+    </div>
+
+    <div class="field">
+      <label for="quizCount">Số câu mặc định mỗi lượt kiểm tra</label>
+      <input type="number" id="quizCount" min="1" max="100" step="1" />
+      <small>Mức chọn sẵn ở màn "Chọn số câu" khi bấm 📝 Kiểm tra. Làm đủ số câu này ở sidebar thì tính luôn là đã trả bài đầu ngày.</small>
+    </div>
+
+    <div class="field">
+      <label for="embedModel">Embedding model (cho Hỏi đáp RAG)</label>
+      <input type="text" id="embedModel" list="embedList" placeholder="text-embedding-3-small" spellcheck="false" />
+      <datalist id="embedList">
+        <option value="text-embedding-3-small"></option>
+        <option value="text-embedding-3-large"></option>
+      </datalist>
+      <small>Dùng để tạo vector khi nạp dữ liệu vào Kho tri thức. Mặc định rẻ và đủ tốt.</small>
+    </div>
+
+    <div class="field">
+      <label for="temperature">Temperature: <span id="tempVal">0.2</span></label>
+      <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.2" />
+      <small>Thấp = dịch sát nghĩa, ổn định. Cao = linh hoạt hơn.</small>
+    </div>
+
+    <div class="field">
+      <label>
+        <input type="checkbox" id="useDictionary" /> Dùng Free Dictionary API (phiên âm, audio, định nghĩa EN)
+      </label>
+      <small>Miễn phí, không cần key. Áp dụng khi tra cứu/lưu một từ tiếng Anh; nghĩa tiếng Việt vẫn do model dịch.</small>
+    </div>
+
+    <div class="field">
+      <label for="systemPrompt">Prompt — Dịch tài liệu (đoạn/paper)</label>
+      <textarea id="systemPrompt" rows="10" spellcheck="false"></textarea>
+      <div class="row"><button type="button" id="resetPrompt" class="ghost">Khôi phục mặc định</button></div>
+    </div>
+
+    <details class="prompts-more">
+      <summary>Prompt riêng cho từng cơ chế khác</summary>
+
+      <div class="field">
+        <label for="translatePrompt">Prompt — Dịch nhanh (bôi đen)</label>
+        <textarea id="translatePrompt" rows="4" spellcheck="false"></textarea>
+        <div class="row"><button type="button" data-reset="translatePrompt" class="ghost">Khôi phục mặc định</button></div>
+      </div>
+
+      <div class="field">
+        <label for="lookupPrompt">Prompt — Tra cứu từ vựng</label>
+        <textarea id="lookupPrompt" rows="4" spellcheck="false"></textarea>
+        <div class="row"><button type="button" data-reset="lookupPrompt" class="ghost">Khôi phục mặc định</button></div>
+      </div>
+
+      <div class="field">
+        <label for="qaPrompt">Prompt — Hỏi đáp (trên tài liệu)</label>
+        <textarea id="qaPrompt" rows="4" spellcheck="false"></textarea>
+        <div class="row"><button type="button" data-reset="qaPrompt" class="ghost">Khôi phục mặc định</button></div>
+      </div>
+
+      <div class="field">
+        <label for="ragPrompt">Prompt — Hỏi đáp RAG (kho tri thức)</label>
+        <textarea id="ragPrompt" rows="4" spellcheck="false"></textarea>
+        <div class="row"><button type="button" data-reset="ragPrompt" class="ghost">Khôi phục mặc định</button></div>
+      </div>
+
+      <div class="field">
+        <label for="chatPrompt">Prompt — Chat tự do (hỏi bất kỳ)</label>
+        <textarea id="chatPrompt" rows="4" spellcheck="false"></textarea>
+        <div class="row"><button type="button" data-reset="chatPrompt" class="ghost">Khôi phục mặc định</button></div>
+      </div>
+
+      <div class="field">
+        <label for="ieltsPrompt">Prompt — Sinh từ vựng IELTS</label>
+        <textarea id="ieltsPrompt" rows="4" spellcheck="false"></textarea>
+        <div class="row"><button type="button" data-reset="ieltsPrompt" class="ghost">Khôi phục mặc định</button></div>
+      </div>
+    </details>
+
+    <details class="prompts-more">
+      <summary>🔒 Học thụ động (chặn duyệt web tới khi học xong)</summary>
+
+      <div class="field">
+        <label><input type="checkbox" id="gateEnabled" /> <b>Công tắc chính</b> — bật chế độ chặn trang để học</label>
+        <small><b>Mặc định TẮT.</b> Khi tắt, extension không chặn bất cứ trang nào — mọi thứ bên dưới bị bỏ qua.
+        Khi bật, bạn vẫn <b>chọn riêng từng cổng</b> muốn dùng (bỏ tick cái nào thì cổng đó không chặn).</small>
+      </div>
+
+      <div class="field">
+        <label><input type="checkbox" id="gateRecall" /> <b>Chế độ nhớ lại</b> — bắt <b>gõ đáp án</b> thay vì chọn A/B/C/D</label>
+        <label><input type="checkbox" id="gateColloc" /> <b>Từ trừu tượng học theo cụm</b> — từ kiểu <i>remuneration, cohesion, appraisal</i> hỏi bằng cụm đi chung + câu ngữ cảnh thay vì nghĩa rời (sinh một lần rồi lưu lại)</label>
+        <small>Trắc nghiệm dễ đoán bừa nên kiến thức không đọng lại. Khi bật: bạn tự gõ đáp án (có gợi ý chữ cái đầu),
+        sai thì phải <b>gõ lại đáp án đúng</b> rồi câu đó quay lại cuối phiên. Đây là cách học hiệu quả hơn hẳn.</small>
+      </div>
+
+      <div class="field">
+        <label><input type="checkbox" id="gateTodo" /> <b>Bước 1</b> — bắt lập <b>danh sách việc cần làm</b> trước tiên trong ngày</label>
+      </div>
+
+      <div class="field">
+        <label><input type="checkbox" id="gateJournal" /> <b>Bước 3</b> — bắt viết <b>nhật ký</b> buổi tối (thiếu ngày trước phải bù)</label>
+        <div class="row">
+          <span>Bắt viết từ giờ</span>
+          <input type="number" id="gateJournalHour" min="0" max="23" style="width:80px" />
+          <span class="muted-note">(21 = 9h tối)</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><input type="checkbox" id="gateMorning" /> <b>Bước 2</b> — chặn <b>cả ngày</b> cho tới khi học xong từ vựng/ngữ pháp</label>
+        <div class="row">
+          <span>Chỉ chặn từ giờ</span>
+          <input type="number" id="gateStartHour" min="0" max="23" style="width:80px" />
+          <span>· Từ vựng</span>
+          <input type="number" id="gateVocabCount" min="0" max="200" style="width:90px" />
+          <span>· Ngữ pháp</span>
+          <input type="number" id="gateGrammarCount" min="0" max="50" style="width:90px" />
+        </div>
+        <small>Chặn liên tục từ giờ này đến hết ngày cho tới khi bạn làm xong; xong rồi thì cả ngày không bị chặn nữa. Thiếu từ vựng đã lưu sẽ tự bù bằng câu ngữ pháp.</small>
+        <label style="margin-top:8px"><input type="checkbox" id="gateLesson" /> Đầu ngày <b>giảng 1 bài ngữ pháp</b> — ưu tiên chủ điểm bạn hay sai, chưa có thì theo lộ trình</label>
+      </div>
+
+      <div class="field">
+        <label><input type="checkbox" id="gateSocial" /> Cổng mạng xã hội — <b>mỗi lần vào đều phải trả bài</b></label>
+        <div class="row">
+          <span>Số câu</span>
+          <input type="number" id="gateSocialCount" min="1" max="20" style="width:80px" />
+          <span>· Giới hạn phiên (phút, 0 = không giới hạn)</span>
+          <input type="number" id="gatePassMinutes" min="0" max="240" style="width:80px" />
+        </div>
+        <div class="row">
+          <span><b>Trả bài xong rảnh</b></span>
+          <input type="number" id="gateSocialCooldown" min="0" max="720" style="width:80px" />
+          <span class="muted-note">phút mới khóa lại (mặc định 120 = 2 tiếng)</span>
+        </div>
+        <div class="row">
+          <span><b>Tối đa số lần trả bài mỗi ngày</b></span>
+          <input type="number" id="gateSocialMax" min="1" max="50" style="width:80px" />
+          <span class="muted-note">(hết hạn mức thì thôi chặn tới hôm sau)</span>
+        </div>
+        <label><input type="checkbox" id="gateSocialAI" /> Dùng AI sinh câu hỏi <b>khó</b>, mỗi ngày một chủ đề</label>
+        <label><input type="checkbox" id="gateSaveWrong" /> Sai câu nào <b>tự lưu từ đó</b> vào kho từ vựng (đã lọc kỹ, chỉ lấy từ/cụm sạch)</label>
+        <div class="row">
+          <span>Trình độ (CEFR)</span>
+          <select id="gateLevel">
+            <option value="B2">B2 (Cambridge B2 First)</option>
+            <option value="B2-C1">B2–C1 (nâng cao dần)</option>
+            <option value="C1">C1 (Cambridge C1 Advanced)</option>
+            <option value="C1-C2">C1–C2 (rất khó)</option>
+          </select>
+        </div>
+        <small>Trả bài xong chỉ mở cho <b>đúng tab đó</b>; mở tab khác hoặc quay lại lần sau phải trả bài tiếp. Không có API key sẽ tự dùng ngân hàng câu hỏi offline.</small>
+      </div>
+
+      <div class="field">
+        <label for="gateSites">Danh sách trang mạng xã hội (mỗi dòng một tên miền)</label>
+        <textarea id="gateSites" rows="6" spellcheck="false"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="row">
+          <button type="button" id="gateTest" class="primary">🔒 Thử ngay — mở trang khóa</button>
+          <button type="button" id="gateReset" class="ghost">Đặt lại trạng thái hôm nay</button>
+        </div>
+        <small>Các thiết lập ở mục này <b>tự lưu ngay khi bạn thay đổi</b> (không cần bấm "Lưu cấu hình").</small>
+        <div id="gateStatus" class="gate-status"></div>
+      </div>
+    </details>
+
+    <div class="actions">
+      <button type="button" id="save" class="primary">Lưu cấu hình</button>
+      <span id="status" class="status"></span>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Học đã rồi lướt</title>
+  <link rel="stylesheet" href="gate.css" />
+</head>
+<body>
+  <main class="gate">
+    <header class="g-head">
+      <div>
+        <h1 id="gTitle">Buổi sáng — học trước đã 💪</h1>
+        <p id="gSub" class="g-sub"></p>
+      </div>
+      <button id="gSkip" class="g-skip" title="Bỏ qua lần này">Bỏ qua</button>
+    </header>
+
+    <div class="g-progress"><div id="gBar" class="g-bar"></div></div>
+    <div id="gCount" class="g-count"></div>
+
+    <section id="gStart" class="g-card hidden">
+      <div class="g-type">Chọn khối lượng hôm nay</div>
+      <div id="gStartInfo" class="g-q"></div>
+      <div id="gCountOpts" class="g-counts"></div>
+      <button id="gStartBtn" class="g-btn primary">Bắt đầu</button>
+    </section>
+
+    <section id="gLesson" class="g-card hidden">
+      <div class="g-type">Bài học ngữ pháp hôm nay</div>
+      <h2 id="gLessonTitle" class="g-lesson-title"></h2>
+      <div id="gLessonBody" class="g-lesson-body"></div>
+      <button id="gLessonDone" class="g-btn primary">Đã học xong → Làm bài kiểm tra</button>
+    </section>
+
+    <section id="gCard" class="g-card">
+      <div id="gType" class="g-type"></div>
+      <div id="gQ" class="g-q"></div>
+      <div id="gOptions" class="g-options"></div>
+      <div id="gInputWrap" class="g-inputwrap hidden">
+        <input type="text" id="gInput" placeholder="Gõ đáp án…" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <div class="g-inputrow">
+          <button id="gCheck" class="g-btn primary">Kiểm tra</button>
+          <button id="gHint" class="g-btn">Hiện lựa chọn</button>
+        </div>
+      </div>
+      <div id="gFeedback" class="g-feedback"></div>
+      <button id="gNext" class="g-btn primary hidden">Tiếp →</button>
+    </section>
+
+    <section id="gReminder" class="g-card hidden">
+      <div class="g-type">⏰ Nhắc việc hằng ngày</div>
+      <div id="gRemText" class="g-q"></div>
+      <button id="gRemDone" class="g-btn primary">Bắt đầu làm — tiếp tục duyệt</button>
+    </section>
+
+    <section id="gTodo" class="g-card hidden">
+      <div class="g-type">Bước 1 — Việc cần làm hôm nay</div>
+      <div class="g-compose">
+        <input type="text" id="gTodoInput" placeholder="Thêm việc… (Enter để lưu)" autocomplete="off" />
+        <button id="gTodoAdd" class="g-btn">Thêm</button>
+      </div>
+      <div id="gTodoList" class="g-list"></div>
+      <div id="gTodoHint" class="g-feedback"></div>
+      <button id="gTodoDone" class="g-btn primary">Xong — tiếp tục</button>
+    </section>
+
+    <section id="gJournal" class="g-card hidden">
+      <div class="g-type">Nhật ký</div>
+      <div id="gJrDate" class="g-q"></div>
+      <div id="gJrDone" class="g-done hidden"></div>
+      <textarea id="gJrText" placeholder="Hôm nay bạn đã làm/học được gì? (thử viết bằng tiếng Anh)"></textarea>
+      <div id="gJrLeft" class="g-feedback"></div>
+      <button id="gJrSave" class="g-btn primary">Lưu &amp; tiếp tục</button>
+    </section>
+
+    <section id="gDone" class="g-done hidden">
+      <div class="g-done-icon">🎉</div>
+      <h2 id="gDoneTitle">Hoàn thành!</h2>
+      <p id="gDoneSub"></p>
+      <button id="gGo" class="g-btn primary">Tiếp tục duyệt web →</button>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="translator.js"></script>
+  <script src="vocab.js"></script>
+  <script src="notes.js"></script>
+  <script src="todo.js"></script>
+  <script src="mistakes.js"></script>
+  <script src="grammar.js"></script>
+  <script src="ielts.js"></script>
+  <script src="quizbank.js"></script>
+  <script src="gate.js"></script>
+</body>
+</html>
