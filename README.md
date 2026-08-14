@@ -1,4 +1,4 @@
-# 🚪 Learn Before You Scroll
+# 🚪 English in Everything
 
 Chrome extension **khóa trình duyệt lại cho tới khi bạn học xong**. Mở Facebook, YouTube hay bất kỳ trang nào trước khi trả bài, bạn gặp một màn chặn: làm hết từ vựng + ngữ pháp mới được đi tiếp. Kèm theo là bộ công cụ đọc — dịch paper PDF và trang web sang tiếng Việt, bôi đen là lưu được từ mới vào đúng kho đang ôn.
 

@@ -1,6 +1,6 @@
 // Service worker: mở side panel, xử lý dịch/tra nghĩa/lưu từ vựng cho content
 // script (trang web bất kỳ) và context menu.
-importScripts("config.js", "translator.js", "vocab.js", "notes.js", "todo.js", "cache.js", "restore-once.js");
+importScripts("config.js", "translator.js", "vocab.js", "notes.js", "todo.js", "cache.js");
 
 // Dọn cache bản dịch quá hạn (>3 tuần) khi service worker khởi động.
 trCachePurge();
@@ -107,7 +107,7 @@ async function pomoUpdateBadge() {
   const p = await getPomo();
   if (!p.running) {
     chrome.action.setBadgeText({ text: "" });
-    chrome.action.setTitle({ title: "Learn Before You Scroll" });
+    chrome.action.setTitle({ title: "English in Everything" });
     return;
   }
   const mins = Math.max(0, Math.ceil((p.endsAt - Date.now()) / 60000));
