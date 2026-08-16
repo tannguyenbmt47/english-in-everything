@@ -41,6 +41,41 @@
     if (pop && !pop.contains(e.target)) removePop();
   });
 
+  // Thanh nổi có bị thứ khác đè lên không? Nhiều trang (ChatGPT, Google Docs,
+  // Medium…) cũng bung thanh công cụ của họ ngay phía trên vùng bôi đen. Cùng
+  // z-index tối đa thì ai nằm trên phụ thuộc ngữ cảnh xếp lớp của trang — mình
+  // thua là nút Dịch bị che, bấm không được.
+  function isCovered(node) {
+    const r = node.getBoundingClientRect();
+    if (!r.width || !r.height) return false;
+    const y = r.top + r.height / 2;
+    return [r.left + 6, r.left + r.width / 2, r.right - 6].some((x) => {
+      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return true;
+      const el = document.elementFromPoint(x, y);
+      return !el || !(el === node || node.contains(el));
+    });
+  }
+
+  // Thử lần lượt: trên → dưới → dưới-phải → trên-phải, lấy chỗ đầu tiên không bị che.
+  function placeBar(rect) {
+    if (!bar) return;
+    const h = bar.offsetHeight || 34;
+    const spots = [
+      [rect.top - h - 6, rect.left],
+      [rect.bottom + 6, rect.left],
+      [rect.bottom + 6, rect.right + 8],
+      [rect.top - h - 6, rect.right + 8],
+    ];
+    for (const [top, left] of spots) {
+      bar.style.top = Math.max(4, top) + window.scrollY + "px";
+      bar.style.left = Math.max(4, left) + window.scrollX + "px";
+      if (!isCovered(bar)) return;
+    }
+    // Không còn chỗ trống -> quay lại vị trí dưới vùng chọn, ít bị tranh nhất.
+    bar.style.top = Math.max(4, rect.bottom + 6) + window.scrollY + "px";
+    bar.style.left = Math.max(4, rect.left) + window.scrollX + "px";
+  }
+
   function showBar(sel, text) {
     removeBar();
     const rect = sel.getRangeAt(0).getBoundingClientRect();
@@ -51,9 +86,15 @@
       '<button class="pvt-btn" data-a="tr">🇻🇳 Dịch</button>' +
       '<button class="pvt-btn" data-a="vocab">＋ Từ vựng</button>';
     document.body.appendChild(bar);
-    const top = window.scrollY + rect.top - 42;
-    bar.style.top = Math.max(window.scrollY + 4, top) + "px";
-    bar.style.left = window.scrollX + rect.left + "px";
+    placeBar(rect);
+    // Thanh của trang chủ nhà thường hiện SAU mình một nhịp -> kiểm tra lại vài
+    // lần. So sánh với đúng node này để không dời nhầm thanh của lần bôi đen sau.
+    const mine = bar;
+    const recheck = setInterval(() => {
+      if (bar !== mine) return clearInterval(recheck);
+      if (isCovered(bar)) placeBar(rect);
+    }, 250);
+    setTimeout(() => clearInterval(recheck), 1500);
 
     bar.querySelector('[data-a="tr"]').addEventListener("click", () => {
       doTranslate(text, rect);
