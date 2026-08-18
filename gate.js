@@ -381,17 +381,55 @@ function bankQuestion(item, typeLabel, bankKind, fromMistake) {
   };
 }
 
+// ---------- Hai từ cùng một nghĩa tiếng Việt ----------
+// Kho tự lưu nghĩa qua AI ở những thời điểm khác nhau nên rất dễ có hai từ mang
+// đúng một dòng nghĩa ("inclusion" và "integration" cùng là "sự hòa nhập").
+// Khi đó đề bài "sự hòa nhập -> gõ từ" là câu KHÔNG THỂ trả lời chắc chắn, mà
+// người học lại bị chấm sai và bị trừ điểm nhớ. Cả hai chuyện đó đều phải sửa.
+function meaningClauses(m) {
+  return String(m || "")
+    .normalize("NFC").toLowerCase()
+    .replace(/^\s*\([^)]*\)\s*/, "")        // bỏ "(danh từ)" ở đầu
+    .split(/[;,/|]|\bhoặc\b/)
+    .map((x) => x.replace(/[.!?"'’“”()]/g, "").replace(/\s+/g, " ").trim())
+    .filter((x) => x.length > 2);
+}
+
+function meaningsClash(a, b) {
+  const A = meaningClauses(a), B = meaningClauses(b);
+  if (!A.length || !B.length) return false;
+  // Trùng hẳn một vế, hoặc vế này là phần đầu của vế kia ("hiệu quả" vs
+  // "hiệu quả kinh tế") — đủ giống để người học gõ nhầm sang từ kia.
+  return A.some((x) => B.some((y) => x === y || x.startsWith(y + " ") || y.startsWith(x + " ")));
+}
+
+// Từ khác trong kho mang cùng nghĩa với từ đang hỏi (bỏ qua chính nó).
+function twinsOf(word, pool) {
+  return (pool || []).filter(
+    (v) => v.term.toLowerCase() !== word.term.toLowerCase() && meaningsClash(v.meaning, word.meaning)
+  );
+}
+
 // Từ vựng ở chế độ NHỚ LẠI: cho nghĩa -> tự gõ lại từ tiếng Anh.
-function vocabRecallQuestion(word) {
+function vocabRecallQuestion(word, pool) {
+  const twins = twinsOf(word, pool);
   return {
     kind: "vocab",
     term: word.term,
     answer: word.term,
+    meaning: word.meaning,
     typeLabel: "Từ vựng — nhớ & viết lại",
     prompt:
       `<div class="g-mean">${esc(word.meaning)}</div>` +
       (word.pos ? `<div class="g-pos">(${esc(word.pos)})</div>` : "") +
-      (word.definition ? `<div class="g-def">${esc(word.definition)}</div>` : ""),
+      (word.definition ? `<div class="g-def">${esc(word.definition)}</div>` : "") +
+      // Báo trước cho người học biết nghĩa này không đủ để chọn từ — phải đọc
+      // định nghĩa tiếng Anh. Không báo thì họ gõ từ kia rồi ăn dấu ✗ oan.
+      (twins.length
+        ? `<div class="g-ambi">⚠️ Kho đang có ${twins.length + 1} từ cùng nghĩa "${esc(word.meaning)}"` +
+          (word.definition ? " — dựa vào định nghĩa tiếng Anh ở trên để chọn đúng từ." : ".") +
+          `</div>`
+        : ""),
     options: null,
     explain: word.definition || "",
   };
@@ -413,6 +451,7 @@ function vocabContextQuestion(word) {
     kind: "vocab",
     term: word.term,
     answer: word.term,
+    meaning: word.meaning,
     typeLabel: "Từ vựng — điền vào cụm",
     prompt:
       `<div class="g-mean">${esc(word.meaning)}</div>` +
@@ -436,6 +475,7 @@ function vocabQuestion(word, pool) {
     return {
       kind: "vocab",
       term: word.term,
+      meaning: word.meaning,
       typeLabel: "Từ vựng — chọn nghĩa đúng",
       prompt: `<span class="g-word">${esc(word.term)}</span>` + (word.phonetic ? `<span class="g-ipa">${esc(word.phonetic)}</span>` : ""),
       options: shuffle([{ text: word.meaning, correct: true }].concat(others.map((o) => ({ text: o.meaning, correct: false })))),
@@ -445,6 +485,7 @@ function vocabQuestion(word, pool) {
   return {
     kind: "vocab",
     term: word.term,
+    meaning: word.meaning,
     typeLabel: "Từ vựng — chọn từ đúng",
     prompt: esc(word.meaning),
     options: shuffle([{ text: word.term, correct: true }].concat(others.map((o) => ({ text: o.term, correct: false })))),
@@ -898,7 +939,7 @@ async function buildMorning(s, vocabCount, list) {
       if (isAbstractTerm(w.term) && (w.collocs || []).length) return qs.push(vocabContextQuestion(w));
       // Còn lại: chế độ nhớ lại, tự gõ lại từ (hiệu quả hơn hẳn chọn A/B/C/D).
       // Cụm quá dài thì vẫn dùng trắc nghiệm cho khả thi.
-      qs.push(s.recallMode !== false && isTypable(w.term) ? vocabRecallQuestion(w) : vocabQuestion(w, list));
+      qs.push(s.recallMode !== false && isTypable(w.term) ? vocabRecallQuestion(w, list) : vocabQuestion(w, list));
     });
   }
   // Nếu chưa đủ số từ vựng, bù bằng câu ngữ pháp.
@@ -1129,6 +1170,16 @@ async function markVocabWrong(q) {
   } catch { show(""); }
 }
 
+// Thứ vừa gõ có phải một từ khác trong kho mang đúng nghĩa đang hỏi không?
+async function ambiguousTwin(q, typed) {
+  const t = String(typed || "").trim();
+  if (!t || !q.meaning || normAns(t) === normAns(q.answer)) return null;
+  try {
+    const v = (await getVocab()).find((x) => normAns(x.term) === normAns(t));
+    return v && v.meaning && meaningsClash(v.meaning, q.meaning) ? v : null;
+  } catch { return null; }
+}
+
 // ---------- "Bạn nhầm với từ nào?" ----------
 // Gõ sai kiểu ĐỒNG NGHĨA / GẦN ÂM (đáp án "integration" mà gõ "incorporation")
 // thì chỉ báo "sai" là chưa đủ: phải tách bạch hai từ thì lần sau mới hết nhầm.
@@ -1302,6 +1353,25 @@ async function handleSubmit() {
     updateCounter();
     el.next.classList.remove("hidden");
     el.next.focus();
+    return;
+  }
+
+  // Gõ trúng một từ KHÁC trong kho nhưng mang đúng nghĩa đang hỏi -> đề bài mơ
+  // hồ, không phải người học sai. Không đánh dấu sai, không trừ điểm nhớ.
+  const twin = q.kind === "vocab" ? await ambiguousTwin(q, val) : null;
+  if (twin) {
+    q.failed = true; // vẫn chưa phải là tự nhớ ra đúng từ -> lần đúng sau tính mức "khó"
+    mustCopy = true;
+    el.feedback.className = "g-feedback";
+    el.feedback.innerHTML =
+      `Không tính là sai: <b>${esc(twin.term)}</b> trong kho cũng ghi nghĩa "${esc(twin.meaning)}".` +
+      `<span class="g-explain">Câu này hỏi <b>${esc(q.answer)}</b>` +
+      (q.explain ? ` — ${esc(q.explain)}` : "") + `</span>` +
+      `<span class="g-explain">Gõ "${esc(q.answer)}" để đi tiếp.</span>`;
+    el.input.value = "";
+    el.input.focus();
+    el.hint.classList.add("hidden");
+    showCompare(q.answer, twin.term, confuseToken); // phần phân biệt vẫn rất đáng đọc
     return;
   }
 

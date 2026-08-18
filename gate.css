@@ -242,3 +242,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Cảnh báo "kho có nhiều từ cùng nghĩa này" ngay trên đề bài. */
+.g-ambi {
+  margin-top: 10px; font-size: 13px; color: var(--fg);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  border-left: 3px solid var(--primary); border-radius: 6px; padding: 6px 10px;
+}
