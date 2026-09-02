@@ -258,7 +258,7 @@ function normAns(s) {
     .trim()
     .toLowerCase()
     .replace(/[‐-―−]/g, "-") // – — − … về gạch nối thường
-    .replace(/[.,!?;:"'’”“]/g, "")
+    .replace(/[.,!?;:"'‘’”“]/g, "")
     .replace(/\s+/g, " ");
 }
 // Sai câu IELTS (khi lướt MXH) -> lưu ĐÁP ÁN (từ/cụm khó) vào từ vựng để học lại.

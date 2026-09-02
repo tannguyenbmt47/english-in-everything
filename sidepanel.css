@@ -689,10 +689,15 @@ body {
 .sd-actions2 { margin-top: 6px; }
 .sd-actions2 .btn { flex: 1; min-width: 0; padding: 6px 4px; font-size: 12px; white-space: nowrap; }
 .sd-actions select {
-  flex: 1; min-width: 0; padding: 6px 8px;
+  /* min-width: 0 để select co lại thoải mái trong panel hẹp -> tới mức gần 0px,
+     tức là không mở được dropdown lẫn không đọc được lựa chọn hiện tại (bug:
+     "Loại nội dung nạp" chỉ còn hiện được đúng option "Ngẫu nhiên" của select
+     bên cạnh). Khóa sàn 108px + cho phép xuống hàng riêng thay vì bóp tới chết. */
+  flex: 1 1 108px; min-width: 108px; padding: 6px 8px;
   border: 1px solid var(--border); border-radius: 8px;
   background: var(--bg); color: var(--fg); font: inherit; font-size: 12.5px;
 }
+#ieltsBtn { flex: 1 1 100%; }
 .sd-status { font-size: 12px; color: var(--muted); margin-top: 8px; min-height: 16px; }
 .sd-status.error { color: var(--error); }
 
@@ -870,8 +875,8 @@ body {
   width: 100%; box-sizing: border-box; margin: 6px 0; padding: 8px 10px;
   border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--fg); font: inherit;
 }
-.manual-add .ma-row { display: flex; gap: 6px; margin-bottom: 8px; }
-.manual-add .ma-row select { flex: 1; margin: 0; }
+.manual-add .ma-row { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.manual-add .ma-row select { flex: 1 1 108px; min-width: 108px; margin: 0; }
 .manual-add .ma-row .btn { flex-shrink: 0; }
 .ma-status { font-size: 12px; color: var(--ok, #16a34a); min-height: 16px; padding-bottom: 6px; }
 

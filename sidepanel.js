@@ -1451,7 +1451,7 @@ function wordHint(term) {
 function normAnswer(s) {
   return String(s || "").normalize("NFC").trim().toLowerCase()
     .replace(/[\u2010-\u2015\u2212]/g, "-")
-    .replace(/[.,!?;:"'\u2019\u201d\u201c]/g, "")
+    .replace(/[.,!?;:"'\u2018\u2019\u201d\u201c]/g, "")
     .replace(/\s+/g, " ");
 }
 function looseAnswer(s) {
@@ -2806,13 +2806,22 @@ function renderMarkdown(md) {
     return " CB" + (blocks.length - 1) + " ";
   });
   const inline = (t) => {
-    t = escapeHtml(t);
+    // Trích link RA TRƯỚC khi escapeHtml, không phải sau: escapeHtml đổi " thành
+    // chuỗi "&quot;", và ngay sau đó regex link (chỉ chặn ký tự " THÔ) không còn
+    // gì để chặn nữa — "&quot;" lọt nguyên vào href="...", rồi trình duyệt GIẢI
+    // MÃ HTML entity ngay trong giá trị thuộc tính, tái tạo lại đúng chuỗi thoát
+    // ra ngoài href ban đầu. Phải tách link ra placeholder, escape phần TEXT của
+    // link riêng, escape phần còn lại của đoạn riêng, rồi mới ráp lại.
+    const links = [];
+    t = String(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)"\'<>]+)\)/g, (m, txt, href) => {
+      links.push(`<a href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(txt)}</a>`);
+      return "\u0000L" + (links.length - 1) + "\u0000";
+    });
+    t = escapeHtml(t); // placeholder chỉ gồm NUL + "L" + số, escapeHtml không đụng tới
     t = t.replace(/`([^`]+)`/g, "<code>$1</code>");
     t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     t = t.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
-    // Chỉ nhận http(s) và cấm mọi ký tự có thể thoát khỏi href="..." — model trả về
-    // link là chuyện thường, và tài liệu người dùng nạp có thể prompt-inject.
-    t = t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)"\'<>]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    t = t.replace(/\u0000L(\d+)\u0000/g, (m, i) => links[+i]);
     return t;
   };
   let html = "";

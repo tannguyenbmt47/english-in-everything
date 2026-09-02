@@ -1,0 +1,11 @@
+{
+  "name": "english-in-everything",
+  "private": true,
+  "description": "Chrome extension khóa trình duyệt tới khi học xong — kèm dịch PDF/web bằng AI.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/",
+    "test:unit": "node --test test/unit/",
+    "test:integration": "node --test test/integration/"
+  }
+}

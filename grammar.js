@@ -620,7 +620,8 @@ const GRAMMAR_DATA = [
 <li><b>Body 1 & 2:</b> nhóm số liệu và mô tả chi tiết, có so sánh.</li>
 </ul>
 <p><b>Ngôn ngữ:</b> đa dạng động từ xu hướng (increase, rise, surge, decline, plummet, remain stable), trạng từ mức độ (sharply, gradually, slightly), và <b>bị động</b> cho quy trình.</p>
-<p class="gr-note">Tiêu chí chấm: Task Achievement · Coherence & Cohesion · Lexical Resource · Grammatical Range & Accuracy (mỗi phần 25%).</p>`,
+<p class="gr-note">Overview không phải một câu "cho có" — thiếu hẳn overview là lý do phổ biến nhất khiến Task Achievement bị chặn ở band 5 dù mô tả số liệu rất chi tiết (band 6 trở lên bắt buộc phải có overview chọn lọc đúng xu hướng).</p>
+<p class="gr-note">Tiêu chí chấm: Task Achievement · Coherence & Cohesion · Lexical Resource · Grammatical Range & Accuracy (mỗi phần 25%) — xem bảng band chi tiết ở bài "Tiêu chí chấm".</p>`,
       },
       {
         title: "Writing Task 2 — quy tắc & dạng đề",
@@ -635,7 +636,8 @@ const GRAMMAR_DATA = [
 <li><b>Two-part question</b> (trả lời đủ 2 câu hỏi).</li>
 </ul>
 <p><b>Cấu trúc 4 đoạn:</b> Introduction (paraphrase + thesis) → Body 1 → Body 2 → Conclusion (tóm tắt + khẳng định lại). Mỗi body: <b>câu chủ đề → giải thích → ví dụ</b>.</p>
-<p><b>Bí quyết band cao:</b> trả lời <b>đúng & đủ</b> yêu cầu, ý mạch lạc, từ nối tự nhiên, đa dạng cấu trúc câu (mệnh đề quan hệ, điều kiện, bị động), ví dụ cụ thể.</p>`,
+<p><b>Bí quyết band cao:</b> trả lời <b>đúng & đủ</b> yêu cầu, ý mạch lạc, từ nối tự nhiên, đa dạng cấu trúc câu (mệnh đề quan hệ, điều kiện, bị động), ví dụ cụ thể.</p>
+<p class="gr-note">Ngay ở band 7, giám khảo vẫn trừ vì <b>khái quát hóa quá mức</b> ("all students...", "everyone knows...") hoặc ý phụ lan man thiếu trọng tâm. Mỗi đoạn thân bài nên xoay quanh đúng MỘT ý chính, có dẫn chứng cụ thể (số liệu, ví dụ thật) thay vì phát biểu chung chung.</p>`,
       },
       {
         title: "Speaking — 3 phần & chiến lược",
@@ -645,21 +647,82 @@ const GRAMMAR_DATA = [
 <li><b>Part 2 (3–4 phút):</b> "cue card" — 1 phút chuẩn bị, nói 1–2 phút. Bám 4 gạch đầu dòng, kể có mở–thân–kết.</li>
 <li><b>Part 3 (4–5 phút):</b> thảo luận trừu tượng liên quan Part 2 — nêu ý kiến, giải thích, so sánh, đưa ví dụ.</li>
 </ul>
-<p><b>Mẹo:</b> nói trôi chảy quan trọng hơn "hoàn hảo"; dùng <b>từ nối tự nhiên</b> (well, actually, to be honest, I suppose); paraphrase khi bí; đừng học thuộc lòng máy móc.</p>`,
+<p><b>Mẹo:</b> nói trôi chảy quan trọng hơn "hoàn hảo"; dùng <b>từ nối tự nhiên</b> (well, actually, to be honest, I suppose); paraphrase khi bí; đừng học thuộc lòng máy móc.</p>
+<p class="gr-note">Giám khảo phân biệt band chủ yếu qua <b>LÝ DO</b> bạn ngập ngừng, không phải số lần: ngập ngừng để tìm TỪ hoặc NGỮ PHÁP cơ bản kéo bạn về band 5–6; ngập ngừng để tìm Ý TIẾP THEO trong lúc câu trước vẫn trôi chảy là bình thường ngay cả ở band 7–8. Đừng cố nói không ngừng nghỉ — hãy để chỗ ngừng đúng lúc, đúng lý do.</p>`,
       },
       {
-        title: "Tiêu chí chấm (Band Descriptors)",
+        title: "Tiêu chí chấm (Band Descriptors) — theo bảng chính thức IELTS.org",
         html: `
-<p><b>Writing & Speaking</b> chấm theo 4 tiêu chí bằng nhau:</p>
+<p>Writing & Speaking đều chấm theo <b>4 tiêu chí bằng nhau (25% mỗi tiêu chí)</b>. Bảng dưới đây tóm tắt bằng tiếng Việt điểm KHÁC NHAU cốt lõi giữa các band 5–8, dựa theo "Band Descriptors (public version)" chính thức của IELTS (British Council · IDP · Cambridge — công bố tại ielts.org).</p>
+<p class="gr-note">Nguyên tắc chấm quan trọng nhất mà nhiều người bỏ qua: giám khảo chỉ cho một band khi bài <b>ĐẠT ĐỦ mọi đặc điểm tích cực</b> của band đó ("a candidate must fully fit the positive features of the descriptor"). Thiếu một đặc điểm là bị đẩy xuống band ngay dưới, dù các mặt khác đã tốt hơn.</p>
+
+<h4>Writing — Task Response/Achievement · Coherence & Cohesion · Lexical Resource · Grammar</h4>
 <div class="gr-scroll"><table>
-<tr><th>Tiêu chí</th><th>Ý nghĩa</th></tr>
-<tr><td>Task Response / Achievement</td><td>trả lời đúng & đủ yêu cầu, phát triển ý</td></tr>
-<tr><td>Coherence & Cohesion</td><td>bố cục, mạch lạc, từ nối, chia đoạn</td></tr>
-<tr><td>Lexical Resource</td><td>vốn từ đa dạng, chính xác, collocation</td></tr>
-<tr><td>Grammatical Range & Accuracy</td><td>đa dạng & chính xác cấu trúc câu</td></tr>
+<tr><th>Band</th><th>Task Response / Achievement</th><th>Coherence & Cohesion</th><th>Lexical Resource</th><th>Grammatical Range & Accuracy</th></tr>
+<tr>
+<td><b>5</b></td>
+<td>Chỉ đáp ứng một phần yêu cầu; ý còn hạn chế, thiếu triển khai, có thể lạc sang chi tiết vụn</td>
+<td>Có tổ chức nhưng thiếu mạch lạc tổng thể; lặp từ do thiếu phép thế/quy chiếu</td>
+<td>Vốn từ hạn chế nhưng đủ tối thiểu cho đề bài; lỗi chính tả/cấu tạo từ rõ rệt</td>
+<td>Câu đơn kiểm soát khá tốt; câu phức có thử nhưng kém chính xác hơn hẳn câu đơn</td>
+</tr>
+<tr>
+<td><b>6</b></td>
+<td>Đáp ứng đủ các phần yêu cầu (có phần còn sơ sài); nêu được quan điểm nhưng phần kết có thể mơ hồ/lặp</td>
+<td>Sắp xếp mạch lạc, có tiến triển rõ; liên kết đôi khi máy móc hoặc lệch giữa các câu</td>
+<td>Đủ từ cho yêu cầu; thử dùng từ ít thông dụng nhưng còn sai; lỗi chính tả không cản trở việc hiểu</td>
+<td>Trộn câu đơn & câu phức; có lỗi ngữ pháp/dấu câu nhưng hiếm khi cản trở giao tiếp</td>
+</tr>
+<tr>
+<td><b>7</b></td>
+<td>Đáp ứng đủ mọi phần, quan điểm rõ ràng xuyên suốt bài; ý được mở rộng & có dẫn chứng — nhưng dễ <b>khái quát hóa quá mức</b> hoặc ý phụ thiếu trọng tâm</td>
+<td>Tổ chức logic, tiến triển rõ; <b>mỗi đoạn có một ý trung tâm rõ ràng</b></td>
+<td>Đủ đa dạng để linh hoạt & chính xác; dùng được từ ít thông dụng, có ý thức về văn phong/collocation</td>
+<td>Đa dạng cấu trúc phức; nhiều câu không lỗi; kiểm soát tốt ngữ pháp & dấu câu, còn vài lỗi nhỏ</td>
+</tr>
+<tr>
+<td><b>8</b></td>
+<td>Đáp ứng đầy đủ & phát triển tốt mọi phần; ý liên quan, được mở rộng, có dẫn chứng</td>
+<td>Sắp xếp thông tin/ý logic; quản lý tốt <b>mọi</b> mặt của liên kết & chia đoạn</td>
+<td>Vốn từ rộng, linh hoạt, truyền đạt nghĩa chính xác; dùng khéo từ hiếm dù đôi lúc collocation chưa hoàn hảo</td>
+<td>Đa dạng cấu trúc, phần lớn câu không lỗi, chỉ thỉnh thoảng sai sót nhỏ</td>
+</tr>
 </table></div>
-<p><b>Speaking</b> cũng có <b>4</b> tiêu chí, nhưng khác Writing: <b>Fluency & Coherence</b> (thay cho cả Task Response lẫn Coherence & Cohesion), <b>Lexical Resource</b>, <b>Grammatical Range & Accuracy</b>, và <b>Pronunciation</b>.</p>
-<p class="gr-note">Muốn lên band: giảm lỗi lặp cấu trúc, tăng câu phức đúng ngữ pháp, dùng từ vựng học thuật đúng ngữ cảnh.</p>`,
+
+<h4>Speaking — Fluency & Coherence · Lexical Resource · Grammar · Pronunciation</h4>
+<div class="gr-scroll"><table>
+<tr><th>Band</th><th>Fluency & Coherence</th><th>Lexical Resource</th><th>Grammatical Range & Accuracy</th><th>Pronunciation</th></tr>
+<tr>
+<td><b>5</b></td>
+<td>Vẫn nói được nhưng phải dựa vào lặp/tự sửa hoặc nói chậm; ngập ngừng GIỮA CÂU khi tìm từ/ngữ pháp cơ bản</td>
+<td>Đủ bàn chủ đề quen lẫn lạ nhưng thiếu linh hoạt; paraphrase chưa chắc thành công</td>
+<td>Câu đơn kiểm soát khá tốt; câu phức cố thử nhưng gần như luôn có lỗi, hay phải nói lại</td>
+<td>Có một số đặc điểm ngữ âm ổn nhưng phạm vi hẹp; người nghe hiểu được nhưng phải cố gắng</td>
+</tr>
+<tr>
+<td><b>6</b></td>
+<td>Duy trì được lượt nói dài; đôi lúc mất mạch lạc vì ngập ngừng/lặp/tự sửa</td>
+<td>Đủ để bàn sâu một chủ đề; dùng từ đôi khi chưa hợp nhưng nghĩa vẫn rõ; paraphrase được</td>
+<td>Trộn câu ngắn & câu phức, linh hoạt còn hạn chế; câu phức hay lỗi nhưng không cản giao tiếp</td>
+<td>Kiểm soát ngữ điệu/trọng âm không đều; người nghe hiểu xuyên suốt mà không cần cố nhiều</td>
+</tr>
+<tr>
+<td><b>7</b></td>
+<td>Nói dài không cần gắng sức rõ rệt; ngập ngừng/tự sửa (nếu có) <b>là để tìm từ giữa câu</b>, KHÔNG làm mất mạch lạc chung</td>
+<td>Linh hoạt bàn nhiều chủ đề; dùng được từ ít thông dụng, có ý thức về văn phong/collocation dù đôi lúc chưa khớp</td>
+<td>Đa dạng cấu trúc, câu không lỗi khá thường xuyên; vài lỗi cơ bản vẫn còn tồn tại</td>
+<td>Có hầu hết ưu điểm của band 6, cộng một phần ưu điểm của band 8</td>
+</tr>
+<tr>
+<td><b>8</b></td>
+<td>Trôi chảy, hiếm khi lặp/tự sửa; <b>ngập ngừng (nếu có) là để chuẩn bị Ý tiếp theo</b>, không phải để tìm từ hay ngữ pháp</td>
+<td>Vốn từ rộng, dùng linh hoạt cho mọi chủ đề kể cả thành ngữ; hiếm khi sai collocation</td>
+<td>Đa dạng cấu trúc, phần lớn câu không lỗi</td>
+<td>Dùng linh hoạt ngữ điệu/trọng âm để nhấn nghĩa; người nghe hiểu dễ dàng, giọng gần như không ảnh hưởng</td>
+</tr>
+</table></div>
+
+<p class="gr-note"><b>Ranh giới 6 → 7 quan trọng nhất, ở cả Writing lẫn Speaking, KHÔNG phải "ít lỗi hơn"</b> mà là: (1) mỗi đoạn/mỗi câu trả lời có đúng MỘT ý trung tâm rõ ràng, không lan man; (2) ngập ngừng/tự sửa — nếu có — xảy ra vì đang tìm Ý tiếp theo để nói, chứ không phải vì bí từ hay bí ngữ pháp cơ bản; (3) bắt đầu dùng được từ/cấu trúc ít thông dụng một cách có ý thức (biết khi nào nên và không nên dùng), chứ không chỉ nhồi từ khó.</p>`,
       },
       {
         title: "Từ nối & cụm hữu ích (Writing/Speaking)",
