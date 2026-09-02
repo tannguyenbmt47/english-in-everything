@@ -1132,7 +1132,6 @@ async function refreshDashboard() {
 // Nạp bộ từ IELTS: sinh bằng LLM + lấy phát âm từ Free Dictionary.
 el.ieltsBtn.addEventListener("click", async () => {
   const cfg = await getConfig();
-  if (!cfg.apiKey) { el.warn.classList.remove("hidden"); setIeltsStatus("Chưa có API key (mở ⚙️).", true); return; }
   const goal = cfg.dailyGoal || 50;
   const { today } = await getTodayStats();
   const count = Math.min(50, Math.max(5, goal - (today.new || 0) || goal));
@@ -1140,10 +1139,43 @@ el.ieltsBtn.addEventListener("click", async () => {
   const kind = el.ieltsKind.value || "word";
   const kindLabel = { word: "từ", collocation: "collocation", idiom: "thành ngữ", proverb: "tục ngữ" }[kind];
   el.ieltsBtn.disabled = true;
-  setIeltsStatus(`Đang tạo ${count} ${kindLabel} (${topic})…`);
+  setIeltsStatus(`Đang chuẩn bị ${count} ${kindLabel} (${topic})…`);
   try {
     const existing = new Set((await getVocab()).map((v) => v.term.trim().toLowerCase()));
-    const words = await generateIeltsWords({ config: cfg, count, topic, kind, exclude: [...existing] });
+
+    // Ưu tiên NGÂN HÀNG OFFLINE biên soạn thủ công theo chủ đề (ielts-topics.js)
+    // — miễn phí, chất lượng ổn định, không cần API key. Chỉ gọi AI để bù phần
+    // còn thiếu (chủ đề "Ngẫu nhiên", loại khác "Từ vựng", hoặc ngân hàng của
+    // chủ đề đó đã được lưu hết vào kho).
+    let words = [];
+    if (kind === "word" && IELTS_TOPIC_BANK[topic]) {
+      words = IELTS_TOPIC_BANK[topic]
+        .filter((w) => !existing.has(w.word.trim().toLowerCase()))
+        .slice(0, count);
+    }
+    const fromBank = words.length;
+    const missing = count - fromBank;
+
+    if (missing > 0) {
+      if (!cfg.apiKey) {
+        if (!fromBank) {
+          el.warn.classList.remove("hidden");
+          setIeltsStatus("Chưa có API key (mở ⚙️) — hoặc chọn một chủ đề đã có ngân hàng offline (Education, Environment, Technology…).", true);
+          return;
+        }
+        // Có sẵn từ ngân hàng thì vẫn dùng, chỉ là không bù đủ tới mục tiêu hôm nay.
+      } else {
+        setIeltsStatus(`Ngân hàng offline có ${fromBank}/${count} từ (${topic}) — đang nhờ AI tạo thêm ${missing}…`);
+        const bankKeys = new Set(words.map((w) => w.word.toLowerCase()));
+        try {
+          const ai = await generateIeltsWords({ config: cfg, count: missing, topic, kind, exclude: [...existing, ...bankKeys] });
+          words = words.concat(ai);
+        } catch (err) {
+          if (!fromBank) throw err; // không có gì từ bank -> lỗi AI thì báo luôn
+          console.error(err); // có sẵn từ bank -> vẫn dùng phần đó, chỉ log lỗi AI
+        }
+      }
+    }
     if (!words.length) throw new Error("Không tạo được từ, hãy thử lại.");
 
     // Lọc trùng: bỏ từ đã có trong kho VÀ từ lặp trong chính đợt này.
@@ -1168,10 +1200,11 @@ el.ieltsBtn.addEventListener("click", async () => {
       setIeltsStatus(`Đang lấy phát âm cho ${fresh.length} từ mới…`);
       dicts = await Promise.all(fresh.map((w) => fetchDictionary(w.word).catch(() => null)));
     }
-    let added = 0;
+    let added = 0, fromBankAdded = 0;
     for (let i = 0; i < fresh.length; i++) {
       const w = fresh[i];
       const d = dicts[i];
+      const isBank = i < fromBank;
       await addVocab({
         term: String(w.word).trim(),
         meaning: w.meaning_vi || "",
@@ -1181,11 +1214,13 @@ el.ieltsBtn.addEventListener("click", async () => {
         definition: w.definition_en || d?.meanings?.[0]?.definition || "",
         example: w.example || "",
         kind,
-        source: `IELTS · ${topic}`,
+        source: isBank ? `IELTS thực chiến · ${topic}` : `IELTS · ${topic}`,
       });
       added++;
+      if (isBank) fromBankAdded++;
     }
-    setIeltsStatus(`✓ Đã thêm ${added} ${kindLabel} mới${dup ? ` (bỏ qua ${dup} trùng)` : ""}. Bấm 📝 để kiểm tra.`);
+    const bankNote = fromBankAdded ? `${fromBankAdded} từ ngân hàng offline${added > fromBankAdded ? ` + ${added - fromBankAdded} từ AI` : ""}` : "";
+    setIeltsStatus(`✓ Đã thêm ${added} ${kindLabel} mới${bankNote ? ` (${bankNote})` : ""}${dup ? ` · bỏ qua ${dup} trùng` : ""}. Bấm 📝 để kiểm tra.`);
     renderVocab();
     refreshVocabCount();
     refreshDashboard();
