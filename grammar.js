@@ -10,23 +10,88 @@ const GRAMMAR_DATA = [
       {
         title: "Nền tảng: thành phần & trật tự câu",
         html: `
-<p>Trước khi đi vào từng chủ điểm, bạn cần nắm "bộ khung" của một câu tiếng Anh. Khác với tiếng Việt vốn khá linh hoạt, tiếng Anh rất coi trọng <b>trật tự từ</b>: thay đổi vị trí thường làm đổi nghĩa hoặc khiến câu sai.</p>
-<h4>Trật tự cơ bản: S – V – O</h4>
-<p>Hầu hết câu trần thuật đi theo thứ tự <b>Chủ ngữ (Subject) → Động từ (Verb) → Tân ngữ (Object)</b>, sau đó mới đến các thành phần bổ nghĩa về <i>cách thức – nơi chốn – thời gian</i>.</p>
-<p class="gr-ex">She (S) <b>reads</b> (V) English books (O) carefully (cách thức) at the library (nơi chốn) every evening (thời gian).<br><i>Cô ấy đọc sách tiếng Anh một cách cẩn thận ở thư viện mỗi tối.</i></p>
-<h4>Các thành phần thường gặp</h4>
+<p>Trước khi đi vào từng chủ điểm, bạn cần nắm "bộ khung" của một câu tiếng Anh — mọi quy tắc khác (thì, bị động, mệnh đề quan hệ…) đều xây trên nền này. Bài này hơi dài vì nó phải tự đứng được một mình: mọi thuật ngữ dùng ở đây (chủ ngữ, tân ngữ, mệnh đề…) sẽ được định nghĩa ngay khi xuất hiện, không giả định bạn đã biết.</p>
+
+<h4>Vì sao trật tự từ quan trọng đến vậy?</h4>
+<p>Tiếng Việt là ngôn ngữ <b>không biến hình</b> (từ không đổi dạng theo chức năng) nhưng khá linh hoạt về trật tự nhờ ngữ cảnh và trợ từ: "Cơm tôi ăn rồi" hay "Tôi ăn cơm rồi" người nghe đều hiểu. Tiếng Anh thì khác: gần như không có cách nào khác để biết "ai làm gì cho ai" ngoài <b>vị trí của từ trong câu</b>. Đổi chỗ hai từ có thể biến một câu đúng thành sai, hoặc tệ hơn — vẫn đúng ngữ pháp nhưng đổi hẳn nghĩa.</p>
+<p class="gr-ex">The dog bit the man. <i>(Con chó cắn người đàn ông.)</i><br>The man bit the dog. <i>(Người đàn ông cắn con chó.)</i></p>
+<p>Hai câu trên dùng đúng những từ giống hệt nhau, chỉ đổi vị trí — nghĩa đảo ngược hoàn toàn. Đây là lý do vì sao học trật tự câu tiếng Anh không phải chuyện "biết rồi", mà là nền tảng bắt buộc phải nắm chắc trước khi học các chủ điểm khác.</p>
+
+<h4>Mệnh đề là gì? (Clause)</h4>
+<p><b>Mệnh đề</b> là một nhóm từ CÓ CHỨA đầy đủ chủ ngữ + động từ chia (không phải V-ing/to-V đơn thuần), có thể diễn đạt một ý trọn vẹn hoặc một phần ý. Mỗi câu tiếng Anh có ít nhất một mệnh đề. Khái niệm này sẽ xuất hiện liên tục ở các bài sau (mệnh đề quan hệ, mệnh đề điều kiện…), nên cần hiểu ngay từ đây: mệnh đề khác với <b>cụm từ (phrase)</b> — cụm từ là một nhóm từ không có đủ chủ ngữ + động từ chia.</p>
+<p class="gr-ex"><b>Mệnh đề:</b> she reads books <i>(có chủ ngữ "she" + động từ chia "reads")</i><br><b>Cụm từ:</b> reading books / in the library <i>(không có chủ ngữ + động từ chia)</i></p>
+
+<h4>5 thành phần cốt lõi của một câu</h4>
+<p>Một câu tiếng Anh được ráp từ tối đa 5 "khối": <b>S – V – O – C – A</b>. Không phải câu nào cũng có đủ cả 5, nhưng hiểu rõ từng khối là chìa khóa để không viết sai cấu trúc.</p>
+
+<h5>1. Chủ ngữ (Subject — S)</h5>
+<p>Là người/vật thực hiện hành động hoặc được nói tới, luôn đứng ở vị trí bắt buộc phải có (trừ câu mệnh lệnh). Có thể là:</p>
 <ul>
-<li><b>Chủ ngữ:</b> danh từ, đại từ, danh động từ (V-ing) hoặc một mệnh đề. <i>Learning English takes time.</i></li>
-<li><b>Động từ:</b> "trái tim" của câu — quyết định thì, thể và sự hòa hợp. Có <b>nội động từ</b> (không cần tân ngữ: <i>He slept.</i>) và <b>ngoại động từ</b> (cần tân ngữ: <i>She bought a book.</i>).</li>
-<li><b>Bổ ngữ (complement):</b> theo sau động từ nối (be, become, seem, look…) để mô tả chủ ngữ: <i>She is <b>a teacher</b> / <b>happy</b>.</i></li>
+<li>Danh từ / cụm danh từ: <i>My sister works in Hanoi.</i></li>
+<li>Đại từ: <i>She works in Hanoi.</i></li>
+<li>Danh động từ (V-ing làm chủ ngữ, xem thêm bài "Danh động từ & Động từ nguyên mẫu"): <i><b>Learning English</b> takes time.</i></li>
+<li>Động từ nguyên mẫu có "to": <i><b>To learn</b> a language well takes years.</i></li>
+<li>Cả một mệnh đề (mệnh đề danh từ): <i><b>What she said</b> surprised everyone.</i></li>
 </ul>
-<h4>Ba loại câu theo cấu trúc</h4>
+<p class="gr-note">Lỗi hay gặp: tiếng Việt cho phép bỏ chủ ngữ khi đã rõ ngữ cảnh ("Đang ăn cơm" = tôi/nó/họ đang ăn cơm), nhưng tiếng Anh <b>luôn luôn phải có chủ ngữ</b>, kể cả khi vô nghĩa như "it" trong <i>It is raining.</i> (không dịch chữ "it" này ra tiếng Việt).</p>
+
+<h5>2. Động từ (Verb — V)</h5>
+<p>"Trái tim" của câu — quyết định thì (thời điểm), thể (chủ động/bị động, thường/tiếp diễn/hoàn thành) và sự hòa hợp với chủ ngữ (xem bài "Sự hòa hợp Chủ ngữ – Động từ"). Động từ chia làm hai nhóm quan trọng, quyết định câu có cần Tân ngữ hay không:</p>
 <ul>
-<li><b>Câu đơn:</b> một mệnh đề độc lập. <i>I like coffee.</i></li>
-<li><b>Câu ghép:</b> hai mệnh đề độc lập nối bằng <i>and, but, so, or…</i> <i>I like coffee, <b>but</b> she prefers tea.</i></li>
-<li><b>Câu phức:</b> một mệnh đề chính + mệnh đề phụ thuộc (bắt đầu bằng <i>because, although, when, that…</i>). <i>I stayed home <b>because</b> it was raining.</i></li>
+<li><b>Nội động từ (intransitive verb):</b> diễn tả trọn vẹn ý nghĩa mà KHÔNG cần tân ngữ theo sau. <i>He slept. / The sun rises. / She arrived late.</i> Thêm một danh từ ngay sau các động từ này là sai: <i>~~He slept the bed.~~</i> sai, phải là <i>He slept <b>on</b> the bed.</i> (cần giới từ).</li>
+<li><b>Ngoại động từ (transitive verb):</b> BẮT BUỘC phải có tân ngữ theo sau mới trọn nghĩa. <i>She bought <b>a book</b>.</i> Nếu bỏ "a book", câu <i>She bought.</i> nghe cụt và sai — người nghe sẽ hỏi ngay "mua cái gì?".</li>
 </ul>
-<p class="gr-note">Mẹo lên band: biết phối hợp cả ba loại câu giúp bài viết vừa mạch lạc vừa "đa dạng cấu trúc" — một tiêu chí chấm quan trọng.</p>`,
+<p>Một số động từ dùng được cả hai cách với nghĩa khác nhau hoặc gần giống nhau: <i>She reads. (nội động từ — cô ấy có thói quen đọc sách) / She reads books. (ngoại động từ — cô ấy đọc sách)</i>.</p>
+
+<h5>3. Tân ngữ (Object — O)</h5>
+<p><b>Tân ngữ là người/vật CHỊU TÁC ĐỘNG trực tiếp hoặc gián tiếp của hành động</b>, đứng ngay sau ngoại động từ. Đây là thành phần hay bị bỏ sót giải thích nhất dù rất hay gặp — nắm chắc phần này sẽ tránh được nhiều lỗi viết câu.</p>
+<ul>
+<li><b>Tân ngữ trực tiếp (direct object):</b> vật/người trực tiếp nhận hành động — trả lời cho câu hỏi "làm gì?" / "ai?". <i>She bought <b>a book</b>.</i> (mua CÁI GÌ? → a book)</li>
+<li><b>Tân ngữ gián tiếp (indirect object):</b> người NHẬN LỢI từ hành động đó — trả lời "cho ai?". Chỉ xuất hiện cùng nhóm động từ "hai tân ngữ" như <i>give, tell, show, send, buy, offer, lend</i>. <i>She gave <b>her brother</b> (gián tiếp) <b>a book</b> (trực tiếp).</i> Có thể viết lại bằng giới từ "to/for": <i>She gave a book <b>to her brother</b>.</i></li>
+</ul>
+<p class="gr-note">Phân biệt nhanh Tân ngữ với Chủ ngữ: đổi câu sang bị động (xem bài "Câu bị động"), TÂN NGỮ của câu chủ động sẽ trở thành CHỦ NGỮ của câu bị động — đây chính là lý do câu bị động luôn cần một ngoại động từ có tân ngữ để "mượn" làm chủ ngữ mới. <i>She bought a book. → A book was bought (by her).</i></p>
+
+<h5>4. Bổ ngữ (Complement — C)</h5>
+<p>Bổ ngữ KHÔNG chịu tác động của hành động (khác Tân ngữ) mà dùng để MÔ TẢ/ĐỊNH DANH chủ ngữ hoặc tân ngữ. Có hai loại:</p>
+<ul>
+<li><b>Bổ ngữ cho chủ ngữ (subject complement):</b> theo sau các "động từ nối/liên kết" (linking verb) như <i>be, become, seem, look, feel, sound, remain, stay</i> — những động từ này không diễn tả hành động mà chỉ "nối" chủ ngữ với một tính chất/danh phận. <i>She is <b>a teacher</b>. / She looks <b>tired</b>. / The soup tastes <b>delicious</b>.</i></li>
+<li><b>Bổ ngữ cho tân ngữ (object complement):</b> mô tả chính tân ngữ vừa nêu, thường sau các động từ như <i>make, call, name, consider, find</i>. <i>They made her <b>captain</b>. / I find this book <b>boring</b>.</i> (ở đây "captain" và "boring" không phải tân ngữ thứ hai — chúng mô tả "her" và "this book").</li>
+</ul>
+<p class="gr-note">Cách phân biệt Bổ ngữ với Tân ngữ nhanh nhất: thử bỏ nó đi hoặc thay bằng đại từ tương ứng. Tân ngữ có thể thay bằng "it/him/her" (<i>She bought a book → She bought it</i>); Bổ ngữ mô tả chủ ngữ/tân ngữ nên không thể thay như vậy mà không phá nghĩa (<i>She is a teacher → ~~She is it~~</i> sai).</p>
+
+<h5>5. Trạng ngữ (Adverbial — A)</h5>
+<p>Là thành phần bổ sung thông tin về <b>cách thức – nơi chốn – thời gian – nguyên nhân…</b>, KHÔNG bắt buộc phải có nhưng thêm vào để câu đầy đủ thông tin hơn. Khác với Tân ngữ và Bổ ngữ, bỏ Trạng ngữ đi câu vẫn đúng ngữ pháp và trọn nghĩa.</p>
+<p class="gr-ex">She reads books <b>carefully</b> (cách thức) <b>at the library</b> (nơi chốn) <b>every evening</b> (thời gian).<br><i>Cô ấy đọc sách một cách cẩn thận ở thư viện mỗi tối.</i></p>
+<p>Thứ tự thông thường của trạng ngữ khi đi cùng nhau là <b>Cách thức → Nơi chốn → Thời gian</b> (nhớ tắt "M-P-T": Manner – Place – Time). Đặt trạng ngữ thời gian lên đầu câu cũng rất phổ biến và tự nhiên: <i><b>Every evening</b>, she reads books carefully at the library.</i></p>
+
+<h4>Trật tự cơ bản S – V – O và các biến thể</h4>
+<p>Ghép 5 thành phần trên lại, câu tiếng Anh thường rơi vào một trong các khuôn mẫu sau — nắm được khuôn nào ứng với động từ nào giúp bạn không viết thiếu/thừa thành phần:</p>
+<div class="gr-scroll"><table>
+<tr><th>Khuôn mẫu</th><th>Loại động từ</th><th>Ví dụ</th></tr>
+<tr><td>S + V</td><td>nội động từ</td><td>Birds fly.</td></tr>
+<tr><td>S + V + O</td><td>ngoại động từ (1 tân ngữ)</td><td>She bought a book.</td></tr>
+<tr><td>S + V + C</td><td>động từ nối</td><td>She is a teacher.</td></tr>
+<tr><td>S + V + O + O</td><td>ngoại động từ (2 tân ngữ)</td><td>She gave him a book.</td></tr>
+<tr><td>S + V + O + C</td><td>ngoại động từ + bổ ngữ cho tân ngữ</td><td>They made her captain.</td></tr>
+</table></div>
+<p>Sau bất kỳ khuôn nào ở trên, Trạng ngữ (A) đều có thể thêm vào cuối câu (hoặc đầu câu) mà không phá cấu trúc.</p>
+
+<h4>Bốn loại câu theo cấu trúc</h4>
+<p>Ngoài phân loại theo thành phần, câu còn được phân loại theo SỐ LƯỢNG và QUAN HỆ giữa các mệnh đề bên trong nó — đây là kiến thức trực tiếp phục vụ tiêu chí "đa dạng cấu trúc câu" khi chấm Writing/Speaking.</p>
+<ul>
+<li><b>Câu đơn (simple sentence):</b> chỉ có MỘT mệnh đề độc lập (mệnh đề tự đứng thành câu hoàn chỉnh được). <i>I like coffee.</i></li>
+<li><b>Câu ghép (compound sentence):</b> HAI (hoặc nhiều) mệnh đề độc lập, có vị thế ngang hàng, nối bằng liên từ kết hợp (and, but, so, or, yet, for, nor — viết tắt FANBOYS) hoặc dấu chấm phẩy. <i>I like coffee, <b>but</b> she prefers tea.</i></li>
+<li><b>Câu phức (complex sentence):</b> MỘT mệnh đề chính (độc lập) + ÍT NHẤT một mệnh đề phụ thuộc (không tự đứng thành câu được, cần dựa vào mệnh đề chính). Mệnh đề phụ thuộc bắt đầu bằng liên từ phụ thuộc (because, although, when, if, that…) hoặc đại từ quan hệ (who, which, that…). <i>I stayed home <b>because it was raining</b>.</i> ("it was raining" không thể đứng một mình thành câu hoàn chỉnh có nghĩa trong ngữ cảnh này vì nó phụ thuộc vào "because").</li>
+<li><b>Câu ghép-phức (compound-complex sentence):</b> kết hợp cả câu ghép lẫn câu phức — ít nhất HAI mệnh đề độc lập VÀ ít nhất MỘT mệnh đề phụ thuộc. <i>I stayed home because it was raining, <b>and</b> I finished reading my book.</i> Đây là loại câu phức tạp nhất, hay gặp ở các bài viết band 7+.</li>
+</ul>
+<p class="gr-note">Mẹo lên band: một bài Writing Task 2 chỉ toàn câu đơn sẽ bị đánh giá là "cấu trúc hạn chế" (Grammatical Range thấp); ngược lại toàn câu ghép-phức phức tạp mà sai ngữ pháp còn tệ hơn. Mục tiêu là <b>trộn cả 4 loại một cách tự nhiên</b> — đây chính là tiêu chí "range" mà giám khảo tìm kiếm (xem bài "Tiêu chí chấm").</p>
+
+<h4>Lỗi phổ biến do ảnh hưởng từ tiếng Việt</h4>
+<ul>
+<li><b>Bỏ chủ ngữ giả "it":</b> <i>~~Is raining.~~</i> → phải là <i>It is raining.</i></li>
+<li><b>Bỏ động từ nối "be":</b> tiếng Việt không cần từ nối khi nói "Cô ấy đẹp", nhưng tiếng Anh bắt buộc: <i>~~She beautiful.~~</i> → <i>She <b>is</b> beautiful.</i></li>
+<li><b>Đặt trạng ngữ thời gian/tần suất sai vị trí:</b> tiếng Việt hay nói "Tôi thường đi học" (trạng từ trước động từ được, được cả trước/sau tuỳ ngữ cảnh), tiếng Anh với trạng từ tần suất (always, usually, often, never) đứng TRƯỚC động từ thường nhưng SAU động từ "be": <i>I <b>usually</b> go to school. / She <b>is usually</b> late.</i></li>
+</ul>`,
       },
       {
         title: "Từ loại (Parts of Speech) — nhận diện & vị trí",
@@ -147,7 +212,20 @@ const GRAMMAR_DATA = [
       {
         title: "12 thì — bảng tổng hợp & cách chọn thì",
         html: `
-<p>Thì (tense) cho biết hành động xảy ra <b>khi nào</b> và ở <b>trạng thái nào</b> (đã xong, đang diễn ra, kéo dài…). Tiếng Anh có 3 mốc thời gian (hiện tại – quá khứ – tương lai), mỗi mốc có 4 thể (đơn – tiếp diễn – hoàn thành – hoàn thành tiếp diễn), tạo thành 12 thì.</p>
+<p><b>Thì (tense)</b> là hình thức biến đổi của động từ để cho biết hành động xảy ra <b>khi nào</b> (hiện tại/quá khứ/tương lai) VÀ ở <b>trạng thái nào</b> (đơn giản/đang diễn ra/đã hoàn tất/hoàn tất-và-kéo dài) — hai khái niệm này gộp lại thành cái người học hay gọi chung là "thì", nhưng thực ra gồm hai lớp riêng: <b>mốc thời gian (tense)</b> và <b>thể (aspect)</b>. Tiếng Anh có 3 mốc thời gian, mỗi mốc có 4 thể, ghép lại thành đúng 12 thì cần nhớ.</p>
+
+<h4>Vì sao người Việt hay lúng túng với hệ thống này?</h4>
+<p>Tiếng Việt diễn tả thời gian bằng CÁC TỪ RIÊNG đặt trước động từ ("đã", "đang", "sẽ", "vừa mới"…) trong khi bản thân động từ KHÔNG đổi dạng: "ăn" luôn là "ăn" dù là "tôi ăn / tôi đã ăn / tôi đang ăn". Tiếng Anh thì ngược lại: chính ĐỘNG TỪ phải đổi dạng (work → worked → working → have worked…), và việc đổi dạng này bắt buộc, không phải tuỳ chọn. Đây là lý do lỗi phổ biến nhất của người Việt học tiếng Anh là <b>quên chia động từ</b> vì thói quen ngôn ngữ mẹ đẻ không đòi hỏi điều đó.</p>
+
+<h4>4 thể (aspect) — trục thứ hai cần nắm song song với mốc thời gian</h4>
+<ul>
+<li><b>Đơn (simple):</b> nêu sự việc như một sự kiện trọn vẹn, không nhấn mạnh quá trình. <i>I work.</i></li>
+<li><b>Tiếp diễn (continuous/progressive):</b> nhấn mạnh hành động ĐANG diễn ra, có tính tạm thời, chưa xong. <i>I am working.</i></li>
+<li><b>Hoàn thành (perfect):</b> nhấn mạnh KẾT QUẢ của một việc đã xong, có liên hệ tới một mốc khác. <i>I have worked.</i></li>
+<li><b>Hoàn thành tiếp diễn (perfect continuous):</b> kết hợp cả hai — nhấn mạnh QUÁ TRÌNH kéo dài tính đến một mốc, thường trả lời "bao lâu". <i>I have been working.</i></li>
+</ul>
+<p>Ghi nhớ: <b>V2/V3</b> là ký hiệu quy ước cho cột 2 và cột 3 trong bảng động từ bất quy tắc (vd go — <b>went</b> (V2) — <b>gone</b> (V3)); với động từ có quy tắc, V2 và V3 giống hệt nhau và đều thêm "-ed" (work — worked — worked).</p>
+
 <div class="gr-scroll"><table>
 <tr><th>Thì</th><th>Khẳng định</th><th>Dấu hiệu tiêu biểu</th></tr>
 <tr><td>Hiện tại đơn</td><td>S + V(s/es)</td><td>always, usually, every day</td></tr>
@@ -163,139 +241,194 @@ const GRAMMAR_DATA = [
 <tr><td>Tương lai hoàn thành</td><td>S + will have + V3</td><td>by + mốc tương lai</td></tr>
 <tr><td>TL hoàn thành tiếp diễn</td><td>S + will have been + V-ing</td><td>by + mốc TL, nhấn thời lượng</td></tr>
 </table></div>
-<h4>Nguyên tắc chọn thì</h4>
-<p>Đừng học vẹt công thức. Hãy tự hỏi ba câu: (1) Hành động thuộc mốc thời gian nào? (2) Nó <b>đang diễn ra</b> hay đã <b>hoàn tất</b>? (3) Có <b>nhấn mạnh sự kéo dài</b> không? Trả lời xong là bạn khoanh vùng được thì cần dùng. Ba nhóm chi tiết ngay bên dưới sẽ giải thích cặn kẽ từng thì.</p>`,
+<h4>Nguyên tắc chọn thì — quy trình 3 bước</h4>
+<p>Đừng học vẹt công thức. Hãy tự hỏi đúng thứ tự ba câu sau — trả lời xong là khoanh vùng được đúng 1 trong 12 thì:</p>
+<ol>
+<li><b>Bước 1 — Mốc thời gian:</b> hành động thuộc về hiện tại, quá khứ hay tương lai? (Nhìn vào dấu hiệu thời gian trong câu: "now" → hiện tại; "yesterday" → quá khứ; "tomorrow" → tương lai.)</li>
+<li><b>Bước 2 — Đã xong hay chưa xong:</b> nếu CHƯA XONG / đang diễn ra tại đúng mốc đó → dùng thể tiếp diễn. Nếu ĐÃ XONG hẳn (dù là xong ở hiện tại, quá khứ hay tương lai) và bạn muốn nhấn KẾT QUẢ → dùng thể hoàn thành.</li>
+<li><b>Bước 3 — Có cần nhấn độ dài không:</b> nếu câu cần trả lời "bao lâu rồi / đã kéo dài bao lâu" → dùng thể hoàn thành tiếp diễn thay vì hoàn thành đơn thuần.</li>
+</ol>
+<p class="gr-note">Ví dụ áp dụng: "Tôi đã sống ở đây 10 năm rồi (và vẫn đang sống)." → Bước 1: hiện tại (vẫn đang tiếp diễn tới giờ). Bước 2: đã "xong" một phần, có kết quả tính đến giờ → hoàn thành. Bước 3: câu nhấn ĐỘ DÀI ("10 năm") → chọn hiện tại hoàn thành TIẾP DIỄN: <i>I have been living here for 10 years.</i> Ba bài dưới đây sẽ giải thích cặn kẽ từng thì theo đúng ba mốc thời gian, kèm các cặp thì hay bị nhầm lẫn với nhau.</p>`,
       },
       {
         title: "Nhóm thì HIỆN TẠI (chi tiết 4 thì)",
         html: `
 <h4>1. Hiện tại đơn (Present Simple)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + V(s/es)</span> — phủ định <i>do/does not + V</i>, nghi vấn <i>Do/Does + S + V?</i></p>
-<p>Đây là thì của những điều <b>mang tính ổn định, lặp lại hoặc đúng như một chân lý</b>, không gắn với một khoảnh khắc cụ thể:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + V(s/es)</span> · <b>Phủ định:</b> <span class="gr-formula">S + do/does not + V</span> · <b>Nghi vấn:</b> <span class="gr-formula">Do/Does + S + V?</span></p>
+<p>Đây là thì của những điều <b>mang tính ổn định, lặp lại hoặc đúng như một chân lý</b>, không gắn với một khoảnh khắc cụ thể — nó KHÔNG có nghĩa là "đang xảy ra ngay bây giờ" như nhiều người lầm tưởng vì tên gọi "hiện tại".</p>
 <ul>
 <li><b>Thói quen, việc lặp lại:</b> <span class="gr-ex">I <b>go</b> to the gym three times a week. <i>(Tôi đến phòng gym ba lần mỗi tuần.)</i></span></li>
-<li><b>Sự thật hiển nhiên, quy luật:</b> <span class="gr-ex">Water <b>boils</b> at 100°C. <i>(Nước sôi ở 100 độ C.)</i></span></li>
-<li><b>Lịch trình cố định</b> (tàu xe, thời khóa biểu): <span class="gr-ex">The train <b>leaves</b> at 7 a.m. tomorrow.</span></li>
+<li><b>Sự thật hiển nhiên, quy luật khoa học:</b> <span class="gr-ex">Water <b>boils</b> at 100°C. <i>(Nước sôi ở 100 độ C — luôn đúng, không riêng lúc nào.)</i></span></li>
+<li><b>Lịch trình cố định</b> (tàu xe, thời khóa biểu, lịch chiếu phim — dù việc đó ở TƯƠNG LAI vẫn dùng hiện tại đơn vì tính chất "cố định, không đổi"): <span class="gr-ex">The train <b>leaves</b> at 7 a.m. tomorrow. <i>(Tàu khởi hành lúc 7 giờ sáng mai — theo đúng lịch trình.)</i></span></li>
+<li><b>Cảm xúc, suy nghĩ, sở hữu</b> (nhóm động từ trạng thái — xem ghi chú dưới): <span class="gr-ex">I <b>believe</b> honesty matters most. / She <b>owns</b> two houses.</span></li>
 </ul>
-<p class="gr-note">Lỗi hay gặp: quên thêm "-s" ở ngôi thứ ba số ít (he/she/it). "He <b>work</b>" là sai; phải là "He <b>works</b>".</p>
+<p class="gr-note">Lỗi hay gặp nhất: quên thêm "-s/-es" ở ngôi thứ ba số ít (he/she/it/danh từ số ít). "He <b>work</b> hard" là sai; phải là "He <b>works</b> hard." Ở thể phủ định/nghi vấn, "-s" chuyển sang cho "does": "Does he <b>work</b> hard?" (không phải "Does he works?").</p>
 
 <h4>2. Hiện tại tiếp diễn (Present Continuous)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + am/is/are + V-ing</span></p>
-<p>Diễn tả hành động <b>đang xảy ra ngay lúc nói</b>, hoặc quanh thời điểm hiện tại nhưng có tính tạm thời:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + am/is/are + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + am/is/are + not + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Am/Is/Are + S + V-ing?</span></p>
+<p>Diễn tả hành động <b>đang xảy ra ngay lúc nói</b>, hoặc quanh thời điểm hiện tại nhưng có tính tạm thời (chưa chắc lâu dài):</p>
 <ul>
-<li><b>Đang diễn ra:</b> <span class="gr-ex">Please be quiet — the baby <b>is sleeping</b>. <i>(Em bé đang ngủ.)</i></span></li>
-<li><b>Tạm thời (không phải mãi mãi):</b> <span class="gr-ex">I <b>am staying</b> with my aunt this month.</span></li>
-<li><b>Kế hoạch tương lai gần đã sắp xếp:</b> <span class="gr-ex">We <b>are meeting</b> the client tomorrow.</span></li>
+<li><b>Đang diễn ra ngay lúc nói:</b> <span class="gr-ex">Please be quiet — the baby <b>is sleeping</b>. <i>(Em bé đang ngủ.)</i></span></li>
+<li><b>Tạm thời, không phải thói quen vĩnh viễn:</b> <span class="gr-ex">I <b>am staying</b> with my aunt this month. <i>(so sánh với "I live with my parents" — thì hiện tại đơn, mang tính lâu dài hơn.)</i></span></li>
+<li><b>Kế hoạch tương lai gần đã sắp xếp cụ thể</b> (khác "be going to" — xem bài Nhóm thì Tương lai): <span class="gr-ex">We <b>are meeting</b> the client tomorrow. <i>(Đã hẹn giờ, địa điểm cụ thể rồi.)</i></span></li>
+<li><b>Xu hướng đang thay đổi:</b> <span class="gr-ex">The climate <b>is getting</b> warmer every year.</span></li>
+<li><b>Phàn nàn về thói quen gây khó chịu</b> (đi kèm "always"): <span class="gr-ex">He <b>is always leaving</b> the door open! <i>(Sắc thái bực mình — khác "He always leaves the door open" chỉ mô tả trung tính.)</i></span></li>
 </ul>
-<p class="gr-note">Động từ chỉ trạng thái (know, like, want, believe, understand…) thường <b>không</b> chia tiếp diễn: nói "I <b>know</b>", không nói "I am knowing".</p>
+<p class="gr-note"><b>Động từ chỉ trạng thái (stative verbs)</b> — như know, like, want, believe, understand, love, hate, own, belong, seem — mô tả một TRẠNG THÁI tồn tại liên tục chứ không phải một HÀNH ĐỘNG đang xảy ra, nên thường <b>không</b> chia tiếp diễn: nói "I <b>know</b> the answer", không nói "~~I am knowing~~". Một số động từ (think, have, taste) có cả hai nghĩa: "I <b>think</b> it's true" (nghĩ = trạng thái, không tiếp diễn) khác "I <b>am thinking</b> about it" (đang suy nghĩ = hành động, được phép tiếp diễn).</p>
 
 <h4>3. Hiện tại hoàn thành (Present Perfect)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + have/has + V3</span></p>
-<p>Đây là "cầu nối" giữa quá khứ và hiện tại: việc đã xảy ra nhưng <b>vẫn còn liên quan tới hiện tại</b>, hoặc thời điểm không quan trọng bằng kết quả:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + have/has + V3</span> · <b>Phủ định:</b> <span class="gr-formula">S + have/has not + V3</span> · <b>Nghi vấn:</b> <span class="gr-formula">Have/Has + S + V3?</span></p>
+<p>Đây là "cầu nối" giữa quá khứ và hiện tại: việc đã xảy ra nhưng <b>vẫn còn liên quan tới hiện tại</b>, hoặc thời điểm xảy ra không quan trọng bằng kết quả/trải nghiệm để lại:</p>
 <ul>
-<li><b>Trải nghiệm (đã từng):</b> <span class="gr-ex">I <b>have visited</b> Japan twice. <i>(Tôi đã từng đến Nhật hai lần.)</i></span></li>
-<li><b>Việc vừa hoàn tất, còn dấu vết:</b> <span class="gr-ex">She <b>has just finished</b> her essay.</span></li>
-<li><b>Kéo dài từ quá khứ đến giờ</b> (với <i>since/for</i>): <span class="gr-ex">We <b>have lived</b> here <b>for</b> ten years / <b>since</b> 2015.</span></li>
+<li><b>Trải nghiệm (đã từng, không nói rõ khi nào):</b> <span class="gr-ex">I <b>have visited</b> Japan twice. <i>(Tôi đã từng đến Nhật hai lần — không quan trọng lần nào, năm nào.)</i></span></li>
+<li><b>Việc vừa hoàn tất, còn ảnh hưởng/dấu vết tới hiện tại:</b> <span class="gr-ex">She <b>has just finished</b> her essay. <i>(Vừa xong — nên giờ có thể nộp bài được.)</i></span></li>
+<li><b>Kéo dài liên tục từ quá khứ đến giờ</b> (với <i>since</i> — mốc bắt đầu, hoặc <i>for</i> — khoảng thời gian): <span class="gr-ex">We <b>have lived</b> here <b>for</b> ten years / <b>since</b> 2015. <i>(Sống ở đây tới tận bây giờ.)</i></span></li>
+<li><b>Sự thay đổi tính đến hiện tại:</b> <span class="gr-ex">Prices <b>have increased</b> significantly this year.</span></li>
 </ul>
-<p class="gr-note">Phân biệt với quá khứ đơn: dùng hiện tại hoàn thành khi <b>không nêu mốc thời gian rõ</b>; khi đã nói "yesterday, in 2019, last week" thì bắt buộc dùng quá khứ đơn.</p>
+<p class="gr-note">Phân biệt với quá khứ đơn — đây là cặp thì bị nhầm nhiều nhất: dùng hiện tại hoàn thành khi <b>KHÔNG nêu mốc thời gian cụ thể đã kết thúc</b>; ngay khi câu có "yesterday, in 2019, last week, two years ago" (mốc đã chốt, đã xong hẳn trong quá khứ, không còn liên hệ trực tiếp) thì BẮT BUỘC dùng quá khứ đơn. So sánh: <i>I <b>have lost</b> my key</i> (vẫn đang mất, hiện tại chưa tìm ra — hiện tại hoàn thành) ≠ <i>I <b>lost</b> my key yesterday</i> (có thể đã tìm lại được rồi, chỉ đơn thuần kể lại sự việc đã qua — quá khứ đơn).</p>
 
 <h4>4. Hiện tại hoàn thành tiếp diễn (Present Perfect Continuous)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + have/has been + V-ing</span></p>
-<p>Giống hiện tại hoàn thành nhưng <b>nhấn mạnh vào quá trình và sự liên tục</b>, thường trả lời câu hỏi "bao lâu":</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + have/has been + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + have/has not been + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Have/Has + S + been + V-ing?</span></p>
+<p>Giống hiện tại hoàn thành ở việc nối quá khứ với hiện tại, nhưng <b>nhấn mạnh vào QUÁ TRÌNH và sự liên tục</b> hơn là kết quả cuối cùng, thường trả lời câu hỏi "bao lâu rồi":</p>
 <ul>
-<li><span class="gr-ex">I <b>have been learning</b> English <b>for</b> three years. <i>(Tôi học tiếng Anh liên tục ba năm nay.)</i></span></li>
-<li><b>Giải thích kết quả nhìn thấy được:</b> <span class="gr-ex">Your eyes are red — <b>have</b> you <b>been crying</b>?</span></li>
-</ul>`,
+<li><span class="gr-ex">I <b>have been learning</b> English <b>for</b> three years. <i>(Tôi học tiếng Anh liên tục ba năm nay — nhấn mạnh quá trình học, có thể vẫn đang tiếp tục.)</i></span></li>
+<li><b>Giải thích một kết quả nhìn thấy được ngay lúc nói bằng NGUYÊN NHÂN vừa mới xảy ra:</b> <span class="gr-ex">Your eyes are red — <b>have</b> you <b>been crying</b>? <i>(Mắt đỏ ⇒ hỏi ngược lại hành động vừa gây ra tình trạng đó.)</i></span></li>
+<li><b>Hành động lặp lại, có tính tạm thời, gần đây:</b> <span class="gr-ex">She <b>has been calling</b> me all week about the project.</span></li>
+</ul>
+<p class="gr-note">Phân biệt với hiện tại hoàn thành đơn: <i>I have <b>read</b> three books this month</i> (hoàn thành đơn — nhấn KẾT QUẢ: đã đọc xong 3 cuốn, đếm được số lượng) ≠ <i>I have <b>been reading</b> this book all afternoon</i> (hoàn thành tiếp diễn — nhấn QUÁ TRÌNH đọc, có thể chưa đọc xong). Không dùng thể này với động từ trạng thái (đã nêu ở mục 2): "~~I have been knowing him for years~~" sai, phải là <i>I have known him for years.</i></p>`,
       },
       {
         title: "Nhóm thì QUÁ KHỨ (chi tiết 4 thì)",
         html: `
 <h4>1. Quá khứ đơn (Past Simple)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + V-ed / V2</span> — phủ định <i>did not + V</i>, nghi vấn <i>Did + S + V?</i></p>
-<p>Kể lại một hành động <b>đã bắt đầu và kết thúc hẳn trong quá khứ</b>, thường có mốc thời gian cụ thể. Đây là thì "xương sống" khi kể chuyện.</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + V-ed / V2</span> · <b>Phủ định:</b> <span class="gr-formula">S + did not + V (nguyên mẫu)</span> · <b>Nghi vấn:</b> <span class="gr-formula">Did + S + V (nguyên mẫu)?</span></p>
+<p>Kể lại một hành động <b>đã bắt đầu và kết thúc hẳn trong quá khứ</b>, thường có mốc thời gian cụ thể hoặc ngầm hiểu rõ ràng. Đây là thì "xương sống" khi kể chuyện, tường thuật sự việc:</p>
 <ul>
-<li><span class="gr-ex">I <b>graduated</b> from university in 2020. <i>(Tôi tốt nghiệp năm 2020.)</i></span></li>
-<li><b>Chuỗi hành động nối tiếp:</b> <span class="gr-ex">She <b>opened</b> the door, <b>walked</b> in and <b>sat</b> down.</span></li>
+<li><b>Sự việc đơn lẻ có mốc thời gian rõ:</b> <span class="gr-ex">I <b>graduated</b> from university in 2020. <i>(Tôi tốt nghiệp năm 2020.)</i></span></li>
+<li><b>Chuỗi hành động nối tiếp nhau (kể chuyện):</b> <span class="gr-ex">She <b>opened</b> the door, <b>walked</b> in and <b>sat</b> down. <i>(Mở cửa, bước vào rồi ngồi xuống — theo đúng thứ tự xảy ra.)</i></span></li>
+<li><b>Thói quen/tình trạng trong quá khứ, nay không còn nữa:</b> <span class="gr-ex">I <b>lived</b> in Hue when I was a child. <i>(so sánh với "used to live" — cùng ý nghĩa, "used to" nhấn mạnh sự đối lập với hiện tại rõ hơn.)</i></span></li>
 </ul>
-<p class="gr-note">Nhớ học động từ bất quy tắc (go→went, buy→bought, see→saw…). Ở thể phủ định/nghi vấn đã có "did" nên động từ chính trở về nguyên mẫu: "Did you <b>go</b>?", không phải "Did you went?".</p>
+<p class="gr-note">Bắt buộc phải học thuộc <b>động từ bất quy tắc</b> (go→went, buy→bought, see→saw, eat→ate…) vì chúng không theo công thức "+ed". Ở thể phủ định/nghi vấn đã mượn "did" để chia thì rồi, nên động từ chính LUÔN trở về dạng nguyên mẫu (không chia): "Did you <b>go</b>?" đúng, "~~Did you went?~~" sai — lỗi chia thì hai lần rất hay gặp.</p>
 
 <h4>2. Quá khứ tiếp diễn (Past Continuous)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + was/were + V-ing</span></p>
-<p>Diễn tả hành động <b>đang diễn ra tại một thời điểm trong quá khứ</b>, hoặc làm nền cho một hành động khác chen vào:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + was/were + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + was/were not + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Was/Were + S + V-ing?</span></p>
+<p>Diễn tả hành động <b>đang diễn ra tại một thời điểm cụ thể trong quá khứ</b>, hoặc làm "phông nền kéo dài" cho một hành động ngắn khác chen vào giữa:</p>
 <ul>
-<li><b>Hành động dài bị hành động ngắn xen vào</b> (dùng với <i>when</i>): <span class="gr-ex">I <b>was cooking</b> dinner <b>when</b> the phone <b>rang</b>. <i>(Tôi đang nấu ăn thì điện thoại reo.)</i></span></li>
-<li><b>Hai hành động song song</b> (dùng với <i>while</i>): <span class="gr-ex">While she <b>was reading</b>, he <b>was watching</b> TV.</span></li>
+<li><b>Hành động dài (nền) bị một hành động ngắn (chen vào) cắt ngang</b> — luôn dùng với <i>when</i>, việc dài chia tiếp diễn, việc ngắn chia quá khứ đơn: <span class="gr-ex">I <b>was cooking</b> dinner <b>when</b> the phone <b>rang</b>. <i>(Tôi đang nấu ăn thì điện thoại reo — nấu ăn là nền, chuông reo là việc ngắn xen vào.)</i></span></li>
+<li><b>Hai hành động dài diễn ra song song</b> — dùng với <i>while</i>, cả hai vế đều chia tiếp diễn: <span class="gr-ex">While she <b>was reading</b>, he <b>was watching</b> TV.</span></li>
+<li><b>Miêu tả khung cảnh, bối cảnh tại một thời điểm trong quá khứ:</b> <span class="gr-ex">The sun <b>was shining</b> and birds <b>were singing</b>. <i>(Thường dùng để mở đầu một câu chuyện.)</i></span></li>
 </ul>
 
 <h4>3. Quá khứ hoàn thành (Past Perfect)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + had + V3</span></p>
-<p>Dùng khi có <b>hai mốc quá khứ</b> và bạn muốn chỉ rõ việc nào <b>xảy ra trước</b>. Việc xảy ra trước dùng quá khứ hoàn thành, việc sau dùng quá khứ đơn:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + had + V3</span> · <b>Phủ định:</b> <span class="gr-formula">S + had not + V3</span> · <b>Nghi vấn:</b> <span class="gr-formula">Had + S + V3?</span></p>
+<p>Dùng khi có <b>hai mốc trong quá khứ</b> và bạn muốn chỉ rõ việc nào <b>xảy ra trước</b> việc còn lại — nó đóng vai trò như một "quá khứ của quá khứ". Việc xảy ra TRƯỚC dùng quá khứ hoàn thành, việc xảy ra SAU (gần hiện tại hơn) dùng quá khứ đơn:</p>
 <ul>
-<li><span class="gr-ex">By the time we <b>arrived</b>, the film <b>had</b> already <b>started</b>. <i>(Khi chúng tôi đến thì phim đã bắt đầu rồi.)</i></span></li>
-<li><span class="gr-ex">She <b>had studied</b> French before she <b>moved</b> to Paris.</span></li>
+<li><span class="gr-ex">By the time we <b>arrived</b>, the film <b>had</b> already <b>started</b>. <i>(Khi chúng tôi đến (việc sau — quá khứ đơn) thì phim đã bắt đầu rồi (việc trước — quá khứ hoàn thành).)</i></span></li>
+<li><span class="gr-ex">She <b>had studied</b> French before she <b>moved</b> to Paris. <i>(Học tiếng Pháp trước, rồi mới chuyển tới Paris.)</i></span></li>
+<li><b>Diễn tả điều kiện không có thật trong quá khứ</b> (xem thêm bài Câu điều kiện, loại 3): <span class="gr-ex">If I <b>had known</b>, I would have helped.</span></li>
 </ul>
-<p class="gr-note">Nếu hai việc xảy ra rõ ràng theo thứ tự nhờ <i>before/after</i>, người bản ngữ đôi khi vẫn dùng quá khứ đơn cho cả hai — nhưng trong văn viết học thuật, dùng quá khứ hoàn thành sẽ chuẩn và rõ ràng hơn.</p>
+<p class="gr-note">Nếu thứ tự hai việc đã RÕ RÀNG nhờ chính liên từ <i>before/after</i> (bản thân từ "before/after" đã nói lên việc nào trước việc nào rồi), người bản ngữ trong văn nói đôi khi vẫn dùng quá khứ đơn cho cả hai vế cho gọn — nhưng trong văn viết học thuật (Writing Task 2), dùng quá khứ hoàn thành cho việc xảy ra trước sẽ chuẩn mực và rõ ràng hơn, được đánh giá cao hơn về Grammatical Range.</p>
 
 <h4>4. Quá khứ hoàn thành tiếp diễn (Past Perfect Continuous)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + had been + V-ing</span></p>
-<p>Nhấn mạnh <b>quá trình kéo dài</b> trước một mốc quá khứ khác:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + had been + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + had not been + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Had + S + been + V-ing?</span></p>
+<p>Giống quá khứ hoàn thành ở việc có hai mốc, nhưng <b>nhấn mạnh QUÁ TRÌNH kéo dài</b> của việc xảy ra trước, tính đến mốc quá khứ thứ hai:</p>
 <ul>
-<li><span class="gr-ex">He <b>had been working</b> for hours before he finally took a break. <i>(Anh ấy đã làm việc suốt nhiều giờ trước khi nghỉ.)</i></span></li>
-</ul>`,
+<li><span class="gr-ex">He <b>had been working</b> for hours before he finally took a break. <i>(Anh ấy đã làm việc liên tục suốt nhiều giờ TRƯỚC KHI nghỉ — nhấn mạnh độ dài của quá trình làm việc, không chỉ đơn thuần "đã làm việc".)</i></span></li>
+<li><b>Nguyên nhân dẫn tới một tình trạng ở mốc quá khứ sau:</b> <span class="gr-ex">She was tired because she <b>had been studying</b> all night. <i>(Cô ấy mệt vì đã học suốt đêm.)</i></span></li>
+</ul>
+<p class="gr-note">Phân biệt với quá khứ hoàn thành đơn: <i>I <b>had finished</b> the report by noon</i> (nhấn KẾT QUẢ — báo cáo đã xong) ≠ <i>I <b>had been writing</b> the report all morning</i> (nhấn QUÁ TRÌNH viết kéo dài cả buổi sáng, có thể vẫn chưa xong hẳn).</p>`,
       },
       {
-        title: "Nhóm thì TƯƠNG LAI (chi tiết 4 thì)",
+        title: "Nhóm thì TƯƠNG LAI (chi tiết 4 thì + các cách nói khác về tương lai)",
         html: `
+<p>Tương lai là mốc thời gian DUY NHẤT trong tiếng Anh có nhiều hơn một cách diễn đạt cho cùng một ý — vì bản thân "tương lai" chưa xảy ra, cách bạn CHỌN diễn đạt nó thể hiện quan điểm của bạn về mức độ chắc chắn/dự định. Đây cũng là điểm hay bị hỏi trong đề Reading/Writing vì có nhiều lựa chọn gần nghĩa.</p>
+
 <h4>1. Tương lai đơn (Future Simple) — will</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + will + V</span></p>
-<p>Dùng cho những gì thuộc tương lai nhưng mang tính <b>quyết định tức thời, dự đoán, lời hứa hay đề nghị</b> — tức chưa có sự chuẩn bị từ trước:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + will + V (nguyên mẫu)</span> · <b>Phủ định:</b> <span class="gr-formula">S + will not (won't) + V</span> · <b>Nghi vấn:</b> <span class="gr-formula">Will + S + V?</span></p>
+<p>Dùng cho những gì thuộc tương lai nhưng mang tính <b>quyết định tức thời (vừa nảy ra lúc nói), dự đoán không có bằng chứng cụ thể, lời hứa hay đề nghị</b> — tức KHÔNG có sự chuẩn bị/kế hoạch từ trước:</p>
 <ul>
-<li><b>Quyết định ngay lúc nói:</b> <span class="gr-ex">It's cold — I <b>will close</b> the window.</span></li>
-<li><b>Dự đoán, quan điểm:</b> <span class="gr-ex">I think prices <b>will rise</b> next year.</span></li>
-<li><b>Lời hứa/đề nghị:</b> <span class="gr-ex">I <b>will help</b> you with your homework.</span></li>
+<li><b>Quyết định ngay lúc nói (chưa hề nghĩ tới trước đó):</b> <span class="gr-ex">It's cold — I <b>will close</b> the window. <i>(Vừa thấy lạnh, quyết định ngay.)</i></span></li>
+<li><b>Dự đoán dựa trên ý kiến/suy nghĩ cá nhân, không có bằng chứng rõ ràng:</b> <span class="gr-ex">I think prices <b>will rise</b> next year.</span></li>
+<li><b>Lời hứa, đề nghị giúp đỡ, đe doạ:</b> <span class="gr-ex">I <b>will help</b> you with your homework. / I <b>will</b> never <b>forgive</b> him.</span></li>
+<li><b>Sự thật sẽ chắc chắn xảy ra (không thể tránh khỏi):</b> <span class="gr-ex">The sun <b>will rise</b> at 6 a.m. tomorrow.</span></li>
 </ul>
 
-<h4>2. Tương lai gần (be going to) — cấu trúc, không nằm trong 12 thì</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + am/is/are + going to + V</span></p>
-<p>Khác với <i>will</i>, cấu trúc này dùng cho <b>kế hoạch đã định trước</b> hoặc <b>dự đoán có bằng chứng ở hiện tại</b>:</p>
+<h4>2. Tương lai gần "be going to" — cấu trúc phổ biến, không nằm trong 12 thì chuẩn</h4>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + am/is/are + going to + V</span> · <b>Phủ định:</b> <span class="gr-formula">S + am/is/are + not + going to + V</span> · <b>Nghi vấn:</b> <span class="gr-formula">Am/Is/Are + S + going to + V?</span></p>
+<p>Khác với <i>will</i>, cấu trúc này dùng cho <b>kế hoạch đã định trước (có suy nghĩ, chuẩn bị)</b> hoặc <b>dự đoán có BẰNG CHỨNG rõ ràng ngay ở hiện tại</b>:</p>
 <ul>
-<li><b>Dự định:</b> <span class="gr-ex">We <b>are going to</b> travel to Da Nang this summer. <i>(Kế hoạch đã có sẵn.)</i></span></li>
-<li><b>Dự đoán có căn cứ:</b> <span class="gr-ex">Look at those clouds — it <b>is going to</b> rain.</span></li>
+<li><b>Dự định đã có kế hoạch từ trước:</b> <span class="gr-ex">We <b>are going to</b> travel to Da Nang this summer. <i>(Đã bàn bạc, lên kế hoạch từ trước, không phải vừa nghĩ ra.)</i></span></li>
+<li><b>Dự đoán dựa trên bằng chứng nhìn/thấy được ngay lúc nói:</b> <span class="gr-ex">Look at those clouds — it <b>is going to</b> rain. <i>(Có mây đen làm bằng chứng — khác "I think it will rain" chỉ là ý kiến cá nhân, không có bằng chứng cụ thể.)</i></span></li>
 </ul>
-<p class="gr-note">So sánh nhanh: "I <b>will</b> call you" (vừa nảy ra ý) ≠ "I <b>am going to</b> call you" (đã dự định từ trước).</p>
+<p class="gr-note">So sánh nhanh ba cách nói gần nghĩa: <i>I <b>will</b> call you</i> (vừa nảy ra ý, chưa từng nghĩ trước đó) ≠ <i>I <b>am going to</b> call you</i> (đã định làm việc này từ trước khi nói câu này) ≠ <i>I <b>am calling</b> you at 5pm</i> (hiện tại tiếp diễn diễn tả tương lai — đã CHỐT lịch cụ thể, gần như một cuộc hẹn chắc chắn, xem bài "Nhóm thì HIỆN TẠI" mục 2).</p>
 
 <h4>3. Tương lai tiếp diễn (Future Continuous)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + will be + V-ing</span></p>
-<p>Diễn tả hành động <b>sẽ đang diễn ra tại một thời điểm xác định</b> trong tương lai:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + will be + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + will not be + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Will + S + be + V-ing?</span></p>
+<p>Diễn tả hành động <b>sẽ đang diễn ra tại một thời điểm xác định</b> trong tương lai — giống hệt logic của hiện tại tiếp diễn nhưng dịch chuyển toàn bộ mốc sang tương lai:</p>
 <ul>
-<li><span class="gr-ex">At 8 p.m. tomorrow, I <b>will be flying</b> to London. <i>(Lúc 8 giờ tối mai tôi đang bay đến London.)</i></span></li>
+<li><span class="gr-ex">At 8 p.m. tomorrow, I <b>will be flying</b> to London. <i>(Lúc 8 giờ tối mai, tôi sẽ đang trên máy bay tới London — hành động chưa xong tại đúng mốc đó.)</i></span></li>
+<li><b>Diễn tả một việc sẽ diễn ra theo lẽ tự nhiên, không cố ý (lịch sự hơn "will"):</b> <span class="gr-ex">I <b>will be seeing</b> him at the meeting anyway, so I can tell him then. <i>(Đằng nào cũng gặp — không phải cố tình sắp xếp riêng.)</i></span></li>
 </ul>
 
 <h4>4. Tương lai hoàn thành (Future Perfect)</h4>
-<p><b>Cấu trúc:</b> <span class="gr-formula">S + will have + V3</span></p>
-<p>Diễn tả hành động <b>sẽ hoàn tất trước một mốc tương lai</b>, thường đi với <i>by + thời gian</i>:</p>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + will have + V3</span> · <b>Phủ định:</b> <span class="gr-formula">S + will not have + V3</span> · <b>Nghi vấn:</b> <span class="gr-formula">Will + S + have + V3?</span></p>
+<p>Diễn tả hành động <b>sẽ hoàn tất trước một mốc tương lai xác định</b>, thường đi với <i>by + thời gian</i> hoặc <i>by the time</i>:</p>
 <ul>
-<li><span class="gr-ex">By 2030, I <b>will have finished</b> my PhD. <i>(Đến năm 2030, tôi sẽ hoàn thành tiến sĩ.)</i></span></li>
-</ul>`,
+<li><span class="gr-ex">By 2030, I <b>will have finished</b> my PhD. <i>(Đến năm 2030 — mốc tương lai — thì việc học tiến sĩ đã xong rồi.)</i></span></li>
+<li><span class="gr-ex">By the time you arrive, we <b>will have eaten</b> dinner. <i>(Khi bạn tới — mốc tương lai — thì chúng tôi đã ăn xong.)</i></span></li>
+</ul>
+
+<h4>5. Tương lai hoàn thành tiếp diễn (Future Perfect Continuous)</h4>
+<p><b>Khẳng định:</b> <span class="gr-formula">S + will have been + V-ing</span></p>
+<p>Nhấn mạnh <b>độ dài của một quá trình</b>, tính đến một mốc tương lai xác định — hiếm gặp hơn 4 thì trên nhưng vẫn xuất hiện trong Writing band cao khi cần nhấn mạnh thời lượng:</p>
+<ul>
+<li><span class="gr-ex">By next month, I <b>will have been working</b> here for five years. <i>(Đến tháng sau, tôi sẽ làm việc ở đây tròn 5 năm — nhấn mạnh khoảng thời gian liên tục.)</i></span></li>
+</ul>
+
+<h4>Các cách khác nói về tương lai (không thuộc 4 thì trên)</h4>
+<ul>
+<li><b>be about to + V:</b> sắp sửa xảy ra ngay lập tức. <i>The movie <b>is about to</b> start — sit down!</i></li>
+<li><b>be to + V:</b> mang tính trang trọng, kế hoạch chính thức/lịch trình (báo chí hay dùng). <i>The president <b>is to</b> visit Vietnam next week.</i></li>
+<li><b>Hiện tại đơn diễn tả tương lai:</b> dùng cho lịch trình cố định, đã nêu ở bài Nhóm thì HIỆN TẠI mục 1. <i>The flight <b>departs</b> at 6 a.m.</i></li>
+</ul>
+<p class="gr-note">Mẹo lên band: dùng ĐA DẠNG các cách diễn đạt tương lai (không chỉ mỗi "will") trong Writing Task 2 khi bàn về xu hướng/dự đoán ("is likely to", "is expected to", "is projected to" cũng là những lựa chọn học thuật rất tốt, xem thêm ở bài "Động từ khiếm khuyết").</p>`,
       },
       {
         title: "Sự hòa hợp Chủ ngữ – Động từ",
         html: `
-<p>"Hòa hợp" nghĩa là động từ phải chia theo <b>số</b> (ít/nhiều) của chủ ngữ. Nghe thì đơn giản, nhưng có nhiều tình huống dễ đánh lừa mắt.</p>
+<p><b>"Hòa hợp" (agreement)</b> nghĩa là động từ phải chia theo <b>số</b> (số ít/số nhiều) của chủ ngữ (xem lại khái niệm Chủ ngữ ở bài "Nền tảng"). Nghe thì đơn giản — "she works", "they work" — nhưng có nhiều tình huống dễ đánh lừa mắt vì chủ ngữ THẬT bị che khuất bởi các từ đứng gần động từ hơn.</p>
+
+<h4>Quy tắc cơ bản</h4>
 <ul>
-<li><b>Chủ ngữ số ít → động từ số ít:</b> <span class="gr-ex">She <b>works</b> hard.</span></li>
-<li><b>Danh từ không đếm được luôn là số ít:</b> <span class="gr-ex">Information <b>is</b> useful. / This news <b>is</b> surprising.</span></li>
-<li><b>Đại từ bất định</b> (everyone, someone, each, every, nobody) → số ít: <span class="gr-ex">Everyone <b>has</b> a role to play.</span></li>
-<li><b>Chủ ngữ + with / as well as / together with / along with</b> → chia theo chủ ngữ chính (phần trước cụm chèn thêm): <span class="gr-ex">The manager, as well as the staff, <b>is</b> attending. <i>(Chia theo "the manager".)</i></span></li>
-<li><b>A number of</b> + N số nhiều → động từ <b>số nhiều</b>; <b>The number of</b> → động từ <b>số ít</b>: <span class="gr-ex">A number of students <b>are</b> absent. / The number of students <b>is</b> rising.</span></li>
-<li><b>Either…or / Neither…nor</b> → chia theo danh từ <b>gần động từ nhất</b>: <span class="gr-ex">Neither the teacher nor the <b>students were</b> late.</span></li>
+<li><b>Chủ ngữ số ít → động từ số ít</b> (thêm -s/-es ở hiện tại đơn, hoặc "is/was"): <span class="gr-ex">She <b>works</b> hard. / The cat <b>is</b> sleeping.</span></li>
+<li><b>Chủ ngữ số nhiều → động từ số nhiều</b> (không thêm -s, hoặc "are/were"): <span class="gr-ex">They <b>work</b> hard. / The cats <b>are</b> sleeping.</span></li>
+<li><b>Danh từ không đếm được (uncountable noun — vật/khái niệm không đếm được từng cái một, xem thêm bài "Đếm được / không đếm được") luôn là số ít:</b> <span class="gr-ex">Information <b>is</b> useful. / This news <b>is</b> surprising. <i>("news" trông có "s" nhưng luôn là số ít.)</i></span></li>
 </ul>
-<p class="gr-note">Cạm bẫy phổ biến: cụm giới từ chen giữa chủ ngữ và động từ. Trong "The <b>box</b> of chocolates <b>is</b> on the table", chủ ngữ thật là "the box" (số ít), không phải "chocolates".</p>`,
+
+<h4>Các trường hợp dễ nhầm — chủ ngữ thật bị "che" bởi từ đứng gần động từ</h4>
+<ul>
+<li><b>Đại từ bất định</b> (indefinite pronoun — chỉ một số lượng không xác định: everyone, someone, anybody, each, every, nobody) → LUÔN số ít dù mang nghĩa "mọi người": <span class="gr-ex">Everyone <b>has</b> a role to play. <i>(Không phải "have" dù nghĩa là "mọi người".)</i></span></li>
+<li><b>Chủ ngữ + with / as well as / together with / along with</b> (cụm chèn thêm, KHÔNG phải liên từ nối hai chủ ngữ ngang hàng) → động từ chia theo chủ ngữ chính đứng trước cụm chèn, bỏ qua phần chèn thêm: <span class="gr-ex">The manager, as well as the staff, <b>is</b> attending. <i>(Chia theo "the manager" — số ít; nếu muốn số nhiều phải dùng "and": "The manager and the staff <b>are</b> attending".)</i></span></li>
+<li><b>A number of</b> + danh từ số nhiều → động từ <b>số nhiều</b> (vì "a number of" ở đây có nghĩa như "several — vài, một số"); <b>The number of</b> → động từ <b>số ít</b> (vì chủ ngữ thật là "the number" — con số, chỉ MỘT con số): <span class="gr-ex">A number of students <b>are</b> absent. <i>(Vài học sinh vắng.)</i> / The number of students <b>is</b> rising. <i>(Con số [học sinh] đang tăng.)</i></span></li>
+<li><b>Either…or / Neither…nor</b> → chia theo danh từ <b>gần động từ nhất</b> (không phải danh từ đầu tiên): <span class="gr-ex">Neither the teacher nor the <b>students were</b> late. <i>(Chia theo "students" vì nó đứng ngay trước động từ.)</i></span></li>
+<li><b>Cụm giới từ chen giữa chủ ngữ và động từ</b> — đây là cạm bẫy phổ biến nhất: cụm "of + danh từ" đứng sau chủ ngữ KHÔNG phải là chủ ngữ, chỉ bổ nghĩa cho nó. <span class="gr-ex">The <b>box</b> of chocolates <b>is</b> on the table. <i>(Chủ ngữ thật là "the box" — số ít, không phải "chocolates".)</i></span></li>
+<li><b>Mệnh đề danh từ / cụm V-ing / to-V làm chủ ngữ</b> → LUÔN số ít, dù bên trong có từ số nhiều: <span class="gr-ex"><b>Learning</b> new languages <b>takes</b> time. / <b>What she said</b> <b>surprises</b> me.</span></li>
+</ul>
+<p class="gr-note">Cách kiểm tra nhanh nhất khi gặp câu dài: gạch bỏ mọi cụm giới từ và cụm chèn thêm, tìm ra ĐÚNG một danh từ/đại từ làm chủ ngữ chính, rồi mới chia động từ theo nó.</p>
+
+<h4>Hòa hợp với các dạng chủ ngữ đặc biệt khác</h4>
+<ul>
+<li><b>Danh từ tập thể (collective noun — chỉ một nhóm nhưng là MỘT danh từ số ít)</b> như team, family, government, staff, committee: thường chia SỐ ÍT khi nhấn mạnh cả nhóm hành động NHƯ MỘT THỂ THỐNG NHẤT, nhưng có thể chia SỐ NHIỀU (trong tiếng Anh-Anh) khi nhấn mạnh các thành viên hành động RIÊNG LẺ: <span class="gr-ex">The team <b>is</b> playing well this season. <i>(Cả đội, như một khối.)</i> / The team <b>are</b> arguing among themselves. <i>(Từng thành viên cãi nhau — Anh-Anh chấp nhận số nhiều ở đây.)</i></span></li>
+<li><b>Tên môn học/lĩnh vực kết thúc bằng "-ics"</b> (mathematics, physics, economics, statistics) — TRÔNG như số nhiều nhưng LUÔN chia số ít vì chỉ MỘT môn/lĩnh vực: <span class="gr-ex">Mathematics <b>is</b> my favourite subject.</span></li>
+<li><b>Đơn vị đo lường, tiền bạc, thời gian, khoảng cách được coi là MỘT tổng thể</b> → chia số ít dù danh từ ở dạng số nhiều: <span class="gr-ex">Ten dollars <b>is</b> not enough. <i>(Coi 10 đô như MỘT số tiền, không phải đếm từng tờ.)</i> / Five years <b>is</b> a long time.</span></li>
+<li><b>Tựa đề sách/phim/tổ chức ở dạng số nhiều</b> → vẫn chia số ít vì đó là TÊN của MỘT tác phẩm/tổ chức: <span class="gr-ex">"The Avengers" <b>is</b> a popular movie.</span></li>
+</ul>
+<p class="gr-note">Bài tập tự kiểm tra: gạch chân chủ ngữ THẬT trong câu "The results of the experiment, which took several years to complete, ___ surprising." — đáp án là "were" (chia theo "the results" số nhiều, bỏ qua toàn bộ cụm "of the experiment" và mệnh đề quan hệ chen giữa).</p>`,
       },
       {
         title: "Câu điều kiện (Conditionals)",
         html: `
-<p>Câu điều kiện gồm hai phần: mệnh đề <b>if</b> (điều kiện) và mệnh đề chính (kết quả). Chọn loại nào tùy vào việc điều kiện đó <b>có thật hay không</b> và thuộc <b>thời điểm nào</b>.</p>
+<p>Câu điều kiện gồm hai <b>mệnh đề</b> (xem lại khái niệm Mệnh đề ở bài "Nền tảng"): mệnh đề <b>if</b> (nêu điều kiện) và mệnh đề chính (nêu kết quả nếu điều kiện đó xảy ra). Chọn đúng loại nào phụ thuộc vào việc điều kiện đó <b>có khả năng xảy ra hay chỉ là giả định</b>, và <b>thuộc mốc thời gian nào</b>.</p>
 <div class="gr-scroll"><table>
 <tr><th>Loại</th><th>Cấu trúc</th><th>Ý nghĩa</th></tr>
 <tr><td>Loại 0</td><td>If + HT đơn, HT đơn</td><td>chân lý, luôn đúng</td></tr>
@@ -303,258 +436,394 @@ const GRAMMAR_DATA = [
 <tr><td>Loại 2</td><td>If + QK đơn, would + V</td><td>trái với hiện tại (giả định)</td></tr>
 <tr><td>Loại 3</td><td>If + QK hoàn thành, would have + V3</td><td>trái với quá khứ (tiếc nuối)</td></tr>
 </table></div>
-<h4>Diễn giải từng loại</h4>
+
+<h4>Diễn giải từng loại kèm lý do chọn thì đó</h4>
 <ul>
-<li><b>Loại 0</b> — quy luật hiển nhiên: <span class="gr-ex">If you <b>heat</b> ice, it <b>melts</b>. <i>(Cứ đun đá là nó tan.)</i></span></li>
-<li><b>Loại 1</b> — điều kiện có thật, khả năng cao: <span class="gr-ex">If it <b>rains</b> tomorrow, we <b>will stay</b> home. <i>(Nếu mai trời mưa, chúng ta sẽ ở nhà.)</i></span></li>
-<li><b>Loại 2</b> — tưởng tượng trái với thực tế hiện tại: <span class="gr-ex">If I <b>were</b> rich, I <b>would travel</b> the world. <i>(Giá mà tôi giàu — thực tế là không.)</i></span> Lưu ý dùng <b>were</b> cho mọi ngôi.</li>
-<li><b>Loại 3</b> — tiếc nuối về quá khứ không thể thay đổi: <span class="gr-ex">If she <b>had studied</b> harder, she <b>would have passed</b>. <i>(Giá mà cô ấy học chăm hơn — nhưng đã không.)</i></span></li>
+<li><b>Loại 0 — quy luật hiển nhiên/luôn đúng:</b> cả hai vế đều dùng hiện tại đơn vì đây là sự thật không đổi, không phải dự đoán. <span class="gr-ex">If you <b>heat</b> ice, it <b>melts</b>. <i>(Cứ đun đá là nó tan — lúc nào cũng vậy.)</i></span></li>
+<li><b>Loại 1 — điều kiện có thật, khả năng xảy ra cao ở tương lai:</b> vế điều kiện dùng hiện tại đơn (dù nói về tương lai — quy tắc: sau "if" không dùng "will"), vế kết quả dùng "will". <span class="gr-ex">If it <b>rains</b> tomorrow, we <b>will stay</b> home. <i>(Nếu mai trời mưa — hoàn toàn có thể xảy ra — chúng ta sẽ ở nhà.)</i></span></li>
+<li><b>Loại 2 — tưởng tượng trái với thực tế ở HIỆN TẠI:</b> vế điều kiện lùi về quá khứ đơn (nhưng KHÔNG mang nghĩa quá khứ — đây là cách tiếng Anh đánh dấu "giả định, không có thật" bằng hình thức quá khứ), vế kết quả dùng "would". <span class="gr-ex">If I <b>were</b> rich, I <b>would travel</b> the world. <i>(Giá mà tôi giàu — thực tế bây giờ tôi không giàu.)</i></span> Lưu ý: trong câu điều kiện loại 2 (và các cấu trúc giả định khác), dùng <b>were</b> cho MỌI ngôi kể cả I/he/she/it (thay vì "was") — đây là "subjunctive mood" (thức giả định), xem thêm bài "Câu ước & giả định".</li>
+<li><b>Loại 3 — tiếc nuối về một việc đã KHÔNG xảy ra trong quá khứ, không thể thay đổi được nữa:</b> vế điều kiện dùng quá khứ hoàn thành, vế kết quả dùng "would have + V3". <span class="gr-ex">If she <b>had studied</b> harder, she <b>would have passed</b>. <i>(Giá mà cô ấy đã học chăm hơn — nhưng thực tế đã không học chăm, và kỳ thi đã qua rồi, không sửa được nữa.)</i></span></li>
 </ul>
-<h4>Điều kiện hỗn hợp & biến thể</h4>
+
+<h4>Điều kiện hỗn hợp (mixed conditionals) & biến thể</h4>
 <ul>
-<li><b>Hỗn hợp (quá khứ → hiện tại):</b> <span class="gr-ex">If I <b>had saved</b> money, I <b>would be</b> rich now.</span></li>
-<li><b>Đảo ngữ trang trọng</b> (bỏ if): <i>Were I you… / Had she known…</i></li>
-<li>Có thể thay <b>if</b> bằng <b>unless</b> (= if not): <span class="gr-ex">You will fail <b>unless</b> you practise.</span></li>
-</ul>`,
+<li><b>Hỗn hợp (điều kiện ở quá khứ → kết quả ở hiện tại):</b> khi một hành động/quyết định TRONG QUÁ KHỨ tạo ra hệ quả kéo dài tới HIỆN TẠI. Vế điều kiện dùng quá khứ hoàn thành (như loại 3), vế kết quả dùng "would + V nguyên mẫu" (như loại 2, vì kết quả đang ở hiện tại): <span class="gr-ex">If I <b>had saved</b> money then, I <b>would be</b> rich now. <i>(Nếu ngày đó tôi đã tiết kiệm tiền — quá khứ — thì bây giờ tôi đã giàu — hiện tại.)</i></span></li>
+<li><b>Đảo ngữ trang trọng</b> (bỏ "if", đảo trợ động từ lên trước chủ ngữ — xem thêm bài "Đảo ngữ"): dùng trong văn phong trang trọng/học thuật. <i>Were I you, I would accept. (= If I were you…) / Had she known, she would have come. (= If she had known…)</i></li>
+<li>Có thể thay <b>if</b> bằng <b>unless</b> (mang nghĩa "nếu KHÔNG" — tương đương "if…not"): <span class="gr-ex">You will fail <b>unless</b> you practise. <i>(= if you don't practise.)</i></span></li>
+<li><b>if only</b> — dạng nhấn mạnh cảm xúc tiếc nuối/ước muốn mạnh hơn "wish", theo đúng cấu trúc thì như loại 2/3: <i>If only I had more time!</i></li>
+</ul>
+<p class="gr-note">Lỗi hay gặp nhất: dùng "will" ngay trong mệnh đề "if" ở loại 1 — "~~If it will rain, we will stay home~~" SAI, mệnh đề "if" không bao giờ chia "will" (trừ khi "will" mang nghĩa "sẵn lòng/đồng ý" chứ không phải thì tương lai: "If you <b>will</b> just wait a moment…" — rất hiếm gặp).</p>`,
       },
       {
         title: "Câu bị động (Passive Voice)",
         html: `
-<p>Ta dùng bị động khi muốn <b>nhấn mạnh vào đối tượng chịu tác động</b>, hoặc khi <b>không biết / không cần nêu</b> ai thực hiện hành động. Đây là công cụ đắc lực trong văn học thuật vì giọng văn khách quan hơn.</p>
-<p><b>Nguyên tắc chuyển:</b> tân ngữ của câu chủ động lên làm chủ ngữ, động từ đổi thành <span class="gr-formula">be + V3</span> (chia <i>be</i> đúng thì), chủ ngữ cũ (nếu cần) đưa xuống sau <i>by</i>.</p>
+<p>Trong câu <b>chủ động (active voice)</b>, chủ ngữ là người/vật THỰC HIỆN hành động: <i>The committee approved the plan.</i> (Ủy ban [chủ ngữ, người thực hiện] phê duyệt kế hoạch.) Trong câu <b>bị động (passive voice)</b>, chủ ngữ là người/vật CHỊU hành động đó — tức Tân ngữ của câu chủ động (xem lại khái niệm Tân ngữ ở bài "Nền tảng") được đưa lên làm chủ ngữ mới.</p>
+<p>Ta dùng bị động khi muốn <b>nhấn mạnh vào đối tượng chịu tác động</b> thay vì người thực hiện, hoặc khi <b>không biết / không quan trọng / không muốn nêu</b> ai làm việc đó. Đây là công cụ rất đắc lực trong văn học thuật và báo chí vì giọng văn khách quan hơn, không cần chỉ đích danh ai chịu trách nhiệm.</p>
+
+<h4>Nguyên tắc chuyển đổi chủ động → bị động</h4>
+<p>Ba bước: (1) Tân ngữ của câu chủ động → lên làm CHỦ NGỮ MỚI. (2) Động từ đổi thành <span class="gr-formula">be + V3 (quá khứ phân từ)</span>, trong đó "be" phải chia ĐÚNG THÌ giống hệt câu chủ động ban đầu. (3) Chủ ngữ cũ (nếu vẫn cần nhắc tới) → đưa xuống cuối câu, sau giới từ <b>by</b> (có thể bỏ hẳn nếu không quan trọng — đây chính là lý do bị động hay được dùng để "giấu" chủ thể hành động).</p>
 <div class="gr-scroll"><table>
-<tr><th>Thì</th><th>Chủ động</th><th>Bị động</th></tr>
+<tr><th>Thì</th><th>Chủ động</th><th>Bị động (be chia đúng thì này)</th></tr>
 <tr><td>HT đơn</td><td>writes</td><td>is written</td></tr>
 <tr><td>HT tiếp diễn</td><td>is writing</td><td>is being written</td></tr>
 <tr><td>QK đơn</td><td>wrote</td><td>was written</td></tr>
+<tr><td>QK tiếp diễn</td><td>was writing</td><td>was being written</td></tr>
 <tr><td>HT hoàn thành</td><td>has written</td><td>has been written</td></tr>
-<tr><td>Tương lai</td><td>will write</td><td>will be written</td></tr>
+<tr><td>QK hoàn thành</td><td>had written</td><td>had been written</td></tr>
+<tr><td>Tương lai đơn</td><td>will write</td><td>will be written</td></tr>
 <tr><td>Động từ khiếm khuyết</td><td>must write</td><td>must be written</td></tr>
 </table></div>
-<p class="gr-ex">Chủ động: The committee <b>approved</b> the plan. → Bị động: The plan <b>was approved</b> (by the committee). <i>(Kế hoạch đã được thông qua.)</i></p>
-<p><b>Ứng dụng IELTS:</b> mô tả quy trình (Writing Task 1) gần như luôn dùng bị động: <span class="gr-ex">First, the beans <b>are harvested</b>; then they <b>are dried</b> and <b>roasted</b>.</span></p>
-<p class="gr-note">Chỉ ngoại động từ (có tân ngữ) mới chuyển sang bị động được. "He slept" không có bị động vì "sleep" không có tân ngữ.</p>`,
+<p class="gr-ex">Chủ động: The committee <b>approved</b> the plan. → Bị động: The plan <b>was approved</b> (by the committee). <i>(Kế hoạch đã được thông qua [bởi ủy ban].)</i></p>
+
+<h4>Câu có hai tân ngữ — chuyển được theo hai cách</h4>
+<p>Với động từ có cả tân ngữ trực tiếp và gián tiếp (give, tell, show — xem lại bài "Nền tảng"), CẢ HAI tân ngữ đều có thể lên làm chủ ngữ bị động, tạo hai câu bị động khác nhau: <span class="gr-ex">She gave him a book. → <b>He</b> was given a book (by her). <i>(nhấn "anh ấy" — phổ biến hơn)</i> / <b>A book</b> was given to him (by her).</span></p>
+
+<h4>Ứng dụng thực tế trong IELTS</h4>
+<p><b>Mô tả quy trình (Writing Task 1 — process diagram)</b> gần như luôn dùng bị động, vì trọng tâm là CÁC BƯỚC diễn ra, không quan trọng ai/cái gì thực hiện: <span class="gr-ex">First, the beans <b>are harvested</b>; then they <b>are dried</b> and <b>roasted</b>. <i>(Đầu tiên hạt cà phê được thu hoạch; sau đó được phơi khô và rang.)</i></span> Trong Writing Task 2, bị động giúp câu văn mang tính khách quan, học thuật hơn khi bàn về vấn đề xã hội: <i>It is widely believed that… / Steps should be taken to…</i></p>
+
+<h4>Khi nào KHÔNG chuyển được sang bị động</h4>
+<p class="gr-note">Chỉ <b>ngoại động từ</b> (có tân ngữ — xem bài "Nền tảng") mới chuyển sang bị động được, vì bị động cần "mượn" tân ngữ làm chủ ngữ mới. "He slept" không có dạng bị động vì "sleep" là <b>nội động từ</b>, không có tân ngữ để mượn. Tương tự "happen, occur, exist, seem, appear, belong to" đều không có dạng bị động.</p>`,
       },
       {
         title: "Câu tường thuật (Reported Speech)",
         html: `
-<p>Khi thuật lại lời người khác mà không trích nguyên văn, ta thường phải <b>lùi thì một bậc</b> (vì thời điểm nói đã thành quá khứ) và đổi các đại từ, trạng từ chỉ thời gian – nơi chốn cho hợp lý.</p>
-<h4>Quy tắc lùi thì</h4>
+<p><b>Lời nói trực tiếp (direct speech)</b> là trích dẫn nguyên văn lời ai đó, đặt trong dấu ngoặc kép: <i>She said, "I am tired."</i> <b>Lời nói gián tiếp / câu tường thuật (reported/indirect speech)</b> là thuật lại Ý của lời nói đó bằng lời của người kể, không trích nguyên văn: <i>She said (that) she was tired.</i> Vì thời điểm nói đã lùi vào quá khứ so với lúc thuật lại, ta thường phải <b>lùi thì một bậc</b> và đổi các đại từ, trạng từ chỉ thời gian/nơi chốn cho phù hợp với góc nhìn mới.</p>
+
+<h4>Quy tắc lùi thì (backshift)</h4>
 <div class="gr-scroll"><table>
-<tr><th>Lời nói trực tiếp</th><th>Lời tường thuật</th></tr>
-<tr><td>HT đơn (do)</td><td>QK đơn (did)</td></tr>
-<tr><td>HT tiếp diễn (am doing)</td><td>QK tiếp diễn (was doing)</td></tr>
-<tr><td>QK đơn (did)</td><td>QK hoàn thành (had done)</td></tr>
+<tr><th>Lời nói trực tiếp</th><th>Lời tường thuật (lùi 1 bậc)</th></tr>
+<tr><td>Hiện tại đơn</td><td>Quá khứ đơn</td></tr>
+<tr><td>Hiện tại tiếp diễn</td><td>Quá khứ tiếp diễn</td></tr>
+<tr><td>Hiện tại hoàn thành</td><td>Quá khứ hoàn thành</td></tr>
+<tr><td>Quá khứ đơn</td><td>Quá khứ hoàn thành</td></tr>
 <tr><td>will</td><td>would</td></tr>
-<tr><td>can / may / must</td><td>could / might / had to</td></tr>
+<tr><td>can</td><td>could</td></tr>
+<tr><td>may</td><td>might</td></tr>
+<tr><td>must (nghĩa vụ)</td><td>had to (hoặc giữ nguyên "must")</td></tr>
 </table></div>
-<h4>Đổi trạng từ</h4>
-<p>now → then · today → that day · tomorrow → the next day · yesterday → the day before · here → there · this → that.</p>
-<p class="gr-ex">Trực tiếp: "I <b>am</b> tired," she said. → Tường thuật: She said (that) she <b>was</b> tired.</p>
-<h4>Câu hỏi & mệnh lệnh</h4>
+
+<h4>Đổi đại từ, trạng từ chỉ thời gian/nơi chốn</h4>
+<p>Vì góc nhìn đã chuyển từ "người nói lúc đó" sang "người kể lúc này", các từ chỉ thời gian/nơi chốn tương đối cũng phải đổi: <b>now</b> → then · <b>today</b> → that day · <b>tomorrow</b> → the next day / the following day · <b>yesterday</b> → the day before / the previous day · <b>here</b> → there · <b>this</b> → that · <b>ago</b> → before.</p>
+<p class="gr-ex">Trực tiếp: "I <b>am</b> tired <b>now</b>," she said. → Tường thuật: She said (that) she <b>was</b> tired <b>then</b>. <i>(Đại từ "I" cũng đổi thành "she" tùy người kể là ai.)</i></p>
+
+<h4>Câu hỏi & câu mệnh lệnh tường thuật — cấu trúc khác câu tường thuật thông thường</h4>
 <ul>
-<li><b>Câu hỏi Yes/No:</b> dùng <i>asked + if/whether</i>, đưa về trật tự khẳng định (không đảo ngữ): <span class="gr-ex">He asked, "Are you ready?" → He asked <b>if I was</b> ready.</span></li>
-<li><b>Câu hỏi Wh-:</b> giữ từ để hỏi, cũng về trật tự khẳng định: <span class="gr-ex">"Where do you live?" → She asked <b>where I lived</b>.</span></li>
-<li><b>Mệnh lệnh:</b> dùng <i>told/asked + tân ngữ + (not) to V</i>: <span class="gr-ex">"Close the door." → He told me <b>to close</b> the door.</span></li>
+<li><b>Câu hỏi Yes/No</b> (không có từ để hỏi): dùng động từ tường thuật <i>ask/wonder + if/whether</i>, và QUAN TRỌNG — đưa mệnh đề về trật tự KHẲNG ĐỊNH (S trước V), không giữ đảo ngữ như câu hỏi gốc: <span class="gr-ex">He asked, "Are you ready?" → He asked <b>if I was</b> ready. <i>(không phải "if was I ready".)</i></span></li>
+<li><b>Câu hỏi Wh-</b> (có từ để hỏi: what, where, when, why, how…): giữ nguyên từ để hỏi ở đầu mệnh đề, cũng đưa về trật tự khẳng định: <span class="gr-ex">"Where do you live?" → She asked <b>where I lived</b>. <i>(không phải "where did I live".)</i></span></li>
+<li><b>Câu mệnh lệnh/yêu cầu:</b> dùng <i>told/asked/ordered + tân ngữ + (not) to V (nguyên mẫu có to)</i>, không lùi thì vì mệnh lệnh không có "thì" để lùi: <span class="gr-ex">"Close the door," he said. → He told me <b>to close</b> the door. / "Don't be late," she said. → She told me <b>not to be</b> late.</span></li>
 </ul>
-<p class="gr-note">Không lùi thì khi lời nói là chân lý luôn đúng: <i>The teacher said the Earth <b>is</b> round.</i></p>`,
+<p class="gr-note">KHÔNG lùi thì khi lời nói gốc là một chân lý/sự thật luôn đúng, không phụ thuộc thời gian: <i>The teacher said the Earth <b>is</b> round.</i> (không bắt buộc phải nói "was round" dù về mặt kỹ thuật lùi thì cũng không sai).</p>`,
       },
       {
         title: "Mệnh đề quan hệ (Relative Clauses)",
         html: `
-<p>Mệnh đề quan hệ giúp <b>bổ nghĩa cho một danh từ</b> mà không phải tách thành câu riêng — nhờ đó câu văn gọn và "cao cấp" hơn. Nó bắt đầu bằng đại từ quan hệ.</p>
-<h4>Chọn đại từ quan hệ</h4>
+<p><b>Mệnh đề quan hệ</b> là một <b>mệnh đề</b> (xem lại khái niệm này ở bài "Nền tảng" — có đủ chủ ngữ + động từ chia) dùng để <b>bổ nghĩa cho một danh từ</b> đứng ngay trước nó, thay vì phải tách thành một câu riêng biệt. Nhờ đó câu văn gọn hơn và tự nhiên/"cao cấp" hơn về mặt văn phong. Nó luôn bắt đầu bằng một <b>đại từ quan hệ (relative pronoun)</b>.</p>
+<p class="gr-ex">Hai câu rời: <i>I have a friend. My friend lives in Paris.</i> → Gộp bằng mệnh đề quan hệ: <i>I have a friend <b>who lives in Paris</b>.</i></p>
+
+<h4>Chọn đúng đại từ quan hệ</h4>
 <ul>
-<li><b>who</b> – thay cho <b>người</b> (làm chủ ngữ): <span class="gr-ex">The scientist <b>who</b> discovered penicillin was Fleming.</span></li>
-<li><b>which</b> – thay cho <b>vật/sự việc</b>: <span class="gr-ex">The book <b>which</b> I bought is fascinating.</span></li>
-<li><b>that</b> – thay cho cả người lẫn vật (chỉ trong mệnh đề xác định).</li>
-<li><b>whose</b> – chỉ <b>sở hữu</b>: <span class="gr-ex">The student <b>whose</b> project won is here.</span></li>
-<li><b>where / when / why</b> – nơi chốn / thời gian / lý do: <span class="gr-ex">This is the city <b>where</b> I was born.</span></li>
+<li><b>who</b> — thay cho <b>người</b>, làm chủ ngữ của mệnh đề quan hệ: <span class="gr-ex">The scientist <b>who</b> discovered penicillin was Fleming. <i>("who" thay cho "the scientist", đóng vai trò chủ ngữ của "discovered".)</i></span></li>
+<li><b>whom</b> — thay cho <b>người</b>, làm tân ngữ của mệnh đề quan hệ (trang trọng, ít dùng trong văn nói): <span class="gr-ex">The man <b>whom</b> I met yesterday is a doctor.</span></li>
+<li><b>which</b> — thay cho <b>vật/sự việc</b> (không dùng cho người): <span class="gr-ex">The book <b>which</b> I bought is fascinating.</span></li>
+<li><b>that</b> — thay được cho CẢ người lẫn vật, nhưng CHỈ dùng được trong mệnh đề xác định (xem mục dưới), không dùng trong mệnh đề không xác định.</li>
+<li><b>whose</b> — chỉ quan hệ <b>sở hữu</b> (của ai/của cái gì), theo sau luôn là một danh từ: <span class="gr-ex">The student <b>whose</b> project won is here. <i>("dự án CỦA học sinh đó" thắng giải.)</i></span></li>
+<li><b>where</b> — thay cho nơi chốn (= in/at which): <span class="gr-ex">This is the city <b>where</b> I was born.</span></li>
+<li><b>when</b> — thay cho thời gian (= at/in which): <span class="gr-ex">I remember the day <b>when</b> we first met.</span></li>
+<li><b>why</b> — thay cho lý do, chỉ theo sau "the reason": <span class="gr-ex">That's the reason <b>why</b> she left.</span></li>
 </ul>
-<h4>Hai loại mệnh đề — khác biệt cốt lõi</h4>
+
+<h4>Hai loại mệnh đề quan hệ — khác biệt cốt lõi về Ý NGHĨA và DẤU CÂU</h4>
 <ul>
-<li><b>Xác định (defining):</b> cung cấp thông tin <b>bắt buộc</b> để hiểu danh từ; <b>không</b> dùng dấu phẩy. <span class="gr-ex">People <b>who</b> exercise regularly live longer.</span></li>
-<li><b>Không xác định (non-defining):</b> chỉ là thông tin <b>thêm</b>, bỏ đi câu vẫn đủ nghĩa; có <b>dấu phẩy</b> và <b>không dùng that</b>. <span class="gr-ex">My father, <b>who</b> is 60, still works.</span></li>
+<li><b>Xác định (defining/restrictive):</b> cung cấp thông tin <b>BẮT BUỘC</b> để xác định chính xác danh từ đang nói tới — bỏ mệnh đề này đi, câu sẽ mất nghĩa hoặc mơ hồ. KHÔNG dùng dấu phẩy. <span class="gr-ex">People <b>who exercise regularly</b> live longer. <i>(Không phải TẤT CẢ mọi người — chỉ những người có tập thể dục đều đặn.)</i></span></li>
+<li><b>Không xác định (non-defining/non-restrictive):</b> chỉ là thông tin THÊM VÀO, bỏ đi câu vẫn đủ nghĩa và đúng ngữ pháp. LUÔN có dấu phẩy bao quanh, và KHÔNG được dùng "that". <span class="gr-ex">My father, <b>who is 60</b>, still works. <i>(Tôi chỉ có một người cha — mệnh đề "who is 60" chỉ là thông tin phụ thêm, không dùng để phân biệt ông với người cha nào khác.)</i></span></li>
 </ul>
-<h4>Rút gọn mệnh đề quan hệ (rất hữu ích cho IELTS)</h4>
+<p class="gr-note">Cách phân biệt nhanh: đọc thử câu mà bỏ hẳn mệnh đề quan hệ đi. Nếu câu còn lại vẫn RÕ NGHĨA, đủ thông tin → đó là loại không xác định (cần dấu phẩy). Nếu câu còn lại bị MẤT nghĩa quan trọng hoặc mơ hồ (không biết đang nói về ai/cái gì) → đó là loại xác định (không dấu phẩy).</p>
+
+<h4>Rút gọn mệnh đề quan hệ (rất hữu ích để đa dạng câu trong IELTS)</h4>
 <ul>
-<li><b>Chủ động → V-ing:</b> <span class="gr-ex">The man who is waiting → the man <b>waiting</b> outside.</span></li>
-<li><b>Bị động → V3:</b> <span class="gr-ex">The report which was written by her → the report <b>written</b> by her.</span></li>
-</ul>`,
+<li><b>Mệnh đề chủ động → rút gọn thành cụm V-ing:</b> bỏ đại từ quan hệ + động từ "be" (nếu có), đổi động từ chính thành V-ing: <span class="gr-ex">The man who is waiting outside → the man <b>waiting</b> outside.</span></li>
+<li><b>Mệnh đề bị động → rút gọn thành cụm V3 (quá khứ phân từ):</b> <span class="gr-ex">The report which was written by her → the report <b>written</b> by her.</span></li>
+</ul>
+<p class="gr-note">Chỉ rút gọn được khi đại từ quan hệ đóng vai trò CHỦ NGỮ của mệnh đề quan hệ (who/which/that làm chủ ngữ) — không rút gọn được khi nó là tân ngữ hoặc dùng "whose".</p>`,
       },
       {
         title: "Danh động từ & Động từ nguyên mẫu (Gerund / Infinitive)",
         html: `
-<p>Khi một động từ đi sau một động từ khác, nó phải chuyển thành <b>V-ing (danh động từ)</b> hoặc <b>to V (nguyên mẫu có to)</b>. Vấn đề là mỗi động từ "kén" một dạng khác nhau — cần ghi nhớ theo nhóm.</p>
-<h4>Động từ theo sau bởi TO + V</h4>
-<p>Thường là động từ hướng tới <b>tương lai/ý định</b>: want, decide, hope, plan, agree, promise, refuse, offer, expect, learn, manage, afford, fail.</p>
-<p class="gr-ex">She <b>decided to move</b> abroad. / I can't <b>afford to buy</b> a car.</p>
-<h4>Động từ theo sau bởi V-ing</h4>
-<p>Thường chỉ việc <b>đang/đã làm, sở thích, tránh né</b>: enjoy, avoid, mind, finish, suggest, consider, admit, deny, practise, imagine, keep, risk, miss.</p>
-<p class="gr-ex">I <b>enjoy reading</b>. / He <b>avoided answering</b> the question.</p>
+<p>Khi một động từ (gọi là "động từ 2") đi ngay sau một động từ khác (động từ chính) trong cùng một mệnh đề, nó KHÔNG được giữ nguyên dạng mà phải chuyển thành một trong hai dạng: <b>V-ing (danh động từ — gerund)</b> hoặc <b>to V (động từ nguyên mẫu có "to" — to-infinitive)</b>. Danh động từ V-ing thực chất hoạt động NHƯ MỘT DANH TỪ trong câu (có thể làm chủ ngữ, tân ngữ — xem lại bài "Nền tảng"), còn to-V mang tính hướng tới một mục đích/ý định chưa xảy ra. Vấn đề là: mỗi động từ chính "kén" một dạng cố định phía sau, không có quy tắc chung — phải học thuộc theo nhóm nghĩa.</p>
+
+<h4>Nhóm động từ theo sau bởi TO + V (to-infinitive)</h4>
+<p>Đây thường là các động từ mang ý nghĩa <b>hướng tới tương lai, một dự định/mục tiêu CHƯA xảy ra</b>: want, decide, hope, plan, agree, promise, refuse, offer, expect, learn, manage, afford, fail, intend, wish, choose, tend.</p>
+<p class="gr-ex">She <b>decided to move</b> abroad. <i>(Quyết định — việc chuyển đi vẫn chưa xảy ra tại thời điểm quyết định.)</i> / I can't <b>afford to buy</b> a car. <i>(Việc mua xe — dự định, chưa thực hiện.)</i></p>
+
+<h4>Nhóm động từ theo sau bởi V-ing (gerund)</h4>
+<p>Thường chỉ việc <b>đang/đã làm, một sở thích/thói quen, hoặc sự tránh né/ngừng lại</b> — tức hành động được nhìn nhận như một "khái niệm" chung chung hơn là một dự định cụ thể: enjoy, avoid, mind, finish, suggest, consider, admit, deny, practise, imagine, keep, risk, miss, dislike, delay, postpone.</p>
+<p class="gr-ex">I <b>enjoy reading</b>. <i>(Sở thích — một hoạt động nói chung, không phải một dự định cụ thể.)</i> / He <b>avoided answering</b> the question. <i>(Tránh né — hành động cụ thể đã diễn ra.)</i></p>
+
 <h4>Luôn dùng V-ing sau giới từ</h4>
-<p class="gr-ex">She is good <b>at solving</b> problems. / Thank you <b>for helping</b> me.</p>
-<h4>Động từ đổi nghĩa theo dạng</h4>
+<p>Đây là quy tắc TUYỆT ĐỐI, không có ngoại lệ: bất kỳ động từ nào đứng ngay sau một giới từ (in, on, at, for, about, of…) đều PHẢI ở dạng V-ing, không bao giờ dùng "to V". Lý do: về mặt ngữ pháp, giới từ luôn cần một danh từ/cụm danh từ theo sau, mà V-ing đóng vai trò danh từ được (xem lại bài "Nền tảng").</p>
+<p class="gr-ex">She is good <b>at solving</b> problems. / Thank you <b>for helping</b> me. / I'm interested <b>in learning</b> Japanese.</p>
+<p class="gr-note">Lỗi rất hay gặp: sau "to" là giới từ (không phải dấu hiệu của to-infinitive) trong một số cụm cố định — look forward <b>to</b>, be used <b>to</b>, be accustomed <b>to</b> — những cụm này "to" đóng vai trò GIỚI TỪ nên vẫn phải theo sau bởi V-ing: <i>I look forward <b>to seeing</b> you.</i> (không phải "to see").</p>
+
+<h4>Động từ ĐỔI NGHĨA hoàn toàn tùy theo dạng theo sau — nhóm quan trọng nhất cần phân biệt</h4>
 <ul>
-<li><b>stop to do</b> (dừng lại <i>để</i> làm việc khác) ≠ <b>stop doing</b> (ngừng hẳn việc đó): <span class="gr-ex">He stopped <b>to smoke</b> vs. He stopped <b>smoking</b>.</span></li>
-<li><b>remember to do</b> (nhớ để làm — chưa làm) ≠ <b>remember doing</b> (nhớ đã làm): <span class="gr-ex">Remember <b>to lock</b> the door vs. I remember <b>locking</b> it.</span></li>
-<li><b>try to do</b> (nỗ lực) ≠ <b>try doing</b> (thử nghiệm cách khác).</li>
+<li><b>stop to do</b> (dừng việc đang làm LẠI <i>để</i> làm việc khác — "to do" ở đây là mục đích) ≠ <b>stop doing</b> (ngừng hẳn, không làm việc đó nữa): <span class="gr-ex">He stopped <b>to smoke</b>. <i>(Dừng lại để hút thuốc — đang làm việc khác thì dừng lại hút thuốc.)</i> vs. He stopped <b>smoking</b>. <i>(Anh ấy đã bỏ thuốc — không hút nữa.)</i></span></li>
+<li><b>remember to do</b> (nhớ ĐỂ làm — việc đó CHƯA xảy ra, còn phải nhớ mà làm) ≠ <b>remember doing</b> (nhớ ĐÃ làm — việc đó đã xảy ra rồi, giờ nhớ lại): <span class="gr-ex">Remember <b>to lock</b> the door before you leave. <i>(Nhắc nhở — chưa khóa, phải nhớ mà khóa.)</i> vs. I remember <b>locking</b> the door. <i>(Nhớ lại — đã khóa rồi, giờ nhớ lại hành động đó.)</i></span></li>
+<li><b>try to do</b> (nỗ lực, cố gắng làm một việc khó) ≠ <b>try doing</b> (thử một cách/phương án khác xem có hiệu quả không): <span class="gr-ex">I tried <b>to open</b> the door, but it was locked. <i>(Cố mở nhưng không được.)</i> vs. Try <b>restarting</b> your computer. <i>(Thử khởi động lại xem có được không — một giải pháp để thử.)</i></span></li>
+<li><b>forget to do</b> (quên phải làm) ≠ <b>forget doing</b> (quên rằng đã từng làm — thường dùng ở thể phủ định "never forget doing"): <span class="gr-ex">I forgot <b>to call</b> her. <i>(Quên gọi — chưa gọi.)</i> vs. I'll never forget <b>meeting</b> him for the first time.</span></li>
 </ul>`,
       },
       {
         title: "Động từ khiếm khuyết (Modal Verbs)",
         html: `
-<p>Modal verbs (can, could, may, might, must, should, will, would…) không diễn tả hành động mà thêm <b>sắc thái</b>: khả năng, sự cho phép, nghĩa vụ, lời khuyên, mức độ chắc chắn. Sau modal luôn là <b>động từ nguyên mẫu không "to"</b>.</p>
-<h4>Nhóm khả năng & xin phép</h4>
+<p><b>Động từ khiếm khuyết (modal verbs)</b> — can, could, may, might, must, should, will, would, shall — là nhóm trợ động từ ĐẶC BIỆT: chúng không tự mang nghĩa hành động, mà thêm một lớp <b>SẮC THÁI</b> vào động từ chính đứng sau: khả năng, sự cho phép, nghĩa vụ, lời khuyên, hoặc mức độ chắc chắn của người nói. Đặc điểm ngữ pháp riêng: sau modal verb LUÔN LÀ động từ nguyên mẫu KHÔNG "to" (bare infinitive), và modal verb không bao giờ thêm "-s" dù chủ ngữ là ngôi thứ ba số ít: <i>She <b>can</b> swim.</i> (không phải "She cans swim" hay "She can to swim").</p>
+
+<h4>Nhóm diễn tả khả năng & xin phép</h4>
 <ul>
-<li><b>can</b> – khả năng hiện tại, xin phép thân mật; <b>could</b> – khả năng quá khứ hoặc lịch sự hơn.</li>
-<li><b>be able to</b> – thay "can" ở những thì mà can không dùng được: <span class="gr-ex">I <b>will be able to</b> help tomorrow.</span></li>
+<li><b>can</b> — khả năng ở hiện tại, hoặc xin phép/cho phép một cách thân mật, thông thường: <span class="gr-ex">She <b>can</b> speak three languages. / <b>Can</b> I sit here?</span></li>
+<li><b>could</b> — khả năng trong QUÁ KHỨ, hoặc cách xin phép LỊCH SỰ hơn "can" ở hiện tại: <span class="gr-ex">When I was young, I <b>could</b> run fast. / <b>Could</b> I borrow your pen?</span></li>
+<li><b>be able to</b> — dùng thay "can/could" ở những vị trí mà modal verb không chia được (vì modal không có dạng "to V", không có dạng hoàn thành riêng): <span class="gr-ex">I <b>will be able to</b> help tomorrow. <i>(Không nói "will can" — hai modal không đứng liền nhau được.)</i></span></li>
 </ul>
-<h4>Nhóm suy đoán (mức độ chắc chắn)</h4>
+
+<h4>Nhóm suy đoán — thể hiện MỨC ĐỘ CHẮC CHẮN của người nói về một sự việc</h4>
 <ul>
-<li><b>must</b> – gần như chắc chắn (suy luận): <span class="gr-ex">The lights are off — they <b>must be</b> asleep.</span></li>
-<li><b>may / might / could</b> – có thể (không chắc): <span class="gr-ex">It <b>might rain</b> later.</span></li>
-<li><b>can't</b> – chắc chắn không: <span class="gr-ex">She <b>can't be</b> serious.</span></li>
+<li><b>must</b> — suy luận gần như CHẮC CHẮN đúng, dựa trên bằng chứng logic: <span class="gr-ex">The lights are off — they <b>must be</b> asleep. <i>(Đèn tắt hết → chắc chắn họ đang ngủ, đây là suy luận logic chứ không phải nghĩa vụ.)</i></span></li>
+<li><b>may / might / could</b> — CÓ THỂ đúng, nhưng không chắc chắn (might có mức độ chắc chắn thấp hơn may một chút): <span class="gr-ex">It <b>might rain</b> later. <i>(Có thể mưa, nhưng không chắc.)</i></span></li>
+<li><b>can't</b> — suy luận CHẮC CHẮN KHÔNG ĐÚNG (phủ định của "must" trong nghĩa suy đoán, KHÔNG dùng "mustn't" cho nghĩa này): <span class="gr-ex">She <b>can't be</b> serious. <i>(Chắc chắn cô ấy không nghiêm túc — dựa trên bằng chứng/logic.)</i></span></li>
 </ul>
-<h4>Nhóm nghĩa vụ & lời khuyên</h4>
+
+<h4>Nhóm nghĩa vụ, sự cho phép & lời khuyên</h4>
 <ul>
-<li><b>must / have to</b> – bắt buộc (must: do người nói; have to: do hoàn cảnh, quy định).</li>
-<li><b>mustn't</b> (cấm) ≠ <b>don't have to</b> (không cần): <span class="gr-ex">You <b>mustn't</b> smoke here vs. You <b>don't have to</b> come.</span></li>
-<li><b>should / ought to</b> – lời khuyên; <b>had better</b> – khuyên mạnh, hàm ý hậu quả.</li>
+<li><b>must</b> vs <b>have to</b> — cả hai đều mang nghĩa "bắt buộc", nhưng khác nguồn gốc của sự bắt buộc đó: <b>must</b> = do chính NGƯỜI NÓI thấy cần thiết (mang tính cá nhân, chủ quan); <b>have to</b> = do HOÀN CẢNH/QUY ĐỊNH bên ngoài áp đặt (khách quan). <span class="gr-ex">I <b>must</b> finish this today. <i>(Tự tôi thấy cần phải xong.)</i> vs. I <b>have to</b> wear a uniform at work. <i>(Quy định của công ty, không phải ý tôi.)</i></span></li>
+<li><b>mustn't</b> (cấm — không được phép làm) ≠ <b>don't have to</b> (không cần — có làm hay không đều được, không bắt buộc): đây là cặp RẤT hay bị nhầm vì cả hai đều có "not" nhưng nghĩa hoàn toàn khác nhau. <span class="gr-ex">You <b>mustn't</b> smoke here. <i>(Cấm — làm là vi phạm.)</i> vs. You <b>don't have to</b> come if you're busy. <i>(Không bắt buộc — tùy bạn.)</i></span></li>
+<li><b>should / ought to</b> — lời khuyên, ý kiến về điều NÊN làm (không mang tính bắt buộc như must): <span class="gr-ex">You <b>should</b> see a doctor.</span></li>
+<li><b>had better</b> — lời khuyên MẠNH hơn "should", hàm ý có HẬU QUẢ xấu nếu không làm theo: <span class="gr-ex">You <b>had better</b> hurry, or you'll miss the bus.</span></li>
 </ul>
-<h4>Suy đoán về quá khứ</h4>
-<p class="gr-ex">She <b>must have left</b> early. / He <b>might have forgotten</b>. / They <b>can't have known</b>.</p>`,
+
+<h4>Suy đoán về QUÁ KHỨ — cấu trúc modal + have + V3</h4>
+<p>Khi muốn suy đoán về một việc đã xảy ra trong quá khứ (không phải hiện tại), dùng công thức <span class="gr-formula">modal + have + V3</span> — giữ nguyên logic mức độ chắc chắn như nhóm suy đoán ở trên, chỉ đổi mốc thời gian:</p>
+<p class="gr-ex">She <b>must have left</b> early. <i>(Chắc chắn cô ấy đã rời đi sớm — suy luận về quá khứ.)</i> / He <b>might have forgotten</b>. <i>(Có thể anh ấy đã quên.)</i> / They <b>can't have known</b>. <i>(Chắc chắn họ đã không biết.)</i> / You <b>should have called</b> me. <i>(Đáng lẽ bạn nên gọi tôi — trách móc nhẹ vì việc đó đã KHÔNG xảy ra.)</i></p>`,
       },
       {
         title: "Mạo từ (a / an / the / zero)",
         html: `
-<p>Mạo từ tuy nhỏ nhưng sai rất dễ bị trừ điểm ngữ pháp. Nguyên tắc gốc: người nghe đã <b>xác định được</b> danh từ đang nói tới hay chưa.</p>
-<h4>a / an — mạo từ không xác định</h4>
-<p>Dùng với danh từ <b>đếm được, số ít</b>, khi nhắc <b>lần đầu</b> hoặc nói chung chung. Chọn <i>a</i>/<i>an</i> theo <b>âm</b> đứng sau, không phải chữ cái: <span class="gr-ex"><b>a</b> university (âm /j/), <b>an</b> hour (âm /au/, "h" câm).</span></p>
-<h4>the — mạo từ xác định</h4>
+<p><b>Mạo từ (article)</b> là từ nhỏ đứng trước danh từ để báo hiệu người nghe/đọc có XÁC ĐỊNH ĐƯỢC chính xác danh từ đó là gì/cái nào hay không. Đây là điểm ngữ pháp tuy nhỏ nhưng RẤT dễ mất điểm vì tiếng Việt hoàn toàn không có khái niệm tương đương — người Việt học tiếng Anh thường hoặc bỏ sót mạo từ, hoặc dùng sai loại.</p>
+
+<h4>a / an — mạo từ KHÔNG xác định (indefinite article)</h4>
+<p>Dùng với danh từ <b>đếm được, số ít</b>, khi nhắc tới nó <b>lần đầu tiên</b> (người nghe chưa biết là cái nào cụ thể) hoặc khi nói chung chung về MỘT trong nhiều cái cùng loại. Chọn <b>a</b> hay <b>an</b> dựa vào <b>ÂM</b> đọc của từ đứng ngay sau, KHÔNG phải chữ cái đầu tiên viết ra: <span class="gr-ex"><b>a</b> university <i>(dù bắt đầu bằng chữ "u" nhưng đọc là âm /j/ giống phụ âm, nên dùng "a")</i>, <b>an</b> hour <i>(chữ "h" không phát âm, âm bắt đầu thực chất là /au/ — nguyên âm, nên dùng "an")</i>, <b>an</b> MBA <i>(đọc là "em-bi-ây", bắt đầu bằng âm nguyên âm /e/)</i>.</span></p>
+
+<h4>the — mạo từ XÁC ĐỊNH (definite article)</h4>
+<p>Dùng khi người nghe/đọc CÓ THỂ xác định chính xác đang nói về cái nào — vì đã nhắc tới trước đó, vì chỉ có một, hoặc vì ngữ cảnh làm rõ:</p>
 <ul>
-<li>Danh từ đã được nhắc trước đó: <span class="gr-ex">I saw <b>a</b> dog. <b>The</b> dog was huge.</span></li>
-<li>Vật duy nhất: <b>the</b> sun, <b>the</b> moon, <b>the</b> Internet.</li>
-<li>So sánh nhất & thứ tự: <b>the</b> best, <b>the</b> first.</li>
-<li>Tên biển, sông, dãy núi, quốc gia số nhiều: the Pacific, the Alps, the USA.</li>
+<li><b>Danh từ đã được nhắc tới ở câu trước</b> (lần đầu dùng a/an, lần sau dùng the vì giờ đã xác định): <span class="gr-ex">I saw <b>a</b> dog yesterday. <b>The</b> dog was huge. <i>(Lần đầu "a dog" — con chó nào đó; lần sau "the dog" — chính con chó vừa nhắc.)</i></span></li>
+<li><b>Vật DUY NHẤT, ai cũng hiểu đang nói về cái nào:</b> <b>the</b> sun, <b>the</b> moon, <b>the</b> sky, <b>the</b> Internet, <b>the</b> world.</li>
+<li><b>So sánh nhất & số thứ tự</b> (chỉ có MỘT cái "nhất"/"đầu tiên"): <b>the</b> best, <b>the</b> tallest, <b>the</b> first, <b>the</b> only.</li>
+<li><b>Tên các đại dương/biển, sông, dãy núi, và tên quốc gia ở dạng số nhiều/có "of":</b> the Pacific (Ocean), the Nile, the Alps, the United States, the Philippines, the United Kingdom.</li>
+<li><b>Rõ nghĩa nhờ ngữ cảnh, dù chưa nhắc tới trước đó:</b> <span class="gr-ex">Can you close <b>the</b> door? <i>(Chỉ có một cửa trong phòng — ai cũng hiểu là cửa nào.)</i></span></li>
 </ul>
-<h4>Zero article — không mạo từ</h4>
-<p>Danh từ số nhiều hoặc không đếm được mang nghĩa <b>chung chung</b>, tên riêng, bữa ăn, môn học, ngôn ngữ: <span class="gr-ex"><b>Water</b> is essential. / I love <b>music</b>. / She teaches <b>English</b>.</span></p>`,
+
+<h4>Zero article — KHÔNG dùng mạo từ</h4>
+<p>Không dùng "a/an" lẫn "the" trong các trường hợp: danh từ số nhiều hoặc không đếm được mang nghĩa CHUNG CHUNG (không chỉ một cái/nhóm cụ thể nào), tên riêng (người, hầu hết địa danh/quốc gia số ít), tên các bữa ăn, tên môn học/ngôn ngữ khi nói chung: <span class="gr-ex"><b>Water</b> is essential for life. <i>(Nước nói chung, không phải một lượng nước cụ thể.)</i> / I love <b>music</b>. / She teaches <b>English</b>. / We had <b>breakfast</b> at 7. / <b>Vietnam</b> is in Southeast Asia.</span></p>
+<p class="gr-note">So sánh cặp dễ nhầm: <i>I go to <b>school</b></i> (nghĩa chung — đi học, với vai trò học sinh) ≠ <i>I go to <b>the</b> school</i> (đến tòa nhà trường học cụ thể đó — có thể chỉ để dự một sự kiện, không phải để học).</p>
+
+<h4>Các cặp danh từ dễ nhầm mạo từ nhất</h4>
+<ul>
+<li><b>go to bed / go to school / go to hospital / go to prison</b> (không mạo từ) — mang nghĩa TRỪU TƯỢNG, gắn với MỤC ĐÍCH chính của nơi đó (ngủ, học, chữa bệnh, chịu án) ≠ <b>go to the hospital / go to the prison</b> (có "the") — chỉ đơn thuần ĐẾN tòa nhà đó vì lý do khác (thăm ai đó, làm việc ở đó nhưng không phải bệnh nhân/phạm nhân).</li>
+<li><b>in future</b> (= từ giờ trở đi, mang tính cảnh báo/nhắc nhở) ≠ <b>in the future</b> (= trong tương lai nói chung, một thời điểm chưa xác định): <span class="gr-ex"><b>In future</b>, please arrive on time. <i>(Từ giờ trở đi, hãy đến đúng giờ.)</i> / Robots will do most jobs <b>in the future</b>.</span></li>
+<li><b>Tên bữa ăn KHÔNG mạo từ khi nói chung</b> nhưng CÓ mạo từ khi mô tả một bữa ăn CỤ THỂ: <i>We had <b>breakfast</b> at 7.</i> ≠ <i>The breakfast we had at the hotel was delicious.</i></li>
+</ul>
+<p class="gr-note">Mẹo lên band: mạo từ là điểm CỰC KỲ nhỏ nhưng bị soi rất kỹ ở Grammatical Range & Accuracy. Cách luyện hiệu quả nhất không phải học quy tắc suông mà là ĐỌC NHIỀU và chú ý xem người bản ngữ dùng "a/an/the/zero" ở đâu trong ngữ cảnh tương tự bài bạn đang viết.</p>`,
       },
       {
         title: "So sánh (Comparison)",
         html: `
-<p>So sánh giúp diễn đạt mức độ hơn – kém – bằng nhau giữa các đối tượng. Cách chia tùy vào <b>độ dài của tính từ/trạng từ</b>.</p>
-<h4>So sánh hơn (comparative)</h4>
+<p>Cấu trúc so sánh giúp diễn đạt mức độ HƠN – KÉM – BẰNG NHAU giữa hai hay nhiều đối tượng. Cách chia phụ thuộc vào <b>số âm tiết</b> của tính từ/trạng từ đang so sánh (âm tiết — syllable — là một "nhịp" phát âm trong từ, vd "tall" có 1 âm tiết, "beautiful" có 3 âm tiết: beau-ti-ful).</p>
+
+<h4>So sánh hơn (comparative) — hơn MỘT đối tượng khác</h4>
 <ul>
-<li>Tính từ <b>ngắn</b> (1 âm tiết): thêm <b>-er + than</b>: <span class="gr-ex">taller than, faster than.</span></li>
-<li>Tính từ <b>dài</b> (≥2 âm tiết): <b>more + adj + than</b>: <span class="gr-ex">more expensive than, more important than.</span></li>
-<li><b>Ngoại lệ quan trọng</b> — tính từ <b>2 âm tiết</b> kết thúc bằng <b>-y, -le, -ow, -er</b> vẫn thêm <b>-er</b> (không dùng <i>more</i>): <span class="gr-ex">happy → happi<b>er</b>, easy → easi<b>er</b>, busy → busi<b>er</b>, simple → simpl<b>er</b>, narrow → narrow<b>er</b>, clever → clever<b>er</b>. <i>(Viết "more happy" là sai — đây là nhóm cực kỳ thông dụng.)</i></span></li>
+<li>Tính từ/trạng từ <b>NGẮN</b> (1 âm tiết): thêm đuôi <b>-er</b>, theo sau bởi <b>than</b>: <span class="gr-ex">tall → tall<b>er than</b>, fast → fast<b>er than</b>.</span></li>
+<li>Tính từ/trạng từ <b>DÀI</b> (từ 2 âm tiết trở lên): thêm <b>more</b> phía TRƯỚC, giữ nguyên tính từ: <span class="gr-ex"><b>more</b> expensive than, <b>more</b> important than.</span></li>
+<li><b>Ngoại lệ quan trọng</b> — tính từ đúng <b>2 âm tiết</b> nhưng kết thúc bằng <b>-y, -le, -ow, -er</b> vẫn thêm <b>-er</b> (không dùng "more"), vì đây là nhóm âm cuối dễ biến đổi: <span class="gr-ex">happy → happi<b>er</b> <i>(y đổi thành i trước khi thêm -er)</i>, easy → easi<b>er</b>, busy → busi<b>er</b>, simple → simpl<b>er</b>, narrow → narrow<b>er</b>, clever → clever<b>er</b>. <i>(Viết "more happy" là SAI — đây là nhóm từ cực kỳ thông dụng nên lỗi này rất hay bị bắt gặp.)</i></span></li>
 </ul>
-<h4>So sánh nhất (superlative)</h4>
+
+<h4>So sánh nhất (superlative) — HƠN TẤT CẢ các đối tượng còn lại trong nhóm</h4>
+<p>Luôn có mạo từ <b>the</b> đứng trước (vì chỉ có MỘT cái "nhất" — xem lại bài "Mạo từ"): tính từ ngắn thêm <b>the + adj-est</b>; tính từ dài dùng <b>the most + adj</b>: <span class="gr-ex">the tall<b>est</b> / <b>the most</b> beautiful.</span></p>
+
+<h4>So sánh bằng nhau & các cấu trúc so sánh khác</h4>
 <ul>
-<li>Ngắn: <b>the + adj-est</b>; Dài: <b>the most + adj</b>: <span class="gr-ex">the tallest / the most beautiful.</span></li>
+<li><b>Bằng nhau:</b> <span class="gr-formula">as + adj/adv + as</span>; phủ định dùng <span class="gr-formula">not as/so … as</span> (kém hơn, không bằng): <span class="gr-ex">She is <b>as</b> talented <b>as</b> her sister. / This phone is <b>not as</b> expensive <b>as</b> that one. <i>(Điện thoại này rẻ hơn — không đắt bằng cái kia.)</i></span></li>
+<li><b>Các dạng so sánh BẤT QUY TẮC</b> (không theo công thức -er/more): good→better→best; bad→worse→worst; little→less→least; much/many→more→most; far→further/farther→furthest/farthest.</li>
+<li><b>Cấu trúc "càng… càng…"</b> — diễn tả hai điều thay đổi cùng chiều với nhau: <span class="gr-formula">The + so sánh hơn (1), the + so sánh hơn (2)</span>: <span class="gr-ex"><b>The more</b> you practise, <b>the better</b> you become. <i>(Càng luyện tập nhiều, càng giỏi lên.)</i></span></li>
+<li><b>Tăng cấp dần (progressive comparison)</b> — lặp lại tính từ so sánh hơn nối bằng "and", diễn tả một xu hướng đang tăng/giảm liên tục theo thời gian: <span class="gr-ex">The city is getting <b>bigger and bigger</b>. <i>(Với tính từ dài: "more and more expensive".)</i></span></li>
+<li><b>Gấp N lần</b>: <span class="gr-formula">N times + as + adj + as</span> hoặc <span class="gr-formula">N times + so sánh hơn + than</span>: <span class="gr-ex">This building is <b>three times as tall as</b> that one.</span></li>
 </ul>
-<h4>So sánh bằng & các dạng khác</h4>
+
+<h4>So sánh trong mô tả biểu đồ (Writing Task 1) — ứng dụng thực tế</h4>
+<p>So sánh là công cụ CHÍNH để mô tả sự khác biệt giữa các cột/đường trong biểu đồ, thay vì chỉ liệt kê số liệu rời rạc: <span class="gr-ex">Sales in 2020 were <b>significantly higher than</b> those in 2019. / The number of tourists was <b>almost twice as high as</b> in the previous year. / Country A had <b>the lowest</b> unemployment rate among the four countries.</span></p>
+<p>Kết hợp so sánh với trạng từ chỉ MỨC ĐỘ chênh lệch giúp câu văn chính xác và tự nhiên hơn: <b>slightly</b> higher (nhỉnh hơn một chút), <b>considerably/significantly/substantially</b> higher (cao hơn đáng kể), <b>marginally</b> lower (thấp hơn không đáng kể), <b>far</b> more expensive (đắt hơn nhiều).</p>
+
+<h4>Lỗi thường gặp</h4>
 <ul>
-<li><b>Bằng nhau:</b> as + adj + as; phủ định not as/so … as: <span class="gr-ex">She is <b>as</b> talented <b>as</b> her sister.</span></li>
-<li><b>Bất quy tắc:</b> good→better→best; bad→worse→worst; little→less→least; much/many→more→most; far→further/farther.</li>
-<li><b>Càng… càng…:</b> <span class="gr-ex"><b>The more</b> you practise, <b>the better</b> you become.</span></li>
-<li><b>Tăng cấp dần:</b> <span class="gr-ex">The city is getting <b>bigger and bigger</b>.</span></li>
+<li><b>Dùng cả "more" và "-er" cùng lúc:</b> "~~more taller~~" sai — chỉ chọn MỘT trong hai cách.</li>
+<li><b>Quên "than" sau so sánh hơn:</b> "~~She is taller me~~" sai, phải có "than": <i>She is taller <b>than</b> me.</i></li>
+<li><b>Nhầm đại từ sau "than":</b> văn nói thân mật chấp nhận "than me", nhưng văn viết học thuật/trang trọng chuẩn mực hơn khi dùng "than I am" (so sánh đầy đủ hai mệnh đề).</li>
 </ul>`,
       },
       {
         title: "Liên từ & mệnh đề (Conjunctions)",
         html: `
-<p>Liên từ nối các ý lại với nhau — dùng đúng sẽ khiến bài viết mạch lạc, dùng sai (đặc biệt lẫn lộn giữa liên từ + mệnh đề và giới từ + danh từ) là lỗi rất phổ biến.</p>
-<h4>Nguyên nhân</h4>
+<p><b>Liên từ (conjunction)</b> là từ dùng để NỐI hai ý/hai mệnh đề lại với nhau, thể hiện mối quan hệ logic giữa chúng (nguyên nhân, tương phản, mục đích…). Dùng đúng liên từ giúp bài viết mạch lạc; lỗi phổ biến nhất là NHẦM LẪN giữa (a) liên từ đi với một MỆNH ĐỀ đầy đủ (có chủ ngữ + động từ chia — xem bài "Nền tảng") và (b) giới từ đi với một DANH TỪ/cụm danh từ/V-ing — hai nhóm này không thể dùng thay thế nhau dù đôi khi dịch ra tiếng Việt nghe giống nhau.</p>
+
+<h4>Diễn tả nguyên nhân</h4>
 <ul>
-<li><b>because / since / as</b> + mệnh đề (S+V): <span class="gr-ex"><b>Because</b> it was raining, we stayed home.</span></li>
-<li><b>because of / due to</b> + danh từ / V-ing: <span class="gr-ex">We stayed home <b>because of</b> the rain.</span></li>
+<li><b>because / since / as</b> — LIÊN TỪ, theo sau là một MỆNH ĐỀ đầy đủ (S + V): <span class="gr-ex"><b>Because</b> it was raining, we stayed home. <i>("it was raining" là mệnh đề đầy đủ.)</i></span></li>
+<li><b>because of / due to / owing to</b> — GIỚI TỪ, theo sau là DANH TỪ hoặc V-ing, KHÔNG phải mệnh đề: <span class="gr-ex">We stayed home <b>because of</b> the rain. <i>("the rain" chỉ là một danh từ, không có động từ chia.)</i></span></li>
 </ul>
-<h4>Tương phản</h4>
+<p class="gr-note">Lỗi rất hay gặp: viết "~~because of it was raining~~" — sai vì sau giới từ "because of" không thể là một mệnh đề đầy đủ có chủ ngữ + động từ chia.</p>
+
+<h4>Diễn tả sự tương phản</h4>
 <ul>
-<li><b>although / though / even though</b> + mệnh đề: <span class="gr-ex"><b>Although</b> he was tired, he kept working.</span></li>
-<li><b>despite / in spite of</b> + danh từ / V-ing: <span class="gr-ex"><b>Despite</b> the rain, they played.</span></li>
-<li><b>however, nevertheless</b> đứng đầu câu, có dấu chấm phẩy hoặc chấm trước: <span class="gr-ex">It was hard. <b>However</b>, she succeeded.</span></li>
+<li><b>although / though / even though</b> — LIÊN TỪ + mệnh đề đầy đủ ("even though" mang sắc thái nhấn mạnh hơn): <span class="gr-ex"><b>Although</b> he was tired, he kept working.</span></li>
+<li><b>despite / in spite of</b> — GIỚI TỪ + danh từ / V-ing (KHÔNG phải mệnh đề — lỗi y hệt kiểu như because of): <span class="gr-ex"><b>Despite</b> the rain, they played. / <b>Despite</b> feeling tired, she kept working. <i>(Nếu muốn dùng cả mệnh đề, phải thêm "the fact that": despite the fact that it was raining.)</i></span></li>
+<li><b>however, nevertheless, on the other hand</b> — đây là TRẠNG TỪ LIÊN KẾT (conjunctive adverb), không phải liên từ thật sự: đứng ĐẦU CÂU MỚI (sau dấu chấm hoặc chấm phẩy), có dấu phẩy ngay sau nó, KHÔNG được nối trực tiếp hai mệnh đề bằng dấu phẩy đơn thuần: <span class="gr-ex">It was hard. <b>However</b>, she succeeded. <i>(hoặc: It was hard; however, she succeeded.)</i></span></li>
 </ul>
-<h4>Mục đích & kết quả</h4>
+
+<h4>Diễn tả mục đích & kết quả</h4>
 <ul>
-<li><b>Mục đích:</b> so that + mệnh đề; in order to / so as to + V: <span class="gr-ex">He left early <b>so that</b> he could catch the train.</span></li>
-<li><b>Kết quả:</b> so + adj + that; such + (a/an) + adj + N + that: <span class="gr-ex">It was <b>so cold that</b> we stayed in. / It was <b>such a cold day that</b> we stayed in.</span></li>
+<li><b>Mục đích</b> (làm gì ĐỂ đạt được điều gì): <span class="gr-formula">so that + mệnh đề</span> hoặc <span class="gr-formula">in order to / so as to + V nguyên mẫu</span>: <span class="gr-ex">He left early <b>so that</b> he could catch the train. / He left early <b>in order to</b> catch the train.</span></li>
+<li><b>Kết quả</b> (mức độ dẫn tới hệ quả gì): <span class="gr-formula">so + adj + that</span> hoặc <span class="gr-formula">such + (a/an) + adj + N + that</span> — khác nhau ở chỗ "so" đi thẳng với tính từ, còn "such" cần cụm danh từ đầy đủ: <span class="gr-ex">It was <b>so cold that</b> we stayed in. / It was <b>such a cold day that</b> we stayed in.</span></li>
 </ul>
-<h4>Bổ sung ý (rất hợp Writing)</h4>
-<p>moreover, furthermore, in addition, besides, what is more — dùng để thêm luận điểm.</p>`,
+
+<h4>Bổ sung ý (rất hữu ích khi viết luận — Writing Task 2)</h4>
+<p>Các từ nối sau đứng đầu câu mới (giống "however"), dùng để thêm một luận điểm/ý bổ sung cùng chiều với ý trước: <b>moreover, furthermore, in addition, besides, what is more, additionally</b>. Ví dụ: <i>Studying abroad broadens one's worldview. <b>Moreover</b>, it improves language skills significantly.</i></p>`,
       },
       {
         title: "Đảo ngữ (Inversion) — nâng cao",
         html: `
-<p>Đảo ngữ là đưa <b>trạng từ phủ định hoặc cụm nhấn mạnh lên đầu câu</b>, rồi đảo trợ động từ ra trước chủ ngữ (giống cấu trúc câu hỏi). Đây là "vũ khí" ghi điểm ở tiêu chí "đa dạng cấu trúc" trong IELTS Writing/Speaking, nhưng cần dùng đúng chỗ, đừng lạm dụng.</p>
-<h4>Sau trạng từ phủ định/hạn định</h4>
+<p><b>Đảo ngữ (inversion)</b> là đưa một <b>trạng từ mang nghĩa phủ định/hạn định</b> (never, rarely, only…) hoặc cả một cụm nhấn mạnh lên ĐẦU câu (thay vì vị trí bình thường của nó), rồi ĐẢO trợ động từ ra TRƯỚC chủ ngữ — cấu trúc lúc này trông giống hệt một câu hỏi dù thực chất vẫn là câu khẳng định. Đây là "vũ khí" ghi điểm ở tiêu chí "đa dạng cấu trúc câu" trong IELTS Writing/Speaking band 7+, nhưng chỉ nên dùng 1-2 lần trong cả bài, dùng quá nhiều sẽ khiến văn phong gượng ép.</p>
+<p class="gr-ex">Câu bình thường: I <b>have</b> never <b>seen</b> such dedication. → Đảo ngữ: <b>Never have I seen</b> such dedication. <i>(Đưa "never" lên đầu, đảo "have" ra trước "I".)</i></p>
+
+<h4>Sau trạng từ phủ định/hạn định đứng đầu câu</h4>
 <ul>
-<li><b>Never / Rarely / Seldom / Hardly ever:</b> <span class="gr-ex"><b>Never have I seen</b> such dedication.</span></li>
-<li><b>Not only … but also:</b> <span class="gr-ex"><b>Not only did</b> she win, <b>but</b> she also broke the record.</span></li>
-<li><b>No sooner … than / Hardly … when</b> (diễn tả việc vừa xong thì việc khác xảy ra): <span class="gr-ex"><b>No sooner had</b> I arrived <b>than</b> it started to rain.</span></li>
+<li><b>Never / Rarely / Seldom / Hardly ever</b> (hiếm khi): <span class="gr-ex"><b>Never have I seen</b> such dedication. / <b>Rarely does she</b> complain.</span></li>
+<li><b>Not only … but also</b> (không chỉ… mà còn…) — đảo ngữ ở PHẦN ĐẦU, phần "but also" giữ nguyên trật tự thường: <span class="gr-ex"><b>Not only did</b> she win, <b>but</b> she also broke the record.</span></li>
+<li><b>No sooner … than</b> / <b>Hardly/Scarcely … when</b> — diễn tả việc A vừa xong thì việc B xảy ra ngay sau đó, thường đi với quá khứ hoàn thành ở vế đảo ngữ: <span class="gr-ex"><b>No sooner had</b> I arrived <b>than</b> it started to rain. <i>(Tôi vừa đến thì trời bắt đầu mưa.)</i></span></li>
 </ul>
-<h4>Sau "Only"</h4>
-<p class="gr-ex"><b>Only when</b> we lose something <b>do we</b> realise its value. / <b>Only by</b> practising <b>can you</b> improve.</p>
-<h4>Đảo ngữ trong câu điều kiện</h4>
-<p class="gr-ex"><b>Were I</b> in your position, I would accept. (= If I were…) / <b>Had she known</b>, she would have come. (= If she had known…)</p>`,
+
+<h4>Sau "Only" + trạng ngữ chỉ thời gian/cách thức</h4>
+<p>Khi "only" đi kèm một cụm trạng ngữ (only when, only after, only by, only if…) và cả cụm đó đứng đầu câu, mệnh đề chính theo sau PHẢI đảo ngữ: <span class="gr-ex"><b>Only when</b> we lose something <b>do we</b> realise its value. <i>(Chỉ khi mất đi thứ gì đó ta mới nhận ra giá trị của nó.)</i> / <b>Only by</b> practising <b>can you</b> improve.</span></p>
+
+<h4>Đảo ngữ trong câu điều kiện trang trọng (xem lại bài "Câu điều kiện")</h4>
+<p>Bỏ hẳn "if", đảo trợ động từ (were/had/should) ra trước chủ ngữ — cách nói này mang tính trang trọng, hay gặp trong văn viết học thuật: <span class="gr-ex"><b>Were I</b> in your position, I would accept. <i>(= If I were in your position…)</i> / <b>Had she known</b>, she would have come. <i>(= If she had known…)</i> / <b>Should you need</b> help, call me. <i>(= If you should need help…)</i></span></p>
+<p class="gr-note">Lưu ý: đảo ngữ CHỈ áp dụng khi từ/cụm nhấn mạnh đứng Ở ĐẦU CÂU. Nếu "never/rarely" nằm ở vị trí bình thường trong câu (không lên đầu) thì KHÔNG đảo ngữ: <i>I have never seen such dedication.</i> (bình thường, không đảo) vẫn hoàn toàn đúng — đảo ngữ chỉ là một lựa chọn văn phong, không bắt buộc.</p>
+
+<h4>Cách xác định TRỢ ĐỘNG TỪ nào cần đảo — quy tắc chung</h4>
+<p>Nguyên tắc: đảo đúng trợ động từ đã CÓ SẴN trong câu gốc (be, have, will, can, must…); nếu câu gốc là động từ thường chia ở hiện tại/quá khứ đơn (không có trợ động từ sẵn), phải MƯỢN "do/does/did" giống hệt cách tạo câu hỏi:</p>
+<ul>
+<li>Câu có "be": <i>She <b>is</b> rarely late.</i> → <b>Rarely is she</b> late.</li>
+<li>Câu có trợ động từ khiếm khuyết: <i>I <b>can</b> never understand him.</i> → <b>Never can I</b> understand him.</li>
+<li>Câu động từ thường, hiện tại đơn → mượn <b>does/do</b>: <i>She <b>rarely complains</b>.</i> → <b>Rarely does she complain</b>. <i>(Chú ý: "complain" trở về nguyên mẫu vì "does" đã mang chức năng chia thì.)</i></li>
+<li>Câu động từ thường, quá khứ đơn → mượn <b>did</b>: <i>She <b>never told</b> anyone.</i> → <b>Never did she tell</b> anyone.</li>
+</ul>
+<p class="gr-note">Đây chính là lý do ví dụ "Not only <b>did</b> she win" ở trên phải mượn "did" — câu gốc "She won" là quá khứ đơn của động từ thường, không có trợ động từ sẵn để đảo.</p>`,
       },
       {
         title: "Đếm được / không đếm được & Lượng từ",
         html: `
-<p>Phân biệt danh từ đếm được (a book, two books) và không đếm được (water, information, advice) là gốc để chọn đúng lượng từ.</p>
-<div class="gr-scroll"><table>
-<tr><th>Dùng với</th><th>Đếm được (số nhiều)</th><th>Không đếm được</th></tr>
-<tr><td>Nhiều</td><td>many</td><td>much</td></tr>
-<tr><td>Ít (phủ định)</td><td>few</td><td>little</td></tr>
-<tr><td>Một ít (đủ dùng)</td><td>a few</td><td>a little</td></tr>
-<tr><td>Cả hai</td><td colspan="2">some, any, a lot of, plenty of, most, all</td></tr>
-</table></div>
-<h4>Sắc thái tinh tế: few vs a few</h4>
+<p>Danh từ tiếng Anh chia thành hai loại quan trọng, quyết định việc chọn lượng từ (many/much…), mạo từ (a/an — xem bài "Mạo từ"), và cả cách chia động từ (xem bài "Sự hòa hợp"):</p>
 <ul>
-<li><b>few / little</b> mang nghĩa <b>phủ định</b> — "rất ít, gần như không đủ": <span class="gr-ex">He has <b>few</b> friends. <i>(Ít bạn — hàm ý cô đơn.)</i></span></li>
-<li><b>a few / a little</b> mang nghĩa <b>tích cực</b> — "một ít nhưng đủ": <span class="gr-ex">He has <b>a few</b> friends. <i>(Có vài người bạn — vẫn ổn.)</i></span></li>
+<li><b>Danh từ đếm được (countable noun):</b> chỉ những thứ có thể ĐẾM riêng lẻ từng cái một, có dạng số ít VÀ số nhiều: a book / two book<b>s</b>, a chair / three chair<b>s</b>.</li>
+<li><b>Danh từ không đếm được (uncountable/mass noun):</b> chỉ những thứ được nhìn nhận như một KHỐI/CHẤT LIỆU/KHÁI NIỆM chung, không đếm riêng lẻ được, và KHÔNG có dạng số nhiều (không thêm -s): water, information, advice, furniture.</li>
 </ul>
-<p class="gr-note">Một số danh từ trông "đếm được" nhưng thực ra không đếm được trong tiếng Anh: information, advice, furniture, equipment, knowledge, research. Không nói "informations" hay "an advice"; muốn đếm phải dùng "a piece of advice".</p>`,
+
+<div class="gr-scroll"><table>
+<tr><th>Lượng từ</th><th>Dùng với danh từ đếm được (số nhiều)</th><th>Dùng với danh từ không đếm được</th></tr>
+<tr><td>Nhiều</td><td>many</td><td>much</td></tr>
+<tr><td>Ít (mang nghĩa phủ định)</td><td>few</td><td>little</td></tr>
+<tr><td>Một ít (đủ dùng)</td><td>a few</td><td>a little</td></tr>
+<tr><td>Dùng được cho CẢ HAI loại</td><td colspan="2">some, any, a lot of, plenty of, most, all, no</td></tr>
+</table></div>
+
+<h4>Sắc thái tinh tế dễ nhầm: few/little (phủ định) vs a few/a little (tích cực)</h4>
+<p>Đây là cặp lượng từ mà cùng một con số nhưng SẮC THÁI cảm xúc hoàn toàn trái ngược nhau — chỉ khác việc có "a" đứng trước hay không:</p>
+<ul>
+<li><b>few / little</b> (KHÔNG có "a") mang nghĩa <b>phủ định, tiêu cực</b> — "rất ít, gần như không đủ, đáng thất vọng": <span class="gr-ex">He has <b>few</b> friends. <i>(Rất ít bạn — hàm ý cô đơn, đáng buồn.)</i></span></li>
+<li><b>a few / a little</b> (CÓ "a") mang nghĩa <b>trung tính/tích cực</b> — "có một ít, không nhiều nhưng đủ dùng, ổn": <span class="gr-ex">He has <b>a few</b> friends. <i>(Có vài người bạn — bình thường, không đáng lo.)</i></span></li>
+</ul>
+
+<h4>Danh từ trông "đếm được" theo trực giác tiếng Việt nhưng KHÔNG đếm được trong tiếng Anh</h4>
+<p>Đây là nhóm gây lỗi nhiều nhất vì tiếng Việt có thể đếm ("một lời khuyên", "hai thông tin") trong khi tiếng Anh coi chúng là khối chung: <b>information, advice, furniture, equipment, knowledge, research, news, luggage/baggage, homework, progress.</b> KHÔNG được thêm "-s" ("~~informations~~", "~~advices~~" đều sai) và KHÔNG dùng "a/an" trực tiếp trước chúng ("~~an advice~~" sai).</p>
+<p>Muốn đếm những danh từ này, phải dùng cụm <span class="gr-formula">a piece of / an item of + danh từ không đếm được</span> làm "đơn vị đếm": <span class="gr-ex"><b>a piece of</b> advice, <b>a piece of</b> furniture, <b>two pieces of</b> information.</span></p>
+<p class="gr-note">Một số danh từ có CẢ HAI dạng với nghĩa khác nhau: <i>experience</i> (không đếm được = kinh nghiệm nói chung: "I have experience in teaching") ≠ <i>an experience</i> (đếm được = một trải nghiệm cụ thể: "It was an unforgettable experience"). Tương tự với <i>time, paper, work, room.</i></p>
+
+<h4>Lượng từ khác đáng chú ý</h4>
+<ul>
+<li><b>a lot of / lots of</b> — dùng được cho CẢ hai loại danh từ, mang tính TRUNG TÍNH, tự nhiên trong văn nói lẫn văn viết không quá trang trọng: <span class="gr-ex">There are <b>a lot of</b> people here. / There is <b>a lot of</b> traffic today.</span></li>
+<li><b>plenty of</b> — nghĩa "đủ, thậm chí dư dả", mang sắc thái tích cực hơn "a lot of": <span class="gr-ex">We have <b>plenty of</b> time.</span></li>
+<li><b>several</b> — CHỈ dùng với danh từ đếm được số nhiều, nghĩa "một vài, nhiều hơn 2-3": <span class="gr-ex"><b>Several</b> students failed the test.</span></li>
+<li><b>a number of</b> (+ danh từ số nhiều, ý "một số") — xem lại cách hòa hợp với động từ ở bài "Sự hòa hợp Chủ ngữ – Động từ".</li>
+<li><b>none of</b> — theo sau là danh từ có "the/these/possessive", chia động từ theo danh từ đó (trong văn viết trang trọng nên chia số ít): <span class="gr-ex"><b>None of</b> the students <b>has</b> finished. <i>(văn viết trang trọng — "have" cũng được chấp nhận trong văn nói.)</i></span></li>
+</ul>
+<p class="gr-note">Mẹo lên band: trong Writing Task 1 khi mô tả số liệu, dùng "the majority of / a significant proportion of / a small number of" thay vì lặp lại "many/a lot of" nhiều lần — vừa chính xác hơn về mặt học thuật, vừa đa dạng từ vựng.</p>`,
       },
       {
         title: "Câu ước & giả định (Wish / Subjunctive)",
         html: `
-<p>Cấu trúc "wish" và các dạng giả định thể hiện điều <b>trái với thực tế</b> hoặc mong muốn — về bản chất giống câu điều kiện loại 2/3.</p>
-<h4>Wish theo ba mốc thời gian</h4>
+<p>Cấu trúc "wish" (ước) và <b>thức giả định (subjunctive mood)</b> dùng để diễn đạt điều <b>TRÁI VỚI THỰC TẾ</b> — một mong muốn, một điều tưởng tượng, hoặc một lời khuyên mang tính giả định. Về bản chất, các cấu trúc này dùng chung LOGIC LÙI THÌ với câu điều kiện loại 2/3 (xem lại bài "Câu điều kiện"): muốn diễn tả điều không có thật, tiếng Anh "lùi" động từ về một thì quá khứ hơn bình thường — đây không phải lỗi chia sai thì, mà là QUY TẮC NGỮ PHÁP của thức giả định.</p>
+
+<h4>Wish theo ba mốc thời gian — dùng đúng thì tương ứng</h4>
 <ul>
-<li><b>Ước ở hiện tại</b> (điều không có thật bây giờ): wish + <b>QK đơn</b>: <span class="gr-ex">I wish I <b>had</b> more free time. <i>(Ước gì tôi có nhiều thời gian rảnh hơn.)</i></span></li>
-<li><b>Ước ở quá khứ</b> (tiếc nuối): wish + <b>QK hoàn thành</b>: <span class="gr-ex">I wish I <b>had studied</b> harder. <i>(Ước gì mình đã học chăm hơn.)</i></span></li>
-<li><b>Ước ở tương lai</b> (mong điều gì đó thay đổi/khó chịu về hiện tại): wish + <b>would</b>: <span class="gr-ex">I wish it <b>would stop</b> raining.</span></li>
+<li><b>Ước về một điều KHÔNG có thật ở HIỆN TẠI:</b> <span class="gr-formula">wish + S + quá khứ đơn</span> (dùng "were" cho mọi ngôi, giống câu điều kiện loại 2): <span class="gr-ex">I wish I <b>had</b> more free time. <i>(Ước gì tôi có nhiều thời gian rảnh hơn — thực tế bây giờ tôi không có nhiều thời gian.)</i></span></li>
+<li><b>Ước/tiếc nuối về một điều đã KHÔNG xảy ra trong QUÁ KHỨ:</b> <span class="gr-formula">wish + S + quá khứ hoàn thành</span> (giống câu điều kiện loại 3): <span class="gr-ex">I wish I <b>had studied</b> harder. <i>(Ước gì mình đã học chăm hơn — nhưng thực tế đã không học chăm, chuyện đã qua rồi.)</i></span></li>
+<li><b>Ước muốn một điều gì đó THAY ĐỔI trong tương lai, thường là một sự khó chịu/bực mình về hiện tại (KHÔNG dùng cho ước về bản thân người nói):</b> <span class="gr-formula">wish + S + would + V</span>: <span class="gr-ex">I wish it <b>would stop</b> raining. <i>(Ước gì trời ngừng mưa — thể hiện sự khó chịu.)</i></span></li>
 </ul>
-<h4>Các cấu trúc giả định liên quan</h4>
+<p class="gr-note">Lỗi hay gặp: KHÔNG dùng "wish + would" khi chủ ngữ của "wish" và chủ ngữ của mệnh đề sau là CÙNG MỘT người — "~~I wish I would study harder~~" là sai (nghe như đang ra lệnh cho chính mình), phải dùng quá khứ đơn: <i>I wish I <b>studied</b> harder.</i> "Wish + would" chỉ dùng khi chủ thể là NGƯỜI/VẬT KHÁC hoặc một hiện tượng (thời tiết, tiếng ồn…).</p>
+
+<h4>Các cấu trúc giả định liên quan — cùng "họ" với wish</h4>
 <ul>
-<li><b>would rather</b> + QK đơn (muốn ai đó làm gì): <span class="gr-ex">I'd rather you <b>didn't</b> smoke here.</span></li>
-<li><b>It's (high) time</b> + QK đơn (đã đến lúc): <span class="gr-ex">It's time we <b>left</b>.</span></li>
-<li><b>as if / as though</b> + QK đơn (như thể — trái thực tế): <span class="gr-ex">He talks <b>as if</b> he <b>knew</b> everything.</span></li>
+<li><b>would rather</b> + S + quá khứ đơn (muốn NGƯỜI KHÁC làm/không làm gì — chủ ngữ sau "would rather" khác chủ ngữ chính): <span class="gr-ex">I'd rather you <b>didn't</b> smoke here. <i>(Tôi muốn bạn đừng hút thuốc ở đây.)</i></span> So sánh: nếu cùng một chủ ngữ, dùng nguyên mẫu không "to": <i>I'd rather <b>stay</b> home.</i></li>
+<li><b>It's (high) time</b> + S + quá khứ đơn (đã đến lúc PHẢI làm gì, hàm ý hơi muộn): <span class="gr-ex">It's time we <b>left</b>. <i>(Đã đến lúc phải đi rồi.)</i></span></li>
+<li><b>as if / as though</b> + quá khứ đơn (như thể — diễn tả điều KHÔNG có thật, một sự so sánh giả định): <span class="gr-ex">He talks <b>as if</b> he <b>knew</b> everything. <i>(Anh ta nói như thể biết hết mọi thứ — thực ra không biết hết.)</i></span></li>
+<li><b>suggest / recommend / insist / demand that</b> + S + V nguyên mẫu (thức giả định trang trọng, ĐỘNG TỪ KHÔNG chia theo ngôi, kể cả ngôi thứ ba số ít): <span class="gr-ex">The doctor suggested that he <b>rest</b> for a week. <i>(không phải "rests" — đây là thức giả định trang trọng, hay gặp trong văn phong học thuật/trang trọng.)</i></span></li>
 </ul>`,
       },
       {
         title: "Giới từ thường gặp (Prepositions)",
         html: `
-<p>Giới từ (in, on, at, for, of…) là phần "khó nhằn" vì nhiều khi phụ thuộc thói quen dùng chứ không theo quy tắc tuyệt đối. Dưới đây là những mảng dễ nhớ nhất.</p>
-<h4>Giới từ chỉ thời gian: in / on / at</h4>
+<p><b>Giới từ (preposition)</b> là từ đứng trước danh từ/đại từ/V-ing để chỉ mối quan hệ về thời gian, nơi chốn, hoặc cách thức (in, on, at, for, of, with, by…). Đây là phần "khó nhằn" nhất với người học vì cách dùng nhiều khi phụ thuộc THÓI QUEN ngôn ngữ chứ không theo quy tắc logic tuyệt đối, và giới từ tiếng Việt hiếm khi dịch 1-1 sang tiếng Anh.</p>
+
+<h4>Giới từ chỉ thời gian: in / on / at — theo nguyên tắc "từ rộng tới hẹp"</h4>
 <ul>
-<li><b>at</b> + giờ, thời điểm cụ thể: at 7 o'clock, at night, at the weekend.</li>
-<li><b>on</b> + ngày, thứ, ngày lễ cụ thể: on Monday, on July 4th, on my birthday.</li>
-<li><b>in</b> + tháng, năm, mùa, buổi: in May, in 2026, in summer, in the morning.</li>
+<li><b>at</b> — thời điểm CHÍNH XÁC, cụ thể nhất (giờ, các mốc đặc biệt): at 7 o'clock, at night, at noon, at the weekend (Anh-Anh), at Christmas.</li>
+<li><b>on</b> — NGÀY cụ thể (thứ trong tuần, ngày tháng, ngày lễ cụ thể): on Monday, on July 4th, on my birthday, on Christmas Day.</li>
+<li><b>in</b> — khoảng thời gian RỘNG hơn (tháng, năm, mùa, thế kỷ, buổi trong ngày): in May, in 2026, in summer, in the 21st century, in the morning.</li>
 </ul>
-<h4>Giới từ chỉ nơi chốn: in / on / at</h4>
+<p class="gr-note">Ngoại lệ: "at night" dùng "at" dù "night" nghe như một khoảng thời gian dài — đây là cách dùng cố định cần nhớ riêng, không theo quy tắc chung.</p>
+
+<h4>Giới từ chỉ nơi chốn: in / on / at — theo nguyên tắc tương tự nhưng về KHÔNG GIAN</h4>
 <ul>
-<li><b>at</b> – một điểm: at the door, at the bus stop.</li>
-<li><b>on</b> – trên bề mặt: on the wall, on the table.</li>
-<li><b>in</b> – bên trong không gian: in the room, in Hanoi.</li>
+<li><b>at</b> — MỘT ĐIỂM cụ thể, không quan tâm kích thước không gian bên trong: at the door, at the bus stop, at the corner, at 55 Main Street (địa chỉ cụ thể).</li>
+<li><b>on</b> — TRÊN một BỀ MẶT: on the wall, on the table, on the floor, on the second page.</li>
+<li><b>in</b> — BÊN TRONG một không gian có ranh giới (phòng, thành phố, quốc gia): in the room, in Hanoi, in Vietnam, in the box.</li>
 </ul>
-<h4>Cụm động từ + giới từ cố định (collocations)</h4>
-<p>Nên học theo cụm: depend <b>on</b>, interested <b>in</b>, good <b>at</b>, afraid <b>of</b>, responsible <b>for</b>, similar <b>to</b>, different <b>from</b>, consist <b>of</b>, focus <b>on</b>, rely <b>on</b>.</p>
-<p class="gr-note">Đừng dịch giới từ theo tiếng Việt. "Phụ thuộc vào" là depend <b>on</b> (không phải "depend in"). Cách chắc nhất là học cả cụm và đọc nhiều để quen tai.</p>`,
+
+<h4>Giới từ chỉ chuyển động</h4>
+<p><b>to</b> (hướng đến, thường với động từ chuyển động: go to, come to), <b>into</b> (đi vào bên trong: walk into the room), <b>onto</b> (đi lên trên bề mặt: jump onto the table), <b>from</b> (xuất phát từ), <b>through</b> (xuyên qua), <b>across</b> (băng qua bề mặt), <b>along</b> (dọc theo).</p>
+
+<h4>Cụm động từ/tính từ + giới từ cố định (collocation) — bắt buộc học theo CỤM, không tách rời</h4>
+<p>Đây là nhóm quan trọng nhất vì SAI giới từ ở đây thường không đến từ logic mà từ thói quen ngôn ngữ — phải học thuộc từng cụm: depend <b>on</b>, interested <b>in</b>, good <b>at</b>, afraid <b>of</b>, responsible <b>for</b>, similar <b>to</b>, different <b>from</b>, consist <b>of</b>, focus <b>on</b>, rely <b>on</b>, apologize <b>for</b>, arrive <b>at/in</b>, believe <b>in</b>, complain <b>about</b>, congratulate <b>on</b>, insist <b>on</b>, participate <b>in</b>, succeed <b>in</b>.</p>
+<p class="gr-note">Đừng dịch giới từ theo phản xạ tiếng Việt. "Phụ thuộc <b>vào</b>" nghe như "depend <b>into</b>" nhưng đúng phải là depend <b>on</b>; "khác <b>với</b>" không phải "different <b>with</b>" mà là different <b>from</b>. Cách chắc chắn nhất để nhớ đúng là học cả CỤM ngay từ đầu (không học "depend" và "on" tách rời), và đọc/nghe nhiều để quen phản xạ tự nhiên.</p>
+
+<h4>Giới từ chỉ phương tiện, cách thức</h4>
+<p><b>by</b> + phương tiện di chuyển (không mạo từ): by car, by bus, by plane — nhưng <b>on foot</b> (đi bộ, ngoại lệ cố định). <b>with</b> + công cụ/dụng cụ: <i>cut it <b>with</b> a knife.</i> <b>by</b> + V-ing diễn tả CÁCH thức làm gì: <i>You can improve <b>by practising</b> every day.</i></p>
+
+<h4>Giới từ ở cuối câu (preposition stranding)</h4>
+<p>Trong câu hỏi Wh- và mệnh đề quan hệ, giới từ thường bị "để lại" ở CUỐI câu thay vì đứng ngay trước từ để hỏi/đại từ quan hệ — đây là cách nói TỰ NHIÊN, phổ biến trong cả văn nói lẫn văn viết không quá trang trọng: <span class="gr-ex">Who did you go <b>with</b>? <i>(thay vì "With whom did you go?" — cách nói rất trang trọng, ít dùng.)</i> / This is the book I told you <b>about</b>.</span></p>
+
+<h4>Lỗi thường gặp do ảnh hưởng tiếng Việt</h4>
+<ul>
+<li><b>Thêm giới từ thừa sau động từ đã mang nghĩa đủ:</b> "~~discuss about~~" sai — "discuss" đã là ngoại động từ, có tân ngữ trực tiếp ngay sau, không cần "about": <i>We <b>discussed</b> the plan.</i> (không phải "discussed about the plan"). Tương tự: <b>enter</b> (không phải "enter into" khi nghĩa là "bước vào"), <b>marry</b> (không phải "marry with").</li>
+<li><b>Thiếu giới từ cần thiết:</b> "~~listen music~~" sai, phải là <i>listen <b>to</b> music</i> vì "listen" là nội động từ, cần giới từ mới nối được tân ngữ.</li>
+</ul>`,
       },
     ],
   },
