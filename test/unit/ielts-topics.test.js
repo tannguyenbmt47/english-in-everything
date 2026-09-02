@@ -85,9 +85,10 @@ describe("Mô phỏng đúng logic ưu tiên ngân hàng offline của sidepanel
   });
 
   test("một số từ trong ngân hàng đã có sẵn trong kho -> bị loại, phần còn thiếu mới cần AI bù", () => {
-    // Environment có 15 từ; đánh dấu 10 từ đã có sẵn -> chỉ còn 5 từ MỚI, dù
+    // Đánh dấu TOÀN BỘ trừ 5 từ cuối là đã có sẵn -> chỉ còn đúng 5 từ MỚI, dù
     // count=10 thì cũng không đủ 10 (đúng lúc này AI phải bù phần thiếu).
-    const already = new Set(ctx.IELTS_TOPIC_BANK.Environment.slice(0, 10).map((w) => w.word.toLowerCase()));
+    const all = ctx.IELTS_TOPIC_BANK.Environment;
+    const already = new Set(all.slice(0, all.length - 5).map((w) => w.word.toLowerCase()));
     const picked = pickFromBank("Environment", "word", already, 10);
     assert.equal(picked.length, 5, "chỉ còn 5 từ MỚI trong ngân hàng, 10 - 5 = 5 từ phải nhờ AI bù");
   });
