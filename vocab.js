@@ -198,11 +198,83 @@ function isAbstractTerm(term) {
   return ABSTRACT_SUFFIX.test(t);
 }
 
+// ============================================================
+// Trùng lặp GẦN GIỐNG — "make decision" và "make a decision" là cùng một
+// collocation, chỉ khác việc có mạo từ hay không, nhưng so sánh nguyên văn
+// (addVocab cũ) coi đó là hai mục riêng biệt: cạnh tranh nhau trong quiz, tốn
+// gấp đôi lượt ôn cho cùng một thứ cần học.
+// ============================================================
+const DEDUP_ARTICLES = new Set(["a", "an", "the"]);
+
+// Khoá gộp trùng: bỏ mạo từ đứng riêng, chuẩn hoá gạch nối/khoảng trắng/hoa-thường.
+// Chỉ bỏ MẠO TỪ (a/an/the) — không đụng tới các từ khác, để "a piece of cake"
+// và "a piece of paper" vẫn tách biệt (chỉ trùng ở từ "a piece of").
+function dedupKey(term) {
+  return String(term || "")
+    .toLowerCase()
+    .normalize("NFC")
+    .replace(/[-‐-―−]/g, " ") // MỌI gạch nối (kể cả gạch nối ASCII thường) -> khoảng trắng
+    .replace(/['’.,!?;:"]/g, "")
+    .split(/\s+/)
+    .filter((w) => w && !DEDUP_ARTICLES.has(w))
+    .join(" ");
+}
+
+// Các nhóm mục ĐÃ CÓ SẴN trong kho trùng lặp gần giống nhau (dùng cho nút dọn
+// dẹp thủ công — addVocab() đã chặn từ nay về sau, nhưng dữ liệu cũ trước khi
+// có bộ lọc này vẫn còn nằm đó).
+function findNearDuplicateGroups(list) {
+  const groups = new Map();
+  for (const v of list) {
+    const k = dedupKey(v.term);
+    if (!k) continue;
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(v);
+  }
+  return [...groups.values()].filter((g) => g.length > 1);
+}
+
+// Gộp một nhóm mục trùng lặp gần giống thành MỘT mục duy nhất. Giữ lại mục có
+// tiến độ ôn nhiều nhất (không mất công học lại từ đầu); bù các trường còn
+// thiếu của mục giữ lại từ các mục bị gộp, không ghi đè trường đã có sẵn.
+async function mergeDuplicateGroup(terms) {
+  const list = await getVocab();
+  const group = list.filter((v) => terms.includes(v.term));
+  if (group.length < 2) return list;
+  group.sort(
+    (a, b) =>
+      (b.reps || 0) - (a.reps || 0) ||
+      (b.reviewedAt || 0) - (a.reviewedAt || 0) ||
+      b.term.length - a.term.length // cụm đầy đủ hơn ("make a decision") thắng khi hoà
+  );
+  const keep = group[0];
+  const drop = group.slice(1);
+  const FILL_FIELDS = ["meaning", "context", "source", "phonetic", "audio", "pos", "definition", "example", "mnemonic"];
+  for (const other of drop) {
+    for (const k of FILL_FIELDS) if (!keep[k] && other[k]) keep[k] = other[k];
+    if (!(keep.collocs || []).length && (other.collocs || []).length) {
+      keep.collocs = other.collocs;
+      keep.cloze = other.cloze;
+      keep.clozeVi = other.clozeVi;
+    }
+  }
+  const dropSet = new Set(drop.map((v) => v.term));
+  const out = list.filter((v) => v === keep || !dropSet.has(v.term));
+  await saveVocabList(out);
+  return out;
+}
+
 async function addVocab(entry) {
   const term = (entry.term || "").trim();
   if (!term) return await getVocab();
   const list = await getVocab();
-  const existing = list.find((v) => v.term.toLowerCase() === term.toLowerCase());
+  let existing = list.find((v) => v.term.toLowerCase() === term.toLowerCase());
+  // Không trùng nguyên văn nhưng trùng "gần giống" (khác mỗi mạo từ) -> gộp vào
+  // mục đã có, GIỮ NGUYÊN cách viết cũ thay vì tạo thêm một dòng cạnh tranh.
+  if (!existing) {
+    const key = dedupKey(term);
+    if (key) existing = list.find((v) => dedupKey(v.term) === key);
+  }
   if (existing) {
     if (entry.meaning) existing.meaning = entry.meaning;
     if (entry.context) existing.context = entry.context;

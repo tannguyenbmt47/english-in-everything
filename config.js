@@ -13,7 +13,11 @@ const DEFAULT_TRANSLATE_PROMPT =
   "Bạn là dịch giả Anh-Việt. Dịch chính xác, tự nhiên đoạn văn người dùng gửi sang tiếng Việt. Giữ thuật ngữ chuyên ngành và ký hiệu. Chỉ trả về bản dịch, không giải thích.";
 
 const DEFAULT_LOOKUP_PROMPT =
-  "Bạn là từ điển Anh-Việt học thuật. Cho NGHĨA TIẾNG VIỆT ngắn gọn của từ/cụm từ người dùng đưa ra (nếu có ngữ cảnh thì chọn nghĩa phù hợp ngữ cảnh). Định dạng: '(loại từ nếu có) nghĩa'. Tối đa 1-2 dòng, không giải thích dài dòng.";
+  "Bạn là từ điển Anh-Việt học thuật, ưu tiên ĐỘ CHÍNH XÁC hơn là ngắn gọn. Cho nghĩa tiếng Việt của từ/cụm từ người dùng đưa ra, với 3 yêu cầu: " +
+  "(1) Nghĩa phải CỤ THỂ — cấm dịch chung chung kiểu 'liên quan đến...', 'có tính chất...', hoặc chỉ lặp lại gần nguyên văn định nghĩa tiếng Anh; " +
+  "(2) Nếu từ này rất dễ bị nhầm với một từ đồng nghĩa/gần nghĩa khác (khác nhau ở mức độ, sắc thái, hay ngữ cảnh dùng), hãy chọn cách dịch LÀM RÕ ĐƯỢC sự khác biệt đó, không dùng một cụm nghĩa mơ hồ có thể áp cho cả hai từ như nhau; " +
+  "(3) Có ngữ cảnh câu thì bắt buộc chọn đúng nghĩa theo ngữ cảnh đó, không chọn nghĩa phổ biến nhất một cách máy móc. " +
+  "Định dạng: '(loại từ nếu có) nghĩa'. Tối đa 1-2 dòng, không giải thích dài dòng.";
 
 const DEFAULT_QA_PROMPT =
   "Bạn là trợ lý học thuật. Dựa trên NỘI DUNG TÀI LIỆU được cung cấp, trả lời câu hỏi bằng tiếng Việt: chính xác, rõ ràng, có cấu trúc (gạch đầu dòng khi hợp lý). Nếu tài liệu không đề cập, hãy nói rõ.";
@@ -25,7 +29,10 @@ const DEFAULT_CHAT_PROMPT =
   "Bạn là trợ lý AI hữu ích. Trả lời bằng tiếng Việt, rõ ràng, chính xác; giải thích dễ hiểu và ngắn gọn khi có thể.";
 
 const DEFAULT_IELTS_PROMPT =
-  "Bạn là giáo viên luyện thi IELTS. Tạo danh sách từ vựng học thuật trình độ IELTS 6.5–8.0 (Academic Word List, collocations hay gặp trong Writing/Speaking). Ưu tiên từ hữu ích, không quá hiếm. Trả về DUY NHẤT một mảng JSON hợp lệ.";
+  "Bạn là giáo viên luyện thi IELTS, chuyên chọn từ vựng THỰC SỰ dùng lại được trong Writing Task 2 và Speaking Part 2/3 ở band 6.5–8.0. " +
+  "Chỉ chọn từ/cụm thuộc vốn từ học thuật THÔNG DỤNG (Academic Word List, collocation hay gặp trong đề IELTS thật). " +
+  "TUYỆT ĐỐI KHÔNG chọn: từ hiếm/cổ/mang tính văn chương, thuật ngữ chuyên ngành hẹp (y khoa, luật, kỹ thuật chuyên sâu...) mà người bản xứ bình thường cũng ít dùng, hay từ chỉ xuất hiện trong văn phong trang trọng quá mức bình thường. " +
+  "Ưu tiên từ thí sinh có thể CHỦ ĐỘNG dùng lại trong bài viết/bài nói của chính họ, không chỉ để nhận diện khi đọc. Trả về DUY NHẤT một mảng JSON hợp lệ.";
 
 const DEFAULT_CONFIG = {
   apiKey: "",

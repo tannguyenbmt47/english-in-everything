@@ -131,6 +131,33 @@ describe("nextSrs — phần tính toán thuần của SM-2 (SỬA LỖI: ease t
   });
 });
 
+describe("dedupKey / findNearDuplicateGroups — trùng lặp gần giống (SỬA LỖI: 'make decision' và 'make a decision' từng bị coi là hai mục khác nhau)", () => {
+  test("chỉ khác mạo từ a/an/the -> cùng khoá", () => {
+    assert.equal(ctx.dedupKey("make decision"), ctx.dedupKey("make a decision"));
+    assert.equal(ctx.dedupKey("take exam"), ctx.dedupKey("take an exam"));
+    assert.equal(ctx.dedupKey("play role"), ctx.dedupKey("play the role"));
+  });
+  test("khác từ THỰC SỰ (không chỉ mạo từ) -> khoá khác nhau, không bị gộp nhầm", () => {
+    assert.notEqual(ctx.dedupKey("a piece of cake"), ctx.dedupKey("a piece of paper"));
+    assert.notEqual(ctx.dedupKey("make decision"), ctx.dedupKey("take decision"));
+  });
+  test("khác hoa/thường, dấu câu, gạch nối -> vẫn cùng khoá", () => {
+    assert.equal(ctx.dedupKey("Off-the-shelf"), ctx.dedupKey("off the shelf"));
+  });
+
+  test("findNearDuplicateGroups gom đúng nhóm, bỏ qua mục không trùng ai", () => {
+    const list = [
+      { term: "make decision" }, { term: "make a decision" },
+      { term: "efficiency" },
+      { term: "take exam" }, { term: "take an exam" }, { term: "take the exam" },
+    ];
+    const groups = JSON.parse(JSON.stringify(ctx.findNearDuplicateGroups(list))).map((g) => g.map((v) => v.term).sort());
+    assert.equal(groups.length, 2);
+    assert.deepEqual(groups.find((g) => g.includes("make decision")), ["make a decision", "make decision"]);
+    assert.deepEqual(groups.find((g) => g.includes("take exam")), ["take an exam", "take exam", "take the exam"].sort());
+  });
+});
+
 describe("isLeech — ngưỡng đổi sang mẹo nhớ", () => {
   test("chưa đủ 6 lần sai thì chưa phải leech", () => {
     assert.equal(ctx.isLeech({ lapses: 5 }), false);

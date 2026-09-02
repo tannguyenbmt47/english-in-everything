@@ -77,6 +77,50 @@ describe("Vòng đời một từ: lưu -> nhiều lượt ôn đúng liên ti�
   });
 });
 
+describe("BUG ĐÃ SỬA — addVocab() chặn trùng lặp gần giống ngay lúc lưu, không chỉ dọn dẹp sau", () => {
+  test("lưu 'make decision' rồi lưu 'make a decision' -> gộp vào MỘT mục, không tạo dòng thứ hai", async () => {
+    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    await ctx.addVocab({ term: "make decision", meaning: "đưa ra quyết định" });
+    await ctx.addVocab({ term: "make a decision", meaning: "đưa ra quyết định" });
+    const list = await ctx.getVocab();
+    assert.equal(list.length, 1, "phải gộp thành một mục duy nhất");
+    assert.equal(list[0].term, "make decision", "giữ nguyên cách viết đã lưu trước đó, không tự đổi tên");
+  });
+
+  test("tiến độ ôn của mục đã có được BẢO TOÀN khi một bản gần giống khác được lưu thêm", async () => {
+    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    await ctx.addVocab({ term: "take exam", meaning: "thi, làm bài kiểm tra" });
+    await ctx.reviewVocab("take exam", true, false);
+    await ctx.reviewVocab("take exam", true, false);
+    const before = (await ctx.getVocab())[0];
+
+    await ctx.addVocab({ term: "take an exam", meaning: "thi, làm bài kiểm tra" });
+    const after = await ctx.getVocab();
+    assert.equal(after.length, 1);
+    assert.equal(after[0].reps, before.reps, "lưu bản gần giống không được reset tiến độ SM-2 đã có");
+  });
+
+  test("mergeDuplicateGroup: gộp dữ liệu CŨ (trước khi có bộ lọc), giữ mục nhiều lượt ôn nhất, bù trường còn thiếu", async () => {
+    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    // Mô phỏng 2 mục đã tồn tại song song TRƯỚC khi addVocab() biết chặn trùng
+    // (nạp thẳng vào storage, bỏ qua addVocab để giữ đúng kịch bản dữ liệu cũ).
+    await ctx.chrome.storage.local.set({
+      vocab: [
+        { term: "play role", meaning: "", reps: 0, ease: 2.5, interval: 0, lapses: 0, createdAt: 1, box: 1, reviewedAt: 0, nextReview: 0 },
+        { term: "play the role", meaning: "đóng vai trò", reps: 4, ease: 2.7, interval: 8, lapses: 0, createdAt: 2, box: 1, reviewedAt: Date.now(), nextReview: 0 },
+      ],
+    });
+    const groups = ctx.findNearDuplicateGroups(await ctx.getVocab());
+    assert.equal(groups.length, 1);
+
+    const merged = await ctx.mergeDuplicateGroup(groups[0].map((v) => v.term));
+    assert.equal(merged.length, 1, "hai mục trùng lặp phải còn lại đúng một");
+    assert.equal(merged[0].term, "play the role", "giữ mục có NHIỀU lượt ôn hơn (reps=4), không phải mục tạo trước");
+    assert.equal(merged[0].meaning, "đóng vai trò", "giữ nghĩa đã có, không bị mục kia (nghĩa rỗng) ghi đè");
+    assert.equal(merged[0].reps, 4, "không mất tiến độ ôn của mục được giữ lại");
+  });
+});
+
 describe("dueVocab / memoryLevel — chọn đúng từ cần ôn hôm nay, phân loại đúng mức nhớ", () => {
   test("từ mới thêm luôn đến hạn ngay (nextReview = lúc thêm)", async () => {
     const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);

@@ -132,6 +132,8 @@ const el = {
   stCleanBtn: document.getElementById("stCleanBtn"),
   stBaseInfo: document.getElementById("stBaseInfo"),
   stBaseBtn: document.getElementById("stBaseBtn"),
+  stDupInfo: document.getElementById("stDupInfo"),
+  stDupBtn: document.getElementById("stDupBtn"),
   stMistakeInfo: document.getElementById("stMistakeInfo"),
   stMistakeBtn: document.getElementById("stMistakeBtn"),
   stRetestInfo: document.getElementById("stRetestInfo"),
@@ -1283,6 +1285,14 @@ async function renderStats() {
     ? `${inflected.length} mục đang ở dạng chia thì: ${inflected.slice(0, 5).map((x) => `"${x.v.term}" → "${x.base}"`).join(", ")}${inflected.length > 5 ? "…" : ""}`
     : "Mọi mục đều đang ở dạng gốc.";
 
+  // Trùng lặp gần giống ("make decision" ↔ "make a decision") — chỉ dữ liệu CŨ
+  // trước khi addVocab() chặn ở đầu vào; từ nay các lượt lưu mới tự gộp luôn.
+  const dupGroups = findNearDuplicateGroups(list);
+  el.stDupBtn.disabled = dupGroups.length === 0;
+  el.stDupInfo.textContent = dupGroups.length
+    ? `Phát hiện ${dupGroups.length} nhóm trùng lặp: ${dupGroups.slice(0, 3).map((g) => g.map((v) => `"${v.term}"`).join(" ↔ ")).join(" · ")}${dupGroups.length > 3 ? "…" : ""}`
+    : "Không có nhóm nào trùng lặp gần giống.";
+
   // Sổ lỗi sai
   const allMistakes = await getMistakes();
   const dueM = await dueMistakes();
@@ -1503,6 +1513,20 @@ el.stBaseBtn.addEventListener("click", async () => {
   await renderStats();
   renderVocab();
   setStatus(`✓ Đã chuẩn hoá ${items.length} mục về dạng gốc.`);
+});
+
+el.stDupBtn.addEventListener("click", async () => {
+  const groups = findNearDuplicateGroups(await getVocab());
+  if (!groups.length) return;
+  const preview = groups
+    .map((g) => "• " + g.map((v) => v.term).join("  ↔  "))
+    .join("\n");
+  if (!confirm(`Gộp ${groups.length} nhóm trùng lặp gần giống (giữ mục có nhiều lượt ôn nhất)?\n\n${preview}`)) return;
+  for (const g of groups) await mergeDuplicateGroup(g.map((v) => v.term));
+  await renderStats();
+  refreshVocabCount();
+  renderVocab();
+  setStatus(`✓ Đã gộp ${groups.length} nhóm trùng lặp.`);
 });
 
 el.stMistakeBtn.addEventListener("click", async () => {

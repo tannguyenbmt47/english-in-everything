@@ -440,7 +440,7 @@ async function generateIeltsWords({ config, count, topic, exclude, kind, signal 
       (topic && topic !== "Ngẫu nhiên" ? ` liên quan chủ đề "${topic}"` : "") +
       `. Trả về DUY NHẤT một mảng JSON, mỗi phần tử: ` +
       `{"word": ${K.wordDesc}, "ipa": "", "pos": "${kind}", ` +
-      `"meaning_vi": nghĩa tiếng Việt ngắn gọn, "definition_en": giải thích/nghĩa bằng tiếng Anh, "example": câu ví dụ tiếng Anh dùng cụm đó}. ` +
+      `"meaning_vi": nghĩa tiếng Việt CỤ THỂ (không chung chung, phân biệt được với cụm gần nghĩa nếu có), "definition_en": giải thích/nghĩa bằng tiếng Anh, "example": câu ví dụ tiếng Anh dùng cụm đó}. ` +
       `Không lặp lại. Không thêm chữ nào ngoài JSON.`;
   } else {
     user =
@@ -448,7 +448,7 @@ async function generateIeltsWords({ config, count, topic, exclude, kind, signal 
       (topic && topic !== "Ngẫu nhiên" ? ` thuộc chủ đề "${topic}"` : "") +
       `. Trả về DUY NHẤT một mảng JSON, mỗi phần tử gồm: ` +
       `{"word": từ tiếng Anh, "ipa": phiên âm IPA, "pos": loại từ (noun/verb/adj/adv), ` +
-      `"meaning_vi": nghĩa tiếng Việt ngắn gọn, "definition_en": định nghĩa tiếng Anh ngắn, "example": câu ví dụ tiếng Anh}. ` +
+      `"meaning_vi": nghĩa tiếng Việt CỤ THỂ (không chung chung, phân biệt được với từ gần nghĩa nếu có), "definition_en": định nghĩa tiếng Anh ngắn, "example": câu ví dụ tiếng Anh}. ` +
       `Không lặp lại từ. Không thêm chữ nào ngoài JSON.`;
   }
   if (exclude && exclude.length) user += `\nTránh các mục đã có: ${exclude.slice(0, 200).join(", ")}.`;
