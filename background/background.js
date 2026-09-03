@@ -1,6 +1,6 @@
 // Service worker: mở side panel, xử lý dịch/tra nghĩa/lưu từ vựng cho content
 // script (trang web bất kỳ) và context menu.
-importScripts("config.js", "translator.js", "vocab.js", "notes.js", "todo.js", "cache.js");
+importScripts("../shared/config.js", "../shared/translator.js", "../shared/vocab.js", "../shared/notes.js", "../shared/todo.js", "../shared/cache.js");
 
 // Dọn cache quá hạn MỖI NGÀY MỘT LẦN. Trước đây gọi thẳng ở top-level, mà
 // service worker MV3 thức dậy theo từng lần chuyển tab/tải trang -> cứ vài chục
@@ -85,7 +85,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab && tab.id && /^https?:\/\//i.test(tab.url || "")) {
-      const gateBase = chrome.runtime.getURL("gate.html");
+      const gateBase = chrome.runtime.getURL("pages/gate/gate.html");
       chrome.tabs.update(tab.id, { url: `${gateBase}?mode=reminder&next=${encodeURIComponent(tab.url)}` }).catch(() => {});
     }
   } catch {}
@@ -242,12 +242,23 @@ function runWithTimeout(fn, ms) {
   return Promise.race([Promise.resolve(fn(controller.signal)), timeout]).finally(() => clearTimeout(timer));
 }
 
-// Nhận yêu cầu từ content script / side panel.
-// Loại yêu cầu hợp lệ. "saveVocab" là thao tác CỤC BỘ nên không đòi API key —
-// trước đây requireConfig() chạy trước mọi nhánh, ai chưa nhập key thì lưu từ
-// cũng hỏng. Việc lọc msg.type sớm cũng để listener này không cướp phản hồi
-// của listener pomodoro (Chrome chỉ nhận sendResponse ĐẦU TIÊN).
-const RPC_TYPES = new Set(["translate", "lookup", "lookupMany", "collocations", "compare", "mnemonic", "lookupWord", "saveVocab"]);
+// Nhận yêu cầu từ content script / side panel / gate (màn chặn học).
+// Loại yêu cầu hợp lệ. "saveVocab"/"reviewVocab"/"renameVocab" là thao tác CỤC
+// BỘ nên không đòi API key — trước đây requireConfig() chạy trước mọi nhánh,
+// ai chưa nhập key thì lưu từ cũng hỏng. Việc lọc msg.type sớm cũng để listener
+// này không cướp phản hồi của listener pomodoro (Chrome chỉ nhận sendResponse
+// ĐẦU TIÊN).
+//
+// reviewVocab/renameVocab: gate.js (một TAB RIÊNG, có thể mở CÙNG LÚC với việc
+// tra từ ở tab khác) gửi qua đây thay vì tự đọc/sửa/ghi chrome.storage.local
+// tại chỗ — để MỌI lượt ghi vào kho từ vựng (dù bắt nguồn từ tab nào) đều đi
+// qua CÙNG một hàng đợi trong vocab.js (withVocabLock), tránh việc hai tab ghi
+// đè lên nhau làm mất tiến độ ôn tập/mất từ mới (xem chú thích ở vocab.js).
+const RPC_TYPES = new Set([
+  "translate", "lookup", "lookupMany", "collocations", "compare", "mnemonic",
+  "lookupWord", "saveVocab", "reviewVocab", "renameVocab",
+]);
+const NO_CONFIG_TYPES = new Set(["saveVocab", "reviewVocab", "renameVocab"]);
 const MAX_RPC_TEXT = 20000;
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -260,8 +271,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   (async () => {
     try {
-      // saveVocab lưu được ngay cả khi chưa có API key; các loại còn lại thì cần.
-      const config = msg.type === "saveVocab" ? await getConfig() : await requireConfig();
+      // saveVocab/reviewVocab/renameVocab lưu được ngay cả khi chưa có API key.
+      const config = NO_CONFIG_TYPES.has(msg.type) ? await getConfig() : await requireConfig();
       if (msg.type === "translate") {
         const cached = await trCacheGet("plain", config.model, config.translatePrompt, msg.text);
         if (cached) { sendResponse({ ok: true, text: cached, cached: true }); return; }
@@ -302,6 +313,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             if (sender.tab?.id) sendToTab(sender.tab.id, { type: "pvt-vocab-updated", term: msg.term, meaning: "(chưa tra được nghĩa — " + e.message + ")" });
           }
         }
+      } else if (msg.type === "reviewVocab") {
+        const list = await reviewVocab(msg.term, !!msg.known, !!msg.helped);
+        sendResponse({ ok: true, list });
+      } else if (msg.type === "renameVocab") {
+        const list = await renameVocab(msg.oldTerm, msg.newTerm);
+        sendResponse({ ok: true, list });
       } else {
         sendResponse({ ok: false, error: "Loại yêu cầu không hợp lệ." });
       }
@@ -516,7 +533,7 @@ function matchedSocialSite(url, sites) {
 // URL — mất form đang gõ dở, mất vị trí đọc, mất cả state của SPA.
 async function maybeGate(tabId, url, onSwitch = false) {
   if (!url || !/^https?:\/\//i.test(url)) return;
-  const gateBase = chrome.runtime.getURL("gate.html");
+  const gateBase = chrome.runtime.getURL("pages/gate/gate.html");
   if (url.startsWith(gateBase)) return;
 
   // Nhắc việc đang chờ -> CHẶN mọi trang (độc lập với cổng học), cho tới khi xác nhận.

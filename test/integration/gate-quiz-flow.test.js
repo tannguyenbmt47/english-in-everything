@@ -13,8 +13,8 @@ const assert = require("node:assert/strict");
 const { loadFiles } = require("../helpers/sandbox.js");
 
 const FILES = [
-  "config.js", "translator.js", "vocab.js", "notes.js", "todo.js",
-  "mistakes.js", "grammar.js", "ielts.js", "quizbank.js", "cache.js", "gate.js",
+  "shared/config.js", "shared/tts.js", "shared/translator.js", "shared/vocab.js", "shared/notes.js", "shared/todo.js",
+  "shared/mistakes.js", "shared/grammar.js", "shared/ielts.js", "pages/gate/quizbank.js", "shared/cache.js", "pages/gate/gate.js",
 ];
 
 describe("Từ trừu tượng: dựng câu hỏi 'điền vào cụm' đúng dữ liệu, che đúng chỗ", () => {
@@ -121,6 +121,28 @@ describe("BUG ĐÃ SỬA — câu ngữ pháp điền khuyết thiếu gợi ý 
         assert.doesNotMatch(it.hint.toLowerCase(), new RegExp(answer.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `hint lộ đáp án "${answer}": "${it.q}"`);
       }
     }
+  });
+
+  test("BUG ĐÃ SỬA — 'Từ loại' và 'Cấu tạo từ' có bài học nhưng từng KHÔNG có câu luyện tập nào, nên không bao giờ được chọn làm chủ điểm yếu để ôn lại", () => {
+    const ctx = loadFiles(FILES, { url: "https://example.test/gate.html?mode=morning" });
+    const posSpeechItems = ctx.GRAMMAR_BANK.filter((it) => /từ loại/i.test(it.q + " " + it.e));
+    const wordFormItems = ctx.GRAMMAR_BANK.filter((it) => /hậu tố|tiền tố|-ly|-tion|-ness|-able/i.test(it.q + " " + it.e));
+    assert.ok(posSpeechItems.length >= 3, "phải có ít nhất vài câu luyện 'Từ loại' trong GRAMMAR_BANK");
+    assert.ok(wordFormItems.length >= 3, "phải có ít nhất vài câu luyện 'Cấu tạo từ' trong GRAMMAR_BANK");
+
+    const topics = [
+      { title: "Từ loại (Parts of Speech) — nhận diện & vị trí" },
+      { title: "Cấu tạo từ (Word Formation): hậu tố & tiền tố" },
+      { title: "Điều kiện (Conditionals)" },
+    ];
+    const mistakes = [
+      { q: posSpeechItems[0].q, e: posSpeechItems[0].e, wrongCount: 3, kind: "grammar" },
+      { q: wordFormItems[0].q, e: wordFormItems[0].e, wrongCount: 2, kind: "grammar" },
+    ];
+    const ranked = ctx.rankWeakTopics(topics, mistakes);
+    const titles = ranked.map((r) => topics[r.idx].title);
+    assert.ok(titles.some((t) => t.includes("Từ loại")), "sai câu 'Từ loại' phải khiến bài đó được xếp là chủ điểm yếu");
+    assert.ok(titles.some((t) => t.includes("Cấu tạo từ")), "sai câu 'Cấu tạo từ' phải khiến bài đó được xếp là chủ điểm yếu");
   });
 });
 

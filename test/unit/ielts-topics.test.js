@@ -12,12 +12,12 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { loadFiles, ROOT } = require("../helpers/sandbox.js");
 
-const ctx = loadFiles(["ielts-topics.js"]);
+const ctx = loadFiles(["pages/sidepanel/ielts-topics.js"]);
 
 // Trích text các <option> trong đúng <select id="ieltsTopic">…</select> của
 // sidepanel.html — không phải toàn bộ file, tránh khớp nhầm select khác.
 function optionsOfIeltsTopicSelect() {
-  const html = fs.readFileSync(path.join(ROOT, "sidepanel.html"), "utf8");
+  const html = fs.readFileSync(path.join(ROOT, "pages/sidepanel/sidepanel.html"), "utf8");
   const selectMatch = html.match(/<select id="ieltsTopic"[^>]*>([\s\S]*?)<\/select>/);
   assert.ok(selectMatch, "không tìm thấy <select id=\"ieltsTopic\"> trong sidepanel.html");
   const opts = [...selectMatch[1].matchAll(/<option[^>]*>([^<]*)<\/option>/g)].map((m) =>

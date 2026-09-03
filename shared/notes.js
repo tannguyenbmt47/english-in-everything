@@ -46,9 +46,9 @@ function noteTitle(n) {
   return { text: t.length > 60 ? t.slice(0, 60).trimEnd() + "…" : t, derived: true };
 }
 
-// Nội dung đem đi dán chỗ khác: có tiêu đề thì kèm theo cho đủ ngữ cảnh.
+// Nội dung đem đi dán chỗ khác: chỉ phần thân, không kèm tiêu đề.
 function noteForCopy(n) {
-  return n.title ? `${n.title}\n\n${n.text}` : String(n.text || "");
+  return String(n.text || "");
 }
 async function deleteNote(id) {
   const list = (await getNotes()).filter((x) => x.id !== id);

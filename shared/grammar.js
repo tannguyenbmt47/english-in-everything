@@ -29,40 +29,40 @@ const GRAMMAR_DATA = [
 <ul>
 <li>Danh từ / cụm danh từ: <i>My sister works in Hanoi.</i></li>
 <li>Đại từ: <i>She works in Hanoi.</i></li>
-<li>Danh động từ (V-ing làm chủ ngữ, xem thêm bài "Danh động từ & Động từ nguyên mẫu"): <i><b>Learning English</b> takes time.</i></li>
-<li>Động từ nguyên mẫu có "to": <i><b>To learn</b> a language well takes years.</i></li>
-<li>Cả một mệnh đề (mệnh đề danh từ): <i><b>What she said</b> surprised everyone.</i></li>
+<li>Danh động từ (V-ing làm chủ ngữ, xem thêm bài "Danh động từ & Động từ nguyên mẫu"): <i>Learning English takes time.</i></li>
+<li>Động từ nguyên mẫu có "to": <i>To learn a language well takes years.</i></li>
+<li>Cả một mệnh đề (mệnh đề danh từ): <i>What she said surprised everyone.</i></li>
 </ul>
 <p class="gr-note">Lỗi hay gặp: tiếng Việt cho phép bỏ chủ ngữ khi đã rõ ngữ cảnh ("Đang ăn cơm" = tôi/nó/họ đang ăn cơm), nhưng tiếng Anh <b>luôn luôn phải có chủ ngữ</b>, kể cả khi vô nghĩa như "it" trong <i>It is raining.</i> (không dịch chữ "it" này ra tiếng Việt).</p>
 
 <h5>2. Động từ (Verb — V)</h5>
 <p>"Trái tim" của câu — quyết định thì (thời điểm), thể (chủ động/bị động, thường/tiếp diễn/hoàn thành) và sự hòa hợp với chủ ngữ (xem bài "Sự hòa hợp Chủ ngữ – Động từ"). Động từ chia làm hai nhóm quan trọng, quyết định câu có cần Tân ngữ hay không:</p>
 <ul>
-<li><b>Nội động từ (intransitive verb):</b> diễn tả trọn vẹn ý nghĩa mà KHÔNG cần tân ngữ theo sau. <i>He slept. / The sun rises. / She arrived late.</i> Thêm một danh từ ngay sau các động từ này là sai: <i>~~He slept the bed.~~</i> sai, phải là <i>He slept <b>on</b> the bed.</i> (cần giới từ).</li>
-<li><b>Ngoại động từ (transitive verb):</b> BẮT BUỘC phải có tân ngữ theo sau mới trọn nghĩa. <i>She bought <b>a book</b>.</i> Nếu bỏ "a book", câu <i>She bought.</i> nghe cụt và sai — người nghe sẽ hỏi ngay "mua cái gì?".</li>
+<li><b>Nội động từ (intransitive verb):</b> diễn tả trọn vẹn ý nghĩa mà KHÔNG cần tân ngữ theo sau. <i>He slept. / The sun rises. / She arrived late.</i> Thêm một danh từ ngay sau các động từ này là sai: <i>~~He slept the bed.~~</i> sai, phải là <i>He slept on the bed.</i> (cần giới từ).</li>
+<li><b>Ngoại động từ (transitive verb):</b> BẮT BUỘC phải có tân ngữ theo sau mới trọn nghĩa. <i>She bought a book.</i> Nếu bỏ "a book", câu <i>She bought.</i> nghe cụt và sai — người nghe sẽ hỏi ngay "mua cái gì?".</li>
 </ul>
 <p>Một số động từ dùng được cả hai cách với nghĩa khác nhau hoặc gần giống nhau: <i>She reads. (nội động từ — cô ấy có thói quen đọc sách) / She reads books. (ngoại động từ — cô ấy đọc sách)</i>.</p>
 
 <h5>3. Tân ngữ (Object — O)</h5>
 <p><b>Tân ngữ là người/vật CHỊU TÁC ĐỘNG trực tiếp hoặc gián tiếp của hành động</b>, đứng ngay sau ngoại động từ. Đây là thành phần hay bị bỏ sót giải thích nhất dù rất hay gặp — nắm chắc phần này sẽ tránh được nhiều lỗi viết câu.</p>
 <ul>
-<li><b>Tân ngữ trực tiếp (direct object):</b> vật/người trực tiếp nhận hành động — trả lời cho câu hỏi "làm gì?" / "ai?". <i>She bought <b>a book</b>.</i> (mua CÁI GÌ? → a book)</li>
-<li><b>Tân ngữ gián tiếp (indirect object):</b> người NHẬN LỢI từ hành động đó — trả lời "cho ai?". Chỉ xuất hiện cùng nhóm động từ "hai tân ngữ" như <i>give, tell, show, send, buy, offer, lend</i>. <i>She gave <b>her brother</b> (gián tiếp) <b>a book</b> (trực tiếp).</i> Có thể viết lại bằng giới từ "to/for": <i>She gave a book <b>to her brother</b>.</i></li>
+<li><b>Tân ngữ trực tiếp (direct object):</b> vật/người trực tiếp nhận hành động — trả lời cho câu hỏi "làm gì?" / "ai?". <i>She bought a book.</i> (mua CÁI GÌ? → a book)</li>
+<li><b>Tân ngữ gián tiếp (indirect object):</b> người NHẬN LỢI từ hành động đó — trả lời "cho ai?". Chỉ xuất hiện cùng nhóm động từ "hai tân ngữ" như <i>give, tell, show, send, buy, offer, lend</i>. <i>She gave her brother (gián tiếp) a book (trực tiếp).</i> Có thể viết lại bằng giới từ "to/for": <i>She gave a book to her brother.</i></li>
 </ul>
 <p class="gr-note">Phân biệt nhanh Tân ngữ với Chủ ngữ: đổi câu sang bị động (xem bài "Câu bị động"), TÂN NGỮ của câu chủ động sẽ trở thành CHỦ NGỮ của câu bị động — đây chính là lý do câu bị động luôn cần một ngoại động từ có tân ngữ để "mượn" làm chủ ngữ mới. <i>She bought a book. → A book was bought (by her).</i></p>
 
 <h5>4. Bổ ngữ (Complement — C)</h5>
 <p>Bổ ngữ KHÔNG chịu tác động của hành động (khác Tân ngữ) mà dùng để MÔ TẢ/ĐỊNH DANH chủ ngữ hoặc tân ngữ. Có hai loại:</p>
 <ul>
-<li><b>Bổ ngữ cho chủ ngữ (subject complement):</b> theo sau các "động từ nối/liên kết" (linking verb) như <i>be, become, seem, look, feel, sound, remain, stay</i> — những động từ này không diễn tả hành động mà chỉ "nối" chủ ngữ với một tính chất/danh phận. <i>She is <b>a teacher</b>. / She looks <b>tired</b>. / The soup tastes <b>delicious</b>.</i></li>
-<li><b>Bổ ngữ cho tân ngữ (object complement):</b> mô tả chính tân ngữ vừa nêu, thường sau các động từ như <i>make, call, name, consider, find</i>. <i>They made her <b>captain</b>. / I find this book <b>boring</b>.</i> (ở đây "captain" và "boring" không phải tân ngữ thứ hai — chúng mô tả "her" và "this book").</li>
+<li><b>Bổ ngữ cho chủ ngữ (subject complement):</b> theo sau các "động từ nối/liên kết" (linking verb) như <i>be, become, seem, look, feel, sound, remain, stay</i> — những động từ này không diễn tả hành động mà chỉ "nối" chủ ngữ với một tính chất/danh phận. <i>She is a teacher. / She looks tired. / The soup tastes delicious.</i></li>
+<li><b>Bổ ngữ cho tân ngữ (object complement):</b> mô tả chính tân ngữ vừa nêu, thường sau các động từ như <i>make, call, name, consider, find</i>. <i>They made her captain. / I find this book boring.</i> (ở đây "captain" và "boring" không phải tân ngữ thứ hai — chúng mô tả "her" và "this book").</li>
 </ul>
 <p class="gr-note">Cách phân biệt Bổ ngữ với Tân ngữ nhanh nhất: thử bỏ nó đi hoặc thay bằng đại từ tương ứng. Tân ngữ có thể thay bằng "it/him/her" (<i>She bought a book → She bought it</i>); Bổ ngữ mô tả chủ ngữ/tân ngữ nên không thể thay như vậy mà không phá nghĩa (<i>She is a teacher → ~~She is it~~</i> sai).</p>
 
 <h5>5. Trạng ngữ (Adverbial — A)</h5>
 <p>Là thành phần bổ sung thông tin về <b>cách thức – nơi chốn – thời gian – nguyên nhân…</b>, KHÔNG bắt buộc phải có nhưng thêm vào để câu đầy đủ thông tin hơn. Khác với Tân ngữ và Bổ ngữ, bỏ Trạng ngữ đi câu vẫn đúng ngữ pháp và trọn nghĩa.</p>
 <p class="gr-ex">She reads books <b>carefully</b> (cách thức) <b>at the library</b> (nơi chốn) <b>every evening</b> (thời gian).<br><i>Cô ấy đọc sách một cách cẩn thận ở thư viện mỗi tối.</i></p>
-<p>Thứ tự thông thường của trạng ngữ khi đi cùng nhau là <b>Cách thức → Nơi chốn → Thời gian</b> (nhớ tắt "M-P-T": Manner – Place – Time). Đặt trạng ngữ thời gian lên đầu câu cũng rất phổ biến và tự nhiên: <i><b>Every evening</b>, she reads books carefully at the library.</i></p>
+<p>Thứ tự thông thường của trạng ngữ khi đi cùng nhau là <b>Cách thức → Nơi chốn → Thời gian</b> (nhớ tắt "M-P-T": Manner – Place – Time). Đặt trạng ngữ thời gian lên đầu câu cũng rất phổ biến và tự nhiên: <i>Every evening, she reads books carefully at the library.</i></p>
 
 <h4>Trật tự cơ bản S – V – O và các biến thể</h4>
 <p>Ghép 5 thành phần trên lại, câu tiếng Anh thường rơi vào một trong các khuôn mẫu sau — nắm được khuôn nào ứng với động từ nào giúp bạn không viết thiếu/thừa thành phần:</p>
@@ -80,17 +80,17 @@ const GRAMMAR_DATA = [
 <p>Ngoài phân loại theo thành phần, câu còn được phân loại theo SỐ LƯỢNG và QUAN HỆ giữa các mệnh đề bên trong nó — đây là kiến thức trực tiếp phục vụ tiêu chí "đa dạng cấu trúc câu" khi chấm Writing/Speaking.</p>
 <ul>
 <li><b>Câu đơn (simple sentence):</b> chỉ có MỘT mệnh đề độc lập (mệnh đề tự đứng thành câu hoàn chỉnh được). <i>I like coffee.</i></li>
-<li><b>Câu ghép (compound sentence):</b> HAI (hoặc nhiều) mệnh đề độc lập, có vị thế ngang hàng, nối bằng liên từ kết hợp (and, but, so, or, yet, for, nor — viết tắt FANBOYS) hoặc dấu chấm phẩy. <i>I like coffee, <b>but</b> she prefers tea.</i></li>
-<li><b>Câu phức (complex sentence):</b> MỘT mệnh đề chính (độc lập) + ÍT NHẤT một mệnh đề phụ thuộc (không tự đứng thành câu được, cần dựa vào mệnh đề chính). Mệnh đề phụ thuộc bắt đầu bằng liên từ phụ thuộc (because, although, when, if, that…) hoặc đại từ quan hệ (who, which, that…). <i>I stayed home <b>because it was raining</b>.</i> ("it was raining" không thể đứng một mình thành câu hoàn chỉnh có nghĩa trong ngữ cảnh này vì nó phụ thuộc vào "because").</li>
-<li><b>Câu ghép-phức (compound-complex sentence):</b> kết hợp cả câu ghép lẫn câu phức — ít nhất HAI mệnh đề độc lập VÀ ít nhất MỘT mệnh đề phụ thuộc. <i>I stayed home because it was raining, <b>and</b> I finished reading my book.</i> Đây là loại câu phức tạp nhất, hay gặp ở các bài viết band 7+.</li>
+<li><b>Câu ghép (compound sentence):</b> HAI (hoặc nhiều) mệnh đề độc lập, có vị thế ngang hàng, nối bằng liên từ kết hợp (and, but, so, or, yet, for, nor — viết tắt FANBOYS) hoặc dấu chấm phẩy. <i>I like coffee, but she prefers tea.</i></li>
+<li><b>Câu phức (complex sentence):</b> MỘT mệnh đề chính (độc lập) + ÍT NHẤT một mệnh đề phụ thuộc (không tự đứng thành câu được, cần dựa vào mệnh đề chính). Mệnh đề phụ thuộc bắt đầu bằng liên từ phụ thuộc (because, although, when, if, that…) hoặc đại từ quan hệ (who, which, that…). <i>I stayed home because it was raining.</i> ("it was raining" không thể đứng một mình thành câu hoàn chỉnh có nghĩa trong ngữ cảnh này vì nó phụ thuộc vào "because").</li>
+<li><b>Câu ghép-phức (compound-complex sentence):</b> kết hợp cả câu ghép lẫn câu phức — ít nhất HAI mệnh đề độc lập VÀ ít nhất MỘT mệnh đề phụ thuộc. <i>I stayed home because it was raining, and I finished reading my book.</i> Đây là loại câu phức tạp nhất, hay gặp ở các bài viết band 7+.</li>
 </ul>
 <p class="gr-note">Mẹo lên band: một bài Writing Task 2 chỉ toàn câu đơn sẽ bị đánh giá là "cấu trúc hạn chế" (Grammatical Range thấp); ngược lại toàn câu ghép-phức phức tạp mà sai ngữ pháp còn tệ hơn. Mục tiêu là <b>trộn cả 4 loại một cách tự nhiên</b> — đây chính là tiêu chí "range" mà giám khảo tìm kiếm (xem bài "Tiêu chí chấm").</p>
 
 <h4>Lỗi phổ biến do ảnh hưởng từ tiếng Việt</h4>
 <ul>
 <li><b>Bỏ chủ ngữ giả "it":</b> <i>~~Is raining.~~</i> → phải là <i>It is raining.</i></li>
-<li><b>Bỏ động từ nối "be":</b> tiếng Việt không cần từ nối khi nói "Cô ấy đẹp", nhưng tiếng Anh bắt buộc: <i>~~She beautiful.~~</i> → <i>She <b>is</b> beautiful.</i></li>
-<li><b>Đặt trạng ngữ thời gian/tần suất sai vị trí:</b> tiếng Việt hay nói "Tôi thường đi học" (trạng từ trước động từ được, được cả trước/sau tuỳ ngữ cảnh), tiếng Anh với trạng từ tần suất (always, usually, often, never) đứng TRƯỚC động từ thường nhưng SAU động từ "be": <i>I <b>usually</b> go to school. / She <b>is usually</b> late.</i></li>
+<li><b>Bỏ động từ nối "be":</b> tiếng Việt không cần từ nối khi nói "Cô ấy đẹp", nhưng tiếng Anh bắt buộc: <i>~~She beautiful.~~</i> → <i>She is beautiful.</i></li>
+<li><b>Đặt trạng ngữ thời gian/tần suất sai vị trí:</b> tiếng Việt hay nói "Tôi thường đi học" (trạng từ trước động từ được, được cả trước/sau tuỳ ngữ cảnh), tiếng Anh với trạng từ tần suất (always, usually, often, never) đứng TRƯỚC động từ thường nhưng SAU động từ "be": <i>I usually go to school. / She is usually late.</i></li>
 </ul>`,
       },
       {
@@ -138,7 +138,7 @@ const GRAMMAR_DATA = [
 <h4>Những cặp dễ nhầm nhất</h4>
 <ul>
 <li><b>economic / economical:</b> economic = thuộc về kinh tế (<i>economic growth</i>); economical = tiết kiệm (<i>an economical car</i>).</li>
-<li><b>economy / economics:</b> economy = nền kinh tế; economics = môn kinh tế học (chia số ít: <i>Economics <b>is</b> hard</i>).</li>
+<li><b>economy / economics:</b> economy = nền kinh tế; economics = môn kinh tế học (chia số ít: <i>Economics is hard</i>).</li>
 <li><b>hard / hardly:</b> hard = chăm chỉ; hardly = hầu như không. <span class="gr-ex">He works <b>hard</b>. ≠ He <b>hardly</b> works.</span></li>
 <li><b>-ing / -ed (tính từ):</b> -ing tả <i>tính chất của vật</i>, -ed tả <i>cảm xúc của người</i>. <span class="gr-ex">The lesson is <b>boring</b>. / I am <b>bored</b>.</span></li>
 <li><b>Danh từ đứng trước danh từ</b> (noun + noun) rất phổ biến — không phải lúc nào cũng dùng tính từ: <i>government policy, traffic congestion, research method</i>.</li>
@@ -285,7 +285,7 @@ const GRAMMAR_DATA = [
 <li><b>Kéo dài liên tục từ quá khứ đến giờ</b> (với <i>since</i> — mốc bắt đầu, hoặc <i>for</i> — khoảng thời gian): <span class="gr-ex">We <b>have lived</b> here <b>for</b> ten years / <b>since</b> 2015. <i>(Sống ở đây tới tận bây giờ.)</i></span></li>
 <li><b>Sự thay đổi tính đến hiện tại:</b> <span class="gr-ex">Prices <b>have increased</b> significantly this year.</span></li>
 </ul>
-<p class="gr-note">Phân biệt với quá khứ đơn — đây là cặp thì bị nhầm nhiều nhất: dùng hiện tại hoàn thành khi <b>KHÔNG nêu mốc thời gian cụ thể đã kết thúc</b>; ngay khi câu có "yesterday, in 2019, last week, two years ago" (mốc đã chốt, đã xong hẳn trong quá khứ, không còn liên hệ trực tiếp) thì BẮT BUỘC dùng quá khứ đơn. So sánh: <i>I <b>have lost</b> my key</i> (vẫn đang mất, hiện tại chưa tìm ra — hiện tại hoàn thành) ≠ <i>I <b>lost</b> my key yesterday</i> (có thể đã tìm lại được rồi, chỉ đơn thuần kể lại sự việc đã qua — quá khứ đơn).</p>
+<p class="gr-note">Phân biệt với quá khứ đơn — đây là cặp thì bị nhầm nhiều nhất: dùng hiện tại hoàn thành khi <b>KHÔNG nêu mốc thời gian cụ thể đã kết thúc</b>; ngay khi câu có "yesterday, in 2019, last week, two years ago" (mốc đã chốt, đã xong hẳn trong quá khứ, không còn liên hệ trực tiếp) thì BẮT BUỘC dùng quá khứ đơn. So sánh: <i>I have lost my key</i> (vẫn đang mất, hiện tại chưa tìm ra — hiện tại hoàn thành) ≠ <i>I lost my key yesterday</i> (có thể đã tìm lại được rồi, chỉ đơn thuần kể lại sự việc đã qua — quá khứ đơn).</p>
 
 <h4>4. Hiện tại hoàn thành tiếp diễn (Present Perfect Continuous)</h4>
 <p><b>Khẳng định:</b> <span class="gr-formula">S + have/has been + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + have/has not been + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Have/Has + S + been + V-ing?</span></p>
@@ -295,7 +295,7 @@ const GRAMMAR_DATA = [
 <li><b>Giải thích một kết quả nhìn thấy được ngay lúc nói bằng NGUYÊN NHÂN vừa mới xảy ra:</b> <span class="gr-ex">Your eyes are red — <b>have</b> you <b>been crying</b>? <i>(Mắt đỏ ⇒ hỏi ngược lại hành động vừa gây ra tình trạng đó.)</i></span></li>
 <li><b>Hành động lặp lại, có tính tạm thời, gần đây:</b> <span class="gr-ex">She <b>has been calling</b> me all week about the project.</span></li>
 </ul>
-<p class="gr-note">Phân biệt với hiện tại hoàn thành đơn: <i>I have <b>read</b> three books this month</i> (hoàn thành đơn — nhấn KẾT QUẢ: đã đọc xong 3 cuốn, đếm được số lượng) ≠ <i>I have <b>been reading</b> this book all afternoon</i> (hoàn thành tiếp diễn — nhấn QUÁ TRÌNH đọc, có thể chưa đọc xong). Không dùng thể này với động từ trạng thái (đã nêu ở mục 2): "~~I have been knowing him for years~~" sai, phải là <i>I have known him for years.</i></p>`,
+<p class="gr-note">Phân biệt với hiện tại hoàn thành đơn: <i>I have read three books this month</i> (hoàn thành đơn — nhấn KẾT QUẢ: đã đọc xong 3 cuốn, đếm được số lượng) ≠ <i>I have been reading this book all afternoon</i> (hoàn thành tiếp diễn — nhấn QUÁ TRÌNH đọc, có thể chưa đọc xong). Không dùng thể này với động từ trạng thái (đã nêu ở mục 2): "~~I have been knowing him for years~~" sai, phải là <i>I have known him for years.</i></p>`,
       },
       {
         title: "Nhóm thì QUÁ KHỨ (chi tiết 4 thì)",
@@ -336,7 +336,7 @@ const GRAMMAR_DATA = [
 <li><span class="gr-ex">He <b>had been working</b> for hours before he finally took a break. <i>(Anh ấy đã làm việc liên tục suốt nhiều giờ TRƯỚC KHI nghỉ — nhấn mạnh độ dài của quá trình làm việc, không chỉ đơn thuần "đã làm việc".)</i></span></li>
 <li><b>Nguyên nhân dẫn tới một tình trạng ở mốc quá khứ sau:</b> <span class="gr-ex">She was tired because she <b>had been studying</b> all night. <i>(Cô ấy mệt vì đã học suốt đêm.)</i></span></li>
 </ul>
-<p class="gr-note">Phân biệt với quá khứ hoàn thành đơn: <i>I <b>had finished</b> the report by noon</i> (nhấn KẾT QUẢ — báo cáo đã xong) ≠ <i>I <b>had been writing</b> the report all morning</i> (nhấn QUÁ TRÌNH viết kéo dài cả buổi sáng, có thể vẫn chưa xong hẳn).</p>`,
+<p class="gr-note">Phân biệt với quá khứ hoàn thành đơn: <i>I had finished the report by noon</i> (nhấn KẾT QUẢ — báo cáo đã xong) ≠ <i>I had been writing the report all morning</i> (nhấn QUÁ TRÌNH viết kéo dài cả buổi sáng, có thể vẫn chưa xong hẳn).</p>`,
       },
       {
         title: "Nhóm thì TƯƠNG LAI (chi tiết 4 thì + các cách nói khác về tương lai)",
@@ -360,7 +360,7 @@ const GRAMMAR_DATA = [
 <li><b>Dự định đã có kế hoạch từ trước:</b> <span class="gr-ex">We <b>are going to</b> travel to Da Nang this summer. <i>(Đã bàn bạc, lên kế hoạch từ trước, không phải vừa nghĩ ra.)</i></span></li>
 <li><b>Dự đoán dựa trên bằng chứng nhìn/thấy được ngay lúc nói:</b> <span class="gr-ex">Look at those clouds — it <b>is going to</b> rain. <i>(Có mây đen làm bằng chứng — khác "I think it will rain" chỉ là ý kiến cá nhân, không có bằng chứng cụ thể.)</i></span></li>
 </ul>
-<p class="gr-note">So sánh nhanh ba cách nói gần nghĩa: <i>I <b>will</b> call you</i> (vừa nảy ra ý, chưa từng nghĩ trước đó) ≠ <i>I <b>am going to</b> call you</i> (đã định làm việc này từ trước khi nói câu này) ≠ <i>I <b>am calling</b> you at 5pm</i> (hiện tại tiếp diễn diễn tả tương lai — đã CHỐT lịch cụ thể, gần như một cuộc hẹn chắc chắn, xem bài "Nhóm thì HIỆN TẠI" mục 2).</p>
+<p class="gr-note">So sánh nhanh ba cách nói gần nghĩa: <i>I will call you</i> (vừa nảy ra ý, chưa từng nghĩ trước đó) ≠ <i>I am going to call you</i> (đã định làm việc này từ trước khi nói câu này) ≠ <i>I am calling you at 5pm</i> (hiện tại tiếp diễn diễn tả tương lai — đã CHỐT lịch cụ thể, gần như một cuộc hẹn chắc chắn, xem bài "Nhóm thì HIỆN TẠI" mục 2).</p>
 
 <h4>3. Tương lai tiếp diễn (Future Continuous)</h4>
 <p><b>Khẳng định:</b> <span class="gr-formula">S + will be + V-ing</span> · <b>Phủ định:</b> <span class="gr-formula">S + will not be + V-ing</span> · <b>Nghi vấn:</b> <span class="gr-formula">Will + S + be + V-ing?</span></p>
@@ -387,9 +387,9 @@ const GRAMMAR_DATA = [
 
 <h4>Các cách khác nói về tương lai (không thuộc 4 thì trên)</h4>
 <ul>
-<li><b>be about to + V:</b> sắp sửa xảy ra ngay lập tức. <i>The movie <b>is about to</b> start — sit down!</i></li>
-<li><b>be to + V:</b> mang tính trang trọng, kế hoạch chính thức/lịch trình (báo chí hay dùng). <i>The president <b>is to</b> visit Vietnam next week.</i></li>
-<li><b>Hiện tại đơn diễn tả tương lai:</b> dùng cho lịch trình cố định, đã nêu ở bài Nhóm thì HIỆN TẠI mục 1. <i>The flight <b>departs</b> at 6 a.m.</i></li>
+<li><b>be about to + V:</b> sắp sửa xảy ra ngay lập tức. <i>The movie is about to start — sit down!</i></li>
+<li><b>be to + V:</b> mang tính trang trọng, kế hoạch chính thức/lịch trình (báo chí hay dùng). <i>The president is to visit Vietnam next week.</i></li>
+<li><b>Hiện tại đơn diễn tả tương lai:</b> dùng cho lịch trình cố định, đã nêu ở bài Nhóm thì HIỆN TẠI mục 1. <i>The flight departs at 6 a.m.</i></li>
 </ul>
 <p class="gr-note">Mẹo lên band: dùng ĐA DẠNG các cách diễn đạt tương lai (không chỉ mỗi "will") trong Writing Task 2 khi bàn về xu hướng/dự đoán ("is likely to", "is expected to", "is projected to" cũng là những lựa chọn học thuật rất tốt, xem thêm ở bài "Động từ khiếm khuyết").</p>`,
       },
@@ -408,7 +408,7 @@ const GRAMMAR_DATA = [
 <h4>Các trường hợp dễ nhầm — chủ ngữ thật bị "che" bởi từ đứng gần động từ</h4>
 <ul>
 <li><b>Đại từ bất định</b> (indefinite pronoun — chỉ một số lượng không xác định: everyone, someone, anybody, each, every, nobody) → LUÔN số ít dù mang nghĩa "mọi người": <span class="gr-ex">Everyone <b>has</b> a role to play. <i>(Không phải "have" dù nghĩa là "mọi người".)</i></span></li>
-<li><b>Chủ ngữ + with / as well as / together with / along with</b> (cụm chèn thêm, KHÔNG phải liên từ nối hai chủ ngữ ngang hàng) → động từ chia theo chủ ngữ chính đứng trước cụm chèn, bỏ qua phần chèn thêm: <span class="gr-ex">The manager, as well as the staff, <b>is</b> attending. <i>(Chia theo "the manager" — số ít; nếu muốn số nhiều phải dùng "and": "The manager and the staff <b>are</b> attending".)</i></span></li>
+<li><b>Chủ ngữ + with / as well as / together with / along with</b> (cụm chèn thêm, KHÔNG phải liên từ nối hai chủ ngữ ngang hàng) → động từ chia theo chủ ngữ chính đứng trước cụm chèn, bỏ qua phần chèn thêm: <span class="gr-ex">The manager, as well as the staff, <b>is</b> attending. <i>(Chia theo "the manager" — số ít; nếu muốn số nhiều phải dùng "and": "The manager and the staff are attending".)</i></span></li>
 <li><b>A number of</b> + danh từ số nhiều → động từ <b>số nhiều</b> (vì "a number of" ở đây có nghĩa như "several — vài, một số"); <b>The number of</b> → động từ <b>số ít</b> (vì chủ ngữ thật là "the number" — con số, chỉ MỘT con số): <span class="gr-ex">A number of students <b>are</b> absent. <i>(Vài học sinh vắng.)</i> / The number of students <b>is</b> rising. <i>(Con số [học sinh] đang tăng.)</i></span></li>
 <li><b>Either…or / Neither…nor</b> → chia theo danh từ <b>gần động từ nhất</b> (không phải danh từ đầu tiên): <span class="gr-ex">Neither the teacher nor the <b>students were</b> late. <i>(Chia theo "students" vì nó đứng ngay trước động từ.)</i></span></li>
 <li><b>Cụm giới từ chen giữa chủ ngữ và động từ</b> — đây là cạm bẫy phổ biến nhất: cụm "of + danh từ" đứng sau chủ ngữ KHÔNG phải là chủ ngữ, chỉ bổ nghĩa cho nó. <span class="gr-ex">The <b>box</b> of chocolates <b>is</b> on the table. <i>(Chủ ngữ thật là "the box" — số ít, không phải "chocolates".)</i></span></li>
@@ -512,13 +512,13 @@ const GRAMMAR_DATA = [
 <li><b>Câu hỏi Wh-</b> (có từ để hỏi: what, where, when, why, how…): giữ nguyên từ để hỏi ở đầu mệnh đề, cũng đưa về trật tự khẳng định: <span class="gr-ex">"Where do you live?" → She asked <b>where I lived</b>. <i>(không phải "where did I live".)</i></span></li>
 <li><b>Câu mệnh lệnh/yêu cầu:</b> dùng <i>told/asked/ordered + tân ngữ + (not) to V (nguyên mẫu có to)</i>, không lùi thì vì mệnh lệnh không có "thì" để lùi: <span class="gr-ex">"Close the door," he said. → He told me <b>to close</b> the door. / "Don't be late," she said. → She told me <b>not to be</b> late.</span></li>
 </ul>
-<p class="gr-note">KHÔNG lùi thì khi lời nói gốc là một chân lý/sự thật luôn đúng, không phụ thuộc thời gian: <i>The teacher said the Earth <b>is</b> round.</i> (không bắt buộc phải nói "was round" dù về mặt kỹ thuật lùi thì cũng không sai).</p>`,
+<p class="gr-note">KHÔNG lùi thì khi lời nói gốc là một chân lý/sự thật luôn đúng, không phụ thuộc thời gian: <i>The teacher said the Earth is round.</i> (không bắt buộc phải nói "was round" dù về mặt kỹ thuật lùi thì cũng không sai).</p>`,
       },
       {
         title: "Mệnh đề quan hệ (Relative Clauses)",
         html: `
 <p><b>Mệnh đề quan hệ</b> là một <b>mệnh đề</b> (xem lại khái niệm này ở bài "Nền tảng" — có đủ chủ ngữ + động từ chia) dùng để <b>bổ nghĩa cho một danh từ</b> đứng ngay trước nó, thay vì phải tách thành một câu riêng biệt. Nhờ đó câu văn gọn hơn và tự nhiên/"cao cấp" hơn về mặt văn phong. Nó luôn bắt đầu bằng một <b>đại từ quan hệ (relative pronoun)</b>.</p>
-<p class="gr-ex">Hai câu rời: <i>I have a friend. My friend lives in Paris.</i> → Gộp bằng mệnh đề quan hệ: <i>I have a friend <b>who lives in Paris</b>.</i></p>
+<p class="gr-ex">Hai câu rời: <i>I have a friend. My friend lives in Paris.</i> → Gộp bằng mệnh đề quan hệ: <i>I have a friend who lives in Paris.</i></p>
 
 <h4>Chọn đúng đại từ quan hệ</h4>
 <ul>
@@ -562,7 +562,7 @@ const GRAMMAR_DATA = [
 <h4>Luôn dùng V-ing sau giới từ</h4>
 <p>Đây là quy tắc TUYỆT ĐỐI, không có ngoại lệ: bất kỳ động từ nào đứng ngay sau một giới từ (in, on, at, for, about, of…) đều PHẢI ở dạng V-ing, không bao giờ dùng "to V". Lý do: về mặt ngữ pháp, giới từ luôn cần một danh từ/cụm danh từ theo sau, mà V-ing đóng vai trò danh từ được (xem lại bài "Nền tảng").</p>
 <p class="gr-ex">She is good <b>at solving</b> problems. / Thank you <b>for helping</b> me. / I'm interested <b>in learning</b> Japanese.</p>
-<p class="gr-note">Lỗi rất hay gặp: sau "to" là giới từ (không phải dấu hiệu của to-infinitive) trong một số cụm cố định — look forward <b>to</b>, be used <b>to</b>, be accustomed <b>to</b> — những cụm này "to" đóng vai trò GIỚI TỪ nên vẫn phải theo sau bởi V-ing: <i>I look forward <b>to seeing</b> you.</i> (không phải "to see").</p>
+<p class="gr-note">Lỗi rất hay gặp: sau "to" là giới từ (không phải dấu hiệu của to-infinitive) trong một số cụm cố định — look forward <b>to</b>, be used <b>to</b>, be accustomed <b>to</b> — những cụm này "to" đóng vai trò GIỚI TỪ nên vẫn phải theo sau bởi V-ing: <i>I look forward to seeing you.</i> (không phải "to see").</p>
 
 <h4>Động từ ĐỔI NGHĨA hoàn toàn tùy theo dạng theo sau — nhóm quan trọng nhất cần phân biệt</h4>
 <ul>
@@ -575,7 +575,7 @@ const GRAMMAR_DATA = [
       {
         title: "Động từ khiếm khuyết (Modal Verbs)",
         html: `
-<p><b>Động từ khiếm khuyết (modal verbs)</b> — can, could, may, might, must, should, will, would, shall — là nhóm trợ động từ ĐẶC BIỆT: chúng không tự mang nghĩa hành động, mà thêm một lớp <b>SẮC THÁI</b> vào động từ chính đứng sau: khả năng, sự cho phép, nghĩa vụ, lời khuyên, hoặc mức độ chắc chắn của người nói. Đặc điểm ngữ pháp riêng: sau modal verb LUÔN LÀ động từ nguyên mẫu KHÔNG "to" (bare infinitive), và modal verb không bao giờ thêm "-s" dù chủ ngữ là ngôi thứ ba số ít: <i>She <b>can</b> swim.</i> (không phải "She cans swim" hay "She can to swim").</p>
+<p><b>Động từ khiếm khuyết (modal verbs)</b> — can, could, may, might, must, should, will, would, shall — là nhóm trợ động từ ĐẶC BIỆT: chúng không tự mang nghĩa hành động, mà thêm một lớp <b>SẮC THÁI</b> vào động từ chính đứng sau: khả năng, sự cho phép, nghĩa vụ, lời khuyên, hoặc mức độ chắc chắn của người nói. Đặc điểm ngữ pháp riêng: sau modal verb LUÔN LÀ động từ nguyên mẫu KHÔNG "to" (bare infinitive), và modal verb không bao giờ thêm "-s" dù chủ ngữ là ngôi thứ ba số ít: <i>She can swim.</i> (không phải "She cans swim" hay "She can to swim").</p>
 
 <h4>Nhóm diễn tả khả năng & xin phép</h4>
 <ul>
@@ -623,13 +623,13 @@ const GRAMMAR_DATA = [
 
 <h4>Zero article — KHÔNG dùng mạo từ</h4>
 <p>Không dùng "a/an" lẫn "the" trong các trường hợp: danh từ số nhiều hoặc không đếm được mang nghĩa CHUNG CHUNG (không chỉ một cái/nhóm cụ thể nào), tên riêng (người, hầu hết địa danh/quốc gia số ít), tên các bữa ăn, tên môn học/ngôn ngữ khi nói chung: <span class="gr-ex"><b>Water</b> is essential for life. <i>(Nước nói chung, không phải một lượng nước cụ thể.)</i> / I love <b>music</b>. / She teaches <b>English</b>. / We had <b>breakfast</b> at 7. / <b>Vietnam</b> is in Southeast Asia.</span></p>
-<p class="gr-note">So sánh cặp dễ nhầm: <i>I go to <b>school</b></i> (nghĩa chung — đi học, với vai trò học sinh) ≠ <i>I go to <b>the</b> school</i> (đến tòa nhà trường học cụ thể đó — có thể chỉ để dự một sự kiện, không phải để học).</p>
+<p class="gr-note">So sánh cặp dễ nhầm: <i>I go to school</i> (nghĩa chung — đi học, với vai trò học sinh) ≠ <i>I go to the school</i> (đến tòa nhà trường học cụ thể đó — có thể chỉ để dự một sự kiện, không phải để học).</p>
 
 <h4>Các cặp danh từ dễ nhầm mạo từ nhất</h4>
 <ul>
 <li><b>go to bed / go to school / go to hospital / go to prison</b> (không mạo từ) — mang nghĩa TRỪU TƯỢNG, gắn với MỤC ĐÍCH chính của nơi đó (ngủ, học, chữa bệnh, chịu án) ≠ <b>go to the hospital / go to the prison</b> (có "the") — chỉ đơn thuần ĐẾN tòa nhà đó vì lý do khác (thăm ai đó, làm việc ở đó nhưng không phải bệnh nhân/phạm nhân).</li>
 <li><b>in future</b> (= từ giờ trở đi, mang tính cảnh báo/nhắc nhở) ≠ <b>in the future</b> (= trong tương lai nói chung, một thời điểm chưa xác định): <span class="gr-ex"><b>In future</b>, please arrive on time. <i>(Từ giờ trở đi, hãy đến đúng giờ.)</i> / Robots will do most jobs <b>in the future</b>.</span></li>
-<li><b>Tên bữa ăn KHÔNG mạo từ khi nói chung</b> nhưng CÓ mạo từ khi mô tả một bữa ăn CỤ THỂ: <i>We had <b>breakfast</b> at 7.</i> ≠ <i>The breakfast we had at the hotel was delicious.</i></li>
+<li><b>Tên bữa ăn KHÔNG mạo từ khi nói chung</b> nhưng CÓ mạo từ khi mô tả một bữa ăn CỤ THỂ: <i>We had breakfast at 7.</i> ≠ <i>The breakfast we had at the hotel was delicious.</i></li>
 </ul>
 <p class="gr-note">Mẹo lên band: mạo từ là điểm CỰC KỲ nhỏ nhưng bị soi rất kỹ ở Grammatical Range & Accuracy. Cách luyện hiệu quả nhất không phải học quy tắc suông mà là ĐỌC NHIỀU và chú ý xem người bản ngữ dùng "a/an/the/zero" ở đâu trong ngữ cảnh tương tự bài bạn đang viết.</p>`,
       },
@@ -664,7 +664,7 @@ const GRAMMAR_DATA = [
 <h4>Lỗi thường gặp</h4>
 <ul>
 <li><b>Dùng cả "more" và "-er" cùng lúc:</b> "~~more taller~~" sai — chỉ chọn MỘT trong hai cách.</li>
-<li><b>Quên "than" sau so sánh hơn:</b> "~~She is taller me~~" sai, phải có "than": <i>She is taller <b>than</b> me.</i></li>
+<li><b>Quên "than" sau so sánh hơn:</b> "~~She is taller me~~" sai, phải có "than": <i>She is taller than me.</i></li>
 <li><b>Nhầm đại từ sau "than":</b> văn nói thân mật chấp nhận "than me", nhưng văn viết học thuật/trang trọng chuẩn mực hơn khi dùng "than I am" (so sánh đầy đủ hai mệnh đề).</li>
 </ul>`,
       },
@@ -694,7 +694,7 @@ const GRAMMAR_DATA = [
 </ul>
 
 <h4>Bổ sung ý (rất hữu ích khi viết luận — Writing Task 2)</h4>
-<p>Các từ nối sau đứng đầu câu mới (giống "however"), dùng để thêm một luận điểm/ý bổ sung cùng chiều với ý trước: <b>moreover, furthermore, in addition, besides, what is more, additionally</b>. Ví dụ: <i>Studying abroad broadens one's worldview. <b>Moreover</b>, it improves language skills significantly.</i></p>`,
+<p>Các từ nối sau đứng đầu câu mới (giống "however"), dùng để thêm một luận điểm/ý bổ sung cùng chiều với ý trước: <b>moreover, furthermore, in addition, besides, what is more, additionally</b>. Ví dụ: <i>Studying abroad broadens one's worldview. Moreover, it improves language skills significantly.</i></p>`,
       },
       {
         title: "Đảo ngữ (Inversion) — nâng cao",
@@ -719,10 +719,10 @@ const GRAMMAR_DATA = [
 <h4>Cách xác định TRỢ ĐỘNG TỪ nào cần đảo — quy tắc chung</h4>
 <p>Nguyên tắc: đảo đúng trợ động từ đã CÓ SẴN trong câu gốc (be, have, will, can, must…); nếu câu gốc là động từ thường chia ở hiện tại/quá khứ đơn (không có trợ động từ sẵn), phải MƯỢN "do/does/did" giống hệt cách tạo câu hỏi:</p>
 <ul>
-<li>Câu có "be": <i>She <b>is</b> rarely late.</i> → <b>Rarely is she</b> late.</li>
-<li>Câu có trợ động từ khiếm khuyết: <i>I <b>can</b> never understand him.</i> → <b>Never can I</b> understand him.</li>
-<li>Câu động từ thường, hiện tại đơn → mượn <b>does/do</b>: <i>She <b>rarely complains</b>.</i> → <b>Rarely does she complain</b>. <i>(Chú ý: "complain" trở về nguyên mẫu vì "does" đã mang chức năng chia thì.)</i></li>
-<li>Câu động từ thường, quá khứ đơn → mượn <b>did</b>: <i>She <b>never told</b> anyone.</i> → <b>Never did she tell</b> anyone.</li>
+<li>Câu có "be": <i>She is rarely late.</i> → <b>Rarely is she</b> late.</li>
+<li>Câu có trợ động từ khiếm khuyết: <i>I can never understand him.</i> → <b>Never can I</b> understand him.</li>
+<li>Câu động từ thường, hiện tại đơn → mượn <b>does/do</b>: <i>She rarely complains.</i> → <b>Rarely does she complain</b>. <i>(Chú ý: "complain" trở về nguyên mẫu vì "does" đã mang chức năng chia thì.)</i></li>
+<li>Câu động từ thường, quá khứ đơn → mượn <b>did</b>: <i>She never told anyone.</i> → <b>Never did she tell</b> anyone.</li>
 </ul>
 <p class="gr-note">Đây chính là lý do ví dụ "Not only <b>did</b> she win" ở trên phải mượn "did" — câu gốc "She won" là quá khứ đơn của động từ thường, không có trợ động từ sẵn để đảo.</p>`,
       },
@@ -776,11 +776,11 @@ const GRAMMAR_DATA = [
 <li><b>Ước/tiếc nuối về một điều đã KHÔNG xảy ra trong QUÁ KHỨ:</b> <span class="gr-formula">wish + S + quá khứ hoàn thành</span> (giống câu điều kiện loại 3): <span class="gr-ex">I wish I <b>had studied</b> harder. <i>(Ước gì mình đã học chăm hơn — nhưng thực tế đã không học chăm, chuyện đã qua rồi.)</i></span></li>
 <li><b>Ước muốn một điều gì đó THAY ĐỔI trong tương lai, thường là một sự khó chịu/bực mình về hiện tại (KHÔNG dùng cho ước về bản thân người nói):</b> <span class="gr-formula">wish + S + would + V</span>: <span class="gr-ex">I wish it <b>would stop</b> raining. <i>(Ước gì trời ngừng mưa — thể hiện sự khó chịu.)</i></span></li>
 </ul>
-<p class="gr-note">Lỗi hay gặp: KHÔNG dùng "wish + would" khi chủ ngữ của "wish" và chủ ngữ của mệnh đề sau là CÙNG MỘT người — "~~I wish I would study harder~~" là sai (nghe như đang ra lệnh cho chính mình), phải dùng quá khứ đơn: <i>I wish I <b>studied</b> harder.</i> "Wish + would" chỉ dùng khi chủ thể là NGƯỜI/VẬT KHÁC hoặc một hiện tượng (thời tiết, tiếng ồn…).</p>
+<p class="gr-note">Lỗi hay gặp: KHÔNG dùng "wish + would" khi chủ ngữ của "wish" và chủ ngữ của mệnh đề sau là CÙNG MỘT người — "~~I wish I would study harder~~" là sai (nghe như đang ra lệnh cho chính mình), phải dùng quá khứ đơn: <i>I wish I studied harder.</i> "Wish + would" chỉ dùng khi chủ thể là NGƯỜI/VẬT KHÁC hoặc một hiện tượng (thời tiết, tiếng ồn…).</p>
 
 <h4>Các cấu trúc giả định liên quan — cùng "họ" với wish</h4>
 <ul>
-<li><b>would rather</b> + S + quá khứ đơn (muốn NGƯỜI KHÁC làm/không làm gì — chủ ngữ sau "would rather" khác chủ ngữ chính): <span class="gr-ex">I'd rather you <b>didn't</b> smoke here. <i>(Tôi muốn bạn đừng hút thuốc ở đây.)</i></span> So sánh: nếu cùng một chủ ngữ, dùng nguyên mẫu không "to": <i>I'd rather <b>stay</b> home.</i></li>
+<li><b>would rather</b> + S + quá khứ đơn (muốn NGƯỜI KHÁC làm/không làm gì — chủ ngữ sau "would rather" khác chủ ngữ chính): <span class="gr-ex">I'd rather you <b>didn't</b> smoke here. <i>(Tôi muốn bạn đừng hút thuốc ở đây.)</i></span> So sánh: nếu cùng một chủ ngữ, dùng nguyên mẫu không "to": <i>I'd rather stay home.</i></li>
 <li><b>It's (high) time</b> + S + quá khứ đơn (đã đến lúc PHẢI làm gì, hàm ý hơi muộn): <span class="gr-ex">It's time we <b>left</b>. <i>(Đã đến lúc phải đi rồi.)</i></span></li>
 <li><b>as if / as though</b> + quá khứ đơn (như thể — diễn tả điều KHÔNG có thật, một sự so sánh giả định): <span class="gr-ex">He talks <b>as if</b> he <b>knew</b> everything. <i>(Anh ta nói như thể biết hết mọi thứ — thực ra không biết hết.)</i></span></li>
 <li><b>suggest / recommend / insist / demand that</b> + S + V nguyên mẫu (thức giả định trang trọng, ĐỘNG TỪ KHÔNG chia theo ngôi, kể cả ngôi thứ ba số ít): <span class="gr-ex">The doctor suggested that he <b>rest</b> for a week. <i>(không phải "rests" — đây là thức giả định trang trọng, hay gặp trong văn phong học thuật/trang trọng.)</i></span></li>
@@ -814,15 +814,15 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Đừng dịch giới từ theo phản xạ tiếng Việt. "Phụ thuộc <b>vào</b>" nghe như "depend <b>into</b>" nhưng đúng phải là depend <b>on</b>; "khác <b>với</b>" không phải "different <b>with</b>" mà là different <b>from</b>. Cách chắc chắn nhất để nhớ đúng là học cả CỤM ngay từ đầu (không học "depend" và "on" tách rời), và đọc/nghe nhiều để quen phản xạ tự nhiên.</p>
 
 <h4>Giới từ chỉ phương tiện, cách thức</h4>
-<p><b>by</b> + phương tiện di chuyển (không mạo từ): by car, by bus, by plane — nhưng <b>on foot</b> (đi bộ, ngoại lệ cố định). <b>with</b> + công cụ/dụng cụ: <i>cut it <b>with</b> a knife.</i> <b>by</b> + V-ing diễn tả CÁCH thức làm gì: <i>You can improve <b>by practising</b> every day.</i></p>
+<p><b>by</b> + phương tiện di chuyển (không mạo từ): by car, by bus, by plane — nhưng <b>on foot</b> (đi bộ, ngoại lệ cố định). <b>with</b> + công cụ/dụng cụ: <i>cut it with a knife.</i> <b>by</b> + V-ing diễn tả CÁCH thức làm gì: <i>You can improve by practising every day.</i></p>
 
 <h4>Giới từ ở cuối câu (preposition stranding)</h4>
 <p>Trong câu hỏi Wh- và mệnh đề quan hệ, giới từ thường bị "để lại" ở CUỐI câu thay vì đứng ngay trước từ để hỏi/đại từ quan hệ — đây là cách nói TỰ NHIÊN, phổ biến trong cả văn nói lẫn văn viết không quá trang trọng: <span class="gr-ex">Who did you go <b>with</b>? <i>(thay vì "With whom did you go?" — cách nói rất trang trọng, ít dùng.)</i> / This is the book I told you <b>about</b>.</span></p>
 
 <h4>Lỗi thường gặp do ảnh hưởng tiếng Việt</h4>
 <ul>
-<li><b>Thêm giới từ thừa sau động từ đã mang nghĩa đủ:</b> "~~discuss about~~" sai — "discuss" đã là ngoại động từ, có tân ngữ trực tiếp ngay sau, không cần "about": <i>We <b>discussed</b> the plan.</i> (không phải "discussed about the plan"). Tương tự: <b>enter</b> (không phải "enter into" khi nghĩa là "bước vào"), <b>marry</b> (không phải "marry with").</li>
-<li><b>Thiếu giới từ cần thiết:</b> "~~listen music~~" sai, phải là <i>listen <b>to</b> music</i> vì "listen" là nội động từ, cần giới từ mới nối được tân ngữ.</li>
+<li><b>Thêm giới từ thừa sau động từ đã mang nghĩa đủ:</b> "~~discuss about~~" sai — "discuss" đã là ngoại động từ, có tân ngữ trực tiếp ngay sau, không cần "about": <i>We discussed the plan.</i> (không phải "discussed about the plan"). Tương tự: <b>enter</b> (không phải "enter into" khi nghĩa là "bước vào"), <b>marry</b> (không phải "marry with").</li>
+<li><b>Thiếu giới từ cần thiết:</b> "~~listen music~~" sai, phải là <i>listen to music</i> vì "listen" là nội động từ, cần giới từ mới nối được tân ngữ.</li>
 </ul>`,
       },
     ],

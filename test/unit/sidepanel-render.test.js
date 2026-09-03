@@ -10,8 +10,8 @@ const assert = require("node:assert/strict");
 const { loadFiles } = require("../helpers/sandbox.js");
 
 const ctx = loadFiles([
-  "config.js", "cache.js", "vocab.js", "notes.js", "todo.js", "mistakes.js",
-  "grammar.js", "ielts.js", "rag.js", "layout.js", "translator.js", "sidepanel.js",
+  "shared/config.js", "shared/cache.js", "shared/vocab.js", "shared/notes.js", "shared/todo.js", "shared/mistakes.js",
+  "shared/grammar.js", "shared/ielts.js", "pages/sidepanel/rag.js", "pages/sidepanel/layout.js", "shared/translator.js", "pages/sidepanel/sidepanel.js",
 ], { url: "https://example.test/sidepanel.html" });
 
 describe("escapeHtml — chặn injection qua NỘI DUNG VĂN BẢN lẫn THUỘC TÍNH", () => {

@@ -8,7 +8,7 @@ const { test, describe } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadFiles } = require("../helpers/sandbox.js");
 
-const ctx = loadFiles(["config.js", "translator.js"]);
+const ctx = loadFiles(["shared/config.js", "shared/translator.js"]);
 
 // Giá trị trả về từ vm context là object/array của MỘT REALM KHÁC — prototype
 // không cùng định danh với Array.prototype ở đây, nên assert.deepEqual (strict)

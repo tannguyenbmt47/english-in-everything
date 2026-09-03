@@ -171,6 +171,42 @@ async function saveVocabList(list) {
   await chrome.storage.local.set({ [VOCAB_KEY]: list });
 }
 
+// Ghi đè TOÀN BỘ kho bằng một snapshot cũ — dùng cho nút "Hoàn tác" sau khi
+// dọn dẹp (xoá rác / gộp trùng lặp / đưa về dạng gốc). Phải đi qua khoá ghi
+// tuần tự như mọi hàm ghi khác trong file này (xem withVocabLock ở trên) —
+// ghi thẳng bằng saveVocabList() sẽ tái tạo đúng race condition đã sửa.
+function restoreVocabList(list) {
+  return withVocabLock(() => restoreVocabListLocked(list));
+}
+async function restoreVocabListLocked(list) {
+  await saveVocabList(list);
+  return list;
+}
+
+// ============================================================
+// Khoá ghi TUẦN TỰ cho kho từ vựng — BUG THẬT đã sửa: addVocab/renameVocab/
+// removeVocab/reviewVocabSM2/mergeDuplicateGroup đều đọc TOÀN BỘ danh sách,
+// sửa trong bộ nhớ rồi ghi đè lại (read-modify-write). Service worker xử lý
+// mỗi message.onMessage như MỘT tác vụ async độc lập — nếu hai lượt gọi các
+// hàm này xen kẽ nhau (vd: hai lượt "tra từ" gần như cùng lúc từ hai tab khác
+// nhau, hoặc batch tra collocation đang chạy trong khi người dùng lưu thêm một
+// từ mới), lượt ghi SAU CÙNG sẽ ghi đè và XOÁ MẤT thay đổi của lượt trước —
+// mất tiến độ ôn tập (ease/reps) hoặc mất hẳn một từ mới mà không có lỗi nào
+// báo ra. Xếp mọi thao tác ghi qua MỘT hàng đợi (promise chain) để luôn chạy
+// tuần tự, không bao giờ có hai lượt get→sửa→set xen kẽ nhau.
+//
+// LƯU Ý khi sửa/thêm hàm: chỉ export public function mới được gọi withVocabLock().
+// Hàm nào gọi hàm khác CŨNG đang khoá (vd addVocab gọi bumpStat) thì hàm được
+// gọi bên trong phải là bản KHÔNG khoá riêng — khoá lồng khoá sẽ bị TREO VĨNH
+// VIỄN (hàng đợi chờ chính nó chạy xong).
+// ============================================================
+let vocabWriteQueue = Promise.resolve();
+function withVocabLock(fn) {
+  const run = vocabWriteQueue.then(fn, fn); // chạy dù lượt trước lỗi, không kẹt hàng đợi
+  vocabWriteQueue = run.then(() => {}, () => {});
+  return run;
+}
+
 // Thêm/cập nhật một mục từ vựng. Trả về danh sách mới.
 const VOCAB_EXTRA = ["phonetic", "audio", "pos", "definition", "example", "kind", "mnemonic", "collocs", "cloze", "clozeVi"];
 
@@ -237,7 +273,10 @@ function findNearDuplicateGroups(list) {
 // Gộp một nhóm mục trùng lặp gần giống thành MỘT mục duy nhất. Giữ lại mục có
 // tiến độ ôn nhiều nhất (không mất công học lại từ đầu); bù các trường còn
 // thiếu của mục giữ lại từ các mục bị gộp, không ghi đè trường đã có sẵn.
-async function mergeDuplicateGroup(terms) {
+function mergeDuplicateGroup(terms) {
+  return withVocabLock(() => mergeDuplicateGroupLocked(terms));
+}
+async function mergeDuplicateGroupLocked(terms) {
   const list = await getVocab();
   const group = list.filter((v) => terms.includes(v.term));
   if (group.length < 2) return list;
@@ -264,7 +303,17 @@ async function mergeDuplicateGroup(terms) {
   return out;
 }
 
-async function addVocab(entry) {
+// Mục CHƯA CÓ nghĩa (tra lỗi giữa chừng, hoặc thêm thủ công rồi bỏ dở) — kiểu
+// phát hiện nhị phân (có/không), không cố đoán "nghĩa có mơ hồ hay không" vì
+// dễ báo sai.
+function isMissingMeaning(v) {
+  return !String(v?.meaning || "").trim();
+}
+
+function addVocab(entry) {
+  return withVocabLock(() => addVocabLocked(entry));
+}
+async function addVocabLocked(entry) {
   const term = (entry.term || "").trim();
   if (!term) return await getVocab();
   const list = await getVocab();
@@ -293,7 +342,7 @@ async function addVocab(entry) {
     };
     for (const k of VOCAB_EXTRA) v[k] = entry[k] || "";
     list.unshift(v);
-    await bumpStat("new"); // đếm từ mới cho mục tiêu hằng ngày
+    await bumpStat("new"); // đếm từ mới cho mục tiêu hằng ngày — DÙNG BẢN KHÔNG khoá, đang giữ khoá rồi
   }
   await saveVocabList(list);
   return list;
@@ -301,7 +350,10 @@ async function addVocab(entry) {
 
 // Sửa chính tả của một từ, GIỮ nguyên tiến độ ôn tập.
 // Cần vì từ tách từ PDF đôi khi dính lỗi ngắt dòng ("off-theshelf").
-async function renameVocab(oldTerm, newTerm) {
+function renameVocab(oldTerm, newTerm) {
+  return withVocabLock(() => renameVocabLocked(oldTerm, newTerm));
+}
+async function renameVocabLocked(oldTerm, newTerm) {
   const next = (newTerm || "").trim();
   if (!next) return await getVocab();
   const list = await getVocab();
@@ -315,7 +367,10 @@ async function renameVocab(oldTerm, newTerm) {
   return out;
 }
 
-async function removeVocab(term) {
+function removeVocab(term) {
+  return withVocabLock(() => removeVocabLocked(term));
+}
+async function removeVocabLocked(term) {
   const list = (await getVocab()).filter(
     (v) => v.term.toLowerCase() !== term.toLowerCase()
   );
@@ -368,7 +423,10 @@ function nextSrs(v, quality) {
   };
 }
 
-async function reviewVocabSM2(term, quality) {
+function reviewVocabSM2(term, quality) {
+  return withVocabLock(() => reviewVocabSM2Locked(term, quality));
+}
+async function reviewVocabSM2Locked(term, quality) {
   const list = await getVocab();
   const v = list.find((x) => x.term.toLowerCase() === term.toLowerCase());
   if (!v) return list;

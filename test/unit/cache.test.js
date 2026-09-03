@@ -7,7 +7,7 @@ const { test, describe } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadFiles } = require("../helpers/sandbox.js");
 
-const ctx = loadFiles(["cache.js"]);
+const ctx = loadFiles(["shared/cache.js"]);
 
 describe("trKey — khóa cache", () => {
   test("cùng input -> cùng khóa (ổn định)", () => {

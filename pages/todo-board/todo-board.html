@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Việc cần làm — English in Everything</title>
+  <link rel="stylesheet" href="todo-board.css" />
+</head>
+<body>
+  <header class="tb-head">
+    <h1>✅ Việc cần làm</h1>
+  </header>
+
+  <main class="tb-main">
+    <div class="td-compose">
+      <div id="todoPriorityPick" class="td-priority-pick">
+        <button type="button" class="td-pri-opt" data-pri="high" title="Ưu tiên cao">🔴</button>
+        <button type="button" class="td-pri-opt active" data-pri="medium" title="Ưu tiên vừa">🟡</button>
+        <button type="button" class="td-pri-opt" data-pri="low" title="Ưu tiên thấp">⚪</button>
+      </div>
+      <input type="text" id="todoInput" placeholder="Thêm việc… (Enter để lưu)" autofocus />
+      <button id="todoAdd" class="tb-btn primary">Thêm</button>
+    </div>
+
+    <div id="todoList" class="td-list"></div>
+
+    <div class="tb-actions">
+      <button id="todoClearDone" class="tb-btn ghost">Xóa việc đã xong</button>
+    </div>
+  </main>
+
+  <!-- ============ CHI TIẾT MỘT VIỆC (bấm vào thẻ trong bảng kanban) ============ -->
+  <div id="todoDetailModal" class="tb-modal hidden">
+    <div class="tb-modal-card">
+      <div class="tb-modal-head">
+        <strong>Chi tiết việc</strong>
+        <button id="tdDetailClose" class="tb-close">✕</button>
+      </div>
+      <textarea id="tdDetailText" class="td-detail-text" rows="2" placeholder="Tên việc…"></textarea>
+
+      <div class="td-detail-row">
+        <span class="td-detail-lbl">Nhãn</span>
+        <input type="text" id="tdDetailLabel" class="td-detail-label-input" list="tdLabelList" placeholder="vd: eDA, Robot…" maxlength="30" />
+        <datalist id="tdLabelList"></datalist>
+      </div>
+      <div class="td-detail-row">
+        <span class="td-detail-lbl">Ưu tiên</span>
+        <div id="tdDetailPriority" class="td-priority-pick">
+          <button type="button" class="td-pri-opt" data-pri="high" title="Ưu tiên cao">🔴</button>
+          <button type="button" class="td-pri-opt" data-pri="medium" title="Ưu tiên vừa">🟡</button>
+          <button type="button" class="td-pri-opt" data-pri="low" title="Ưu tiên thấp">⚪</button>
+        </div>
+      </div>
+      <div class="td-detail-row">
+        <span class="td-detail-lbl">Trạng thái</span>
+        <div id="tdDetailStatus" class="td-status-pick">
+          <button type="button" class="td-status-opt" data-status="todo">📋 Cần làm</button>
+          <button type="button" class="td-status-opt" data-status="doing">🔥 Đang làm</button>
+          <button type="button" class="td-status-opt" data-status="done">✅ Đã xong</button>
+        </div>
+      </div>
+      <div class="td-detail-row">
+        <span class="td-detail-lbl">Hạn chót</span>
+        <input type="date" id="tdDetailDue" />
+        <button type="button" id="tdDetailDueClear" class="td-detail-clear" title="Bỏ hạn chót">✕</button>
+      </div>
+
+      <span class="td-detail-lbl">Mô tả</span>
+      <textarea id="tdDetailDesc" class="td-detail-desc" placeholder="Ghi chú thêm, checklist, link…"></textarea>
+      <div id="tdDetailMeta" class="td-detail-meta"></div>
+
+      <div class="tb-modal-actions">
+        <button id="tdDetailDelete" class="tb-btn ghost">Xoá việc</button>
+        <button id="tdDetailDoneBtn" class="tb-btn primary">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/vocab.js"></script>
+  <script src="../../shared/todo.js"></script>
+  <script src="todo-board.js"></script>
+</body>
+</html>

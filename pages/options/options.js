@@ -237,7 +237,7 @@ els.resetPrompt.addEventListener("click", () => {
 // Thử ngay: lưu thiết lập rồi mở trang khóa để xem giao diện/luồng học.
 els.gateTest.addEventListener("click", async () => {
   await chrome.storage.local.set({ gateSettings: readGateSettings() });
-  chrome.tabs.create({ url: chrome.runtime.getURL("gate.html?mode=morning&next=") });
+  chrome.tabs.create({ url: chrome.runtime.getURL("pages/gate/gate.html?mode=morning&next=") });
 });
 
 // Đặt lại trạng thái: coi như hôm nay chưa học, xóa vé mạng xã hội -> chặn lại ngay.

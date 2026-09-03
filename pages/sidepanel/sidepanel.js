@@ -47,6 +47,7 @@ const el = {
   notesList: document.getElementById("notesList"),
   openJournal: document.getElementById("openJournal"),
   openTodo: document.getElementById("openTodo"),
+  todoQuickBtn: document.getElementById("todoQuickBtn"),
   // Nhật ký (popup + lịch)
   journalModal: document.getElementById("journalModal"),
   jrDone: document.getElementById("jrDone"),
@@ -62,14 +63,6 @@ const el = {
   journalFix: document.getElementById("journalFix"),
   journalDel: document.getElementById("journalDel"),
   journalFixResult: document.getElementById("journalFixResult"),
-  // Việc cần làm
-  todoModal: document.getElementById("todoModal"),
-  tdClose: document.getElementById("tdClose"),
-  todoInput: document.getElementById("todoInput"),
-  todoAdd: document.getElementById("todoAdd"),
-  todoList: document.getElementById("todoList"),
-  todoClearDone: document.getElementById("todoClearDone"),
-  todoDone: document.getElementById("todoDone"),
   qaEmpty: document.getElementById("qaEmpty"),
   qaChat: document.getElementById("qaChat"),
   qaMessages: document.getElementById("qaMessages"),
@@ -134,6 +127,16 @@ const el = {
   stBaseBtn: document.getElementById("stBaseBtn"),
   stDupInfo: document.getElementById("stDupInfo"),
   stDupBtn: document.getElementById("stDupBtn"),
+  stMissingInfo: document.getElementById("stMissingInfo"),
+  stMissingBtn: document.getElementById("stMissingBtn"),
+  stCleanupUndo: document.getElementById("stCleanupUndo"),
+  cleanupModal: document.getElementById("cleanupModal"),
+  cleanupTitle: document.getElementById("cleanupTitle"),
+  cleanupToggleAll: document.getElementById("cleanupToggleAll"),
+  cleanupList: document.getElementById("cleanupList"),
+  cleanupClose: document.getElementById("cleanupClose"),
+  cleanupCancel: document.getElementById("cleanupCancel"),
+  cleanupApply: document.getElementById("cleanupApply"),
   stMistakeInfo: document.getElementById("stMistakeInfo"),
   stMistakeBtn: document.getElementById("stMistakeBtn"),
   stRetestInfo: document.getElementById("stRetestInfo"),
@@ -202,6 +205,72 @@ const el = {
   fcGood: document.getElementById("fcGood"),
   fcEasy: document.getElementById("fcEasy"),
 };
+
+// ---------- Select tuỳ biến (thay <select> gốc của trình duyệt) ----------
+// BUG THẬT đã sửa: <select> gốc mở popup lựa chọn theo toạ độ MÀN HÌNH tuyệt
+// đối — trong side panel (khung hẹp, dock sát mép trình duyệt), Chrome/Brave
+// đôi khi tính sai toạ độ đó và vẽ popup lệch hẳn ra ngoài màn hình, không bấm
+// được lựa chọn nào. Thay bằng menu tự vẽ, định vị NGAY TRONG trang panel nên
+// luôn đúng chỗ (đo bằng getBoundingClientRect của CHÍNH document panel, không
+// phải toạ độ màn hình) và tự kẹp lại nếu tràn mép phải/dưới.
+// <select> gốc vẫn ở trong DOM (ẩn qua CSS .cs-native) làm nguồn giá trị thật
+// — mọi chỗ code đọc select.value/nghe "change" không cần đổi gì.
+function enhanceSelect(select) {
+  select.classList.add("cs-native");
+  const wrap = document.createElement("div");
+  wrap.className = "cs-wrap";
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "cs-btn";
+  if (select.title) btn.title = select.title;
+  const label = document.createElement("span");
+  btn.appendChild(label);
+  const menu = document.createElement("div");
+  menu.className = "cs-menu hidden";
+
+  function syncLabel() {
+    const opt = select.options[select.selectedIndex];
+    label.textContent = opt ? opt.textContent : "";
+  }
+  function closeMenu() { menu.classList.add("hidden"); }
+  function buildMenu() {
+    menu.innerHTML = "";
+    Array.from(select.options).forEach((opt, i) => {
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "cs-opt" + (i === select.selectedIndex ? " active" : "");
+      item.textContent = opt.textContent;
+      item.addEventListener("click", () => {
+        select.selectedIndex = i;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+        syncLabel();
+        closeMenu();
+      });
+      menu.appendChild(item);
+    });
+  }
+  function openMenu() {
+    buildMenu();
+    menu.style.left = ""; menu.style.right = ""; menu.style.top = ""; menu.style.bottom = "";
+    menu.classList.remove("hidden");
+    const wRect = wrap.getBoundingClientRect();
+    const mRect = menu.getBoundingClientRect();
+    if (wRect.left + mRect.width > window.innerWidth) menu.style.right = "0px";
+    if (wRect.bottom + mRect.height > window.innerHeight) { menu.style.top = "auto"; menu.style.bottom = "100%"; menu.style.marginTop = "0"; menu.style.marginBottom = "4px"; }
+  }
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (menu.classList.contains("hidden")) openMenu(); else closeMenu();
+  });
+  document.addEventListener("click", (e) => { if (!wrap.contains(e.target)) closeMenu(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+  select.addEventListener("change", syncLabel); // nếu nơi khác đổi select.value trực tiếp, nhãn vẫn đồng bộ
+
+  select.replaceWith(wrap);
+  wrap.append(select, btn, menu);
+  syncLabel();
+}
+[el.ieltsTopic, el.ieltsKind, el.maKind].forEach(enhanceSelect);
 
 let segments = [];
 let abortController = null;
@@ -828,106 +897,9 @@ async function refreshVocabCount() {
 }
 
 // ---------- Công cụ Tra cứu ----------
-// ---------- Phát âm ----------
-// Ưu tiên audio thật từ từ điển; không có thì giọng trình duyệt; nếu trình duyệt
-// chặn (Brave Shields) hoặc máy không có giọng tiếng Anh -> dùng TTS của OpenAI.
-async function playAudio(url, fallbackText) {
-  if (url) {
-    try {
-      await new Audio(url).play();
-      return;
-    } catch { /* rơi xuống TTS */ }
-  }
-  await speakEn(fallbackText);
-}
-
-// Chờ danh sách giọng nạp xong (lần gọi đầu thường rỗng).
-function loadVoices() {
-  return new Promise((resolve) => {
-    const now = speechSynthesis.getVoices();
-    if (now && now.length) return resolve(now);
-    const timer = setTimeout(() => resolve(speechSynthesis.getVoices() || []), 1200);
-    speechSynthesis.addEventListener(
-      "voiceschanged",
-      () => { clearTimeout(timer); resolve(speechSynthesis.getVoices() || []); },
-      { once: true }
-    );
-  });
-}
-
-function speakBrowser(text) {
-  return new Promise(async (resolve, reject) => {
-    if (!("speechSynthesis" in window)) return reject(new Error("Trình duyệt không hỗ trợ giọng máy."));
-    const voices = await loadVoices();
-    const en = voices.filter((v) => /^en/i.test(v.lang));
-    if (!voices.length) return reject(new Error("Không có giọng đọc nào (có thể bị Brave Shields chặn)."));
-    if (!en.length) return reject(new Error("Máy chưa cài giọng tiếng Anh."));
-
-    try { if (speechSynthesis.speaking) speechSynthesis.cancel(); } catch {}
-    const u = new SpeechSynthesisUtterance(String(text));
-    u.voice = en[0];
-    u.lang = en[0].lang || "en-US";
-    u.rate = 0.9;
-    let started = false;
-    u.onstart = () => { started = true; };
-    u.onend = () => resolve();
-    u.onerror = (e) => reject(new Error("Giọng máy lỗi: " + (e.error || "không rõ")));
-    speechSynthesis.speak(u);
-    // Không phát ra tiếng sau 1.5s -> coi như bị chặn.
-    setTimeout(() => { if (!started) reject(new Error("Trình duyệt không phát được giọng máy.")); }, 1500);
-  });
-}
-
-// TTS qua API (dùng chính API key đã cấu hình).
-async function speakOpenAI(text, cfg) {
-  const res = await fetch(`${cfg.baseUrl}/audio/speech`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${cfg.apiKey}` },
-    body: JSON.stringify({
-      model: cfg.ttsModel || "tts-1",
-      voice: cfg.ttsVoice || "alloy",
-      input: String(text).slice(0, 500),
-    }),
-  });
-  if (!res.ok) {
-    let d = "";
-    try { d = (await res.json())?.error?.message; } catch {}
-    throw new Error(`TTS API ${res.status}: ${d || res.statusText}`);
-  }
-  const blobUrl = URL.createObjectURL(await res.blob());
-  const audio = new Audio(blobUrl);
-  audio.onended = () => URL.revokeObjectURL(blobUrl);
-  await audio.play();
-}
-
-async function speakEn(text) {
-  if (!text) return;
-  const cfg = await getConfig();
-  const provider = cfg.ttsProvider || "auto";
-
-  if (provider !== "openai") {
-    try {
-      await speakBrowser(text);
-      return;
-    } catch (err) {
-      if (provider === "browser") {
-        setStatus("🔇 " + err.message + " → Thử tắt Brave Shields cho trang này, hoặc đổi TTS sang OpenAI trong ⚙️.", true);
-        return;
-      }
-      console.warn("TTS trình duyệt lỗi, chuyển sang OpenAI:", err.message);
-    }
-  }
-
-  if (!cfg.apiKey) {
-    setStatus("🔇 Không phát âm được: trình duyệt chặn giọng máy và chưa có API key cho TTS (⚙️).", true);
-    return;
-  }
-  try {
-    await speakOpenAI(text, cfg);
-  } catch (err) {
-    setStatus("🔇 Không phát âm được: " + err.message, true);
-  }
-}
+// Phát âm (playAudio/speakEn/...) nay nằm trong tts.js — dùng chung với gate.js.
+// Gán hook lỗi riêng cho side panel: hiện lên thanh trạng thái thay vì chỉ log.
+ttsOnError = (msg) => setStatus(msg, true);
 
 // Thêm thủ công một mục (từ/collocation/idiom/tục ngữ). Nghĩa để trống -> AI tự tra.
 el.maAdd.addEventListener("click", async () => {
@@ -1328,6 +1300,13 @@ async function renderStats() {
     ? `Phát hiện ${dupGroups.length} nhóm trùng lặp: ${dupGroups.slice(0, 3).map((g) => g.map((v) => `"${v.term}"`).join(" ↔ ")).join(" · ")}${dupGroups.length > 3 ? "…" : ""}`
     : "Không có nhóm nào trùng lặp gần giống.";
 
+  // Mục CHƯA CÓ nghĩa (tra lỗi giữa chừng / thêm thủ công rồi bỏ dở).
+  const missing = list.filter(isMissingMeaning);
+  el.stMissingBtn.disabled = missing.length === 0;
+  el.stMissingInfo.textContent = missing.length
+    ? `${missing.length} mục chưa có nghĩa: ${missing.slice(0, 5).map((v) => `"${v.term}"`).join(", ")}${missing.length > 5 ? "…" : ""}`
+    : "Mọi mục đều đã có nghĩa.";
+
   // Sổ lỗi sai
   const allMistakes = await getMistakes();
   const dueM = await dueMistakes();
@@ -1519,15 +1498,103 @@ function isSuspectAutoVocab(v) {
   return /Sai khi lướt MXH/i.test(v.source || "") && !isCleanLexicalItem(term);
 }
 
+// ---------- Xem trước + chọn từng mục (dùng chung cho 4 loại dọn dẹp) ----------
+// BUG/THIẾU TÍNH NĂNG đã sửa: trước đây cả 4 nút dùng confirm() gốc của trình
+// duyệt — liệt kê hết trong một hộp thoại chữ thô, bắt đồng ý/từ chối TOÀN BỘ
+// cùng lúc, không chọn được từng mục, và "Gộp trùng lặp" (thao tác PHÁ HUỶ, xoá
+// hẳn các mục bị gộp) mà lỡ bấm OK thì không có đường lùi. Giờ mở một danh sách
+// thật trong trang, mỗi mục một checkbox (mặc định tick hết), chỉ áp dụng cho
+// phần đã chọn, và có nút Hoàn tác sau khi áp dụng.
+let cleanupSelected = new Set();
+function openCleanupModal({ title, items, onApply }) {
+  el.cleanupTitle.textContent = title;
+  cleanupSelected = new Set(items.map((it) => it.id));
+  el.cleanupList.innerHTML = "";
+  items.forEach((it) => {
+    const row = document.createElement("label");
+    row.className = "cleanup-item";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = true;
+    cb.addEventListener("change", () => {
+      if (cb.checked) cleanupSelected.add(it.id);
+      else cleanupSelected.delete(it.id);
+      syncCleanupControls(items.length);
+    });
+    const txt = document.createElement("span");
+    txt.className = "cleanup-item-txt";
+    txt.innerHTML = `<b>${escapeHtml(it.label)}</b>` + (it.sub ? `<span>${escapeHtml(it.sub)}</span>` : "");
+    row.append(cb, txt);
+    el.cleanupList.appendChild(row);
+  });
+  syncCleanupControls(items.length);
+
+  el.cleanupToggleAll.onclick = () => {
+    const selectAll = cleanupSelected.size < items.length;
+    cleanupSelected = new Set(selectAll ? items.map((it) => it.id) : []);
+    el.cleanupList.querySelectorAll("input[type=checkbox]").forEach((cb) => { cb.checked = selectAll; });
+    syncCleanupControls(items.length);
+  };
+  el.cleanupApply.onclick = async () => {
+    const ids = [...cleanupSelected];
+    if (!ids.length) return;
+    el.cleanupModal.classList.add("hidden");
+    await onApply(ids);
+  };
+  el.cleanupModal.classList.remove("hidden");
+}
+function syncCleanupControls(total) {
+  el.cleanupApply.textContent = `Áp dụng (${cleanupSelected.size})`;
+  el.cleanupApply.disabled = cleanupSelected.size === 0;
+  el.cleanupToggleAll.textContent = cleanupSelected.size >= total ? "Bỏ chọn tất cả" : "Chọn tất cả";
+}
+function closeCleanupModal() { el.cleanupModal.classList.add("hidden"); }
+el.cleanupClose.addEventListener("click", closeCleanupModal);
+el.cleanupCancel.addEventListener("click", closeCleanupModal);
+el.cleanupModal.addEventListener("click", (e) => { if (e.target === el.cleanupModal) closeCleanupModal(); });
+
+// Thanh "Hoàn tác" nổi cạnh khối Dọn từ đáng ngờ — snapshot TOÀN BỘ kho trước
+// khi áp dụng, nên hoàn tác đúng ngay cả với thao tác phá huỷ (gộp trùng lặp).
+let cleanupUndoTimer = null;
+function showCleanupUndo(snapshot, message) {
+  clearTimeout(cleanupUndoTimer);
+  el.stCleanupUndo.innerHTML = "";
+  el.stCleanupUndo.classList.remove("hidden");
+  const txt = document.createElement("span");
+  txt.textContent = message;
+  const undoBtn = document.createElement("button");
+  undoBtn.type = "button";
+  undoBtn.className = "cleanup-undo-btn";
+  undoBtn.textContent = "Hoàn tác";
+  undoBtn.addEventListener("click", async () => {
+    clearTimeout(cleanupUndoTimer);
+    await restoreVocabList(snapshot);
+    el.stCleanupUndo.classList.add("hidden");
+    await renderStats();
+    refreshVocabCount();
+    renderVocab();
+    setStatus("✓ Đã hoàn tác.");
+  });
+  el.stCleanupUndo.append(txt, undoBtn);
+  cleanupUndoTimer = setTimeout(() => el.stCleanupUndo.classList.add("hidden"), 20000);
+}
+
 el.stCleanBtn.addEventListener("click", async () => {
   const suspects = (await getVocab()).filter(isSuspectAutoVocab);
   if (!suspects.length) return;
-  if (!confirm(`Xoá ${suspects.length} mục nghi là rác?\n\n${suspects.map((v) => "• " + v.term).join("\n")}`)) return;
-  for (const v of suspects) await removeVocab(v.term);
-  await renderStats();
-  refreshVocabCount();
-  renderVocab();
-  setStatus(`✓ Đã dọn ${suspects.length} mục.`);
+  openCleanupModal({
+    title: `Xoá ${suspects.length} mục nghi là rác`,
+    items: suspects.map((v) => ({ id: v.term, label: v.term, sub: "Xoá khỏi kho" })),
+    onApply: async (ids) => {
+      const snapshot = await getVocab();
+      const idSet = new Set(ids);
+      for (const v of suspects) if (idSet.has(v.term)) await removeVocab(v.term);
+      await renderStats();
+      refreshVocabCount();
+      renderVocab();
+      showCleanupUndo(snapshot, `✓ Đã xoá ${ids.length} mục.`);
+    },
+  });
 });
 
 // Mục lưu nhầm dạng đã chia ("knocked back") -> đổi tên về dạng từ điển.
@@ -1543,25 +1610,67 @@ async function inflectedVocab() {
 el.stBaseBtn.addEventListener("click", async () => {
   const items = await inflectedVocab();
   if (!items.length) return;
-  if (!confirm(`Đưa ${items.length} mục về dạng gốc (giữ nguyên tiến độ ôn)?\n\n${items.map((x) => `• ${x.v.term} → ${x.base}`).join("\n")}`)) return;
-  for (const x of items) await renameVocab(x.v.term, x.base);
-  await renderStats();
-  renderVocab();
-  setStatus(`✓ Đã chuẩn hoá ${items.length} mục về dạng gốc.`);
+  openCleanupModal({
+    title: `Đưa ${items.length} mục về dạng gốc`,
+    items: items.map((x) => ({ id: x.v.term, label: x.v.term, sub: `→ ${x.base}` })),
+    onApply: async (ids) => {
+      const snapshot = await getVocab();
+      const idSet = new Set(ids);
+      for (const x of items) if (idSet.has(x.v.term)) await renameVocab(x.v.term, x.base);
+      await renderStats();
+      renderVocab();
+      showCleanupUndo(snapshot, `✓ Đã chuẩn hoá ${ids.length} mục về dạng gốc.`);
+    },
+  });
 });
 
 el.stDupBtn.addEventListener("click", async () => {
   const groups = findNearDuplicateGroups(await getVocab());
   if (!groups.length) return;
-  const preview = groups
-    .map((g) => "• " + g.map((v) => v.term).join("  ↔  "))
-    .join("\n");
-  if (!confirm(`Gộp ${groups.length} nhóm trùng lặp gần giống (giữ mục có nhiều lượt ôn nhất)?\n\n${preview}`)) return;
-  for (const g of groups) await mergeDuplicateGroup(g.map((v) => v.term));
-  await renderStats();
-  refreshVocabCount();
-  renderVocab();
-  setStatus(`✓ Đã gộp ${groups.length} nhóm trùng lặp.`);
+  openCleanupModal({
+    title: `Gộp ${groups.length} nhóm trùng lặp gần giống`,
+    items: groups.map((g, i) => ({ id: String(i), label: g.map((v) => v.term).join("  ↔  "), sub: "Giữ mục có nhiều lượt ôn nhất" })),
+    onApply: async (ids) => {
+      const snapshot = await getVocab();
+      const idSet = new Set(ids);
+      for (let i = 0; i < groups.length; i++) if (idSet.has(String(i))) await mergeDuplicateGroup(groups[i].map((v) => v.term));
+      await renderStats();
+      refreshVocabCount();
+      renderVocab();
+      showCleanupUndo(snapshot, `✓ Đã gộp ${ids.length} nhóm trùng lặp.`);
+    },
+  });
+});
+
+// Mục chưa có nghĩa -> tra bù bằng đúng lượt gọi gộp (lookupMany) đã dùng ở
+// nơi khác trong app, không tốn thêm cơ chế mới.
+el.stMissingBtn.addEventListener("click", async () => {
+  const missing = (await getVocab()).filter(isMissingMeaning);
+  if (!missing.length) return;
+  openCleanupModal({
+    title: `Tra nghĩa cho ${missing.length} mục còn thiếu`,
+    items: missing.map((v) => ({ id: v.term, label: v.term, sub: v.context ? `Ngữ cảnh: ${v.context}` : "" })),
+    onApply: async (ids) => {
+      const snapshot = await getVocab();
+      const idSet = new Set(ids);
+      const targets = missing.filter((v) => idSet.has(v.term));
+      const r = await chrome.runtime.sendMessage({
+        type: "lookupMany",
+        items: targets.map((v) => ({ term: v.term, context: v.context || "" })),
+      });
+      const meanings = r?.ok ? r.meanings || {} : {};
+      let done = 0;
+      for (const v of targets) {
+        const mean = meanings[v.term.toLowerCase()];
+        if (mean) { await addVocab({ term: v.term, meaning: mean }); done++; }
+      }
+      await renderStats();
+      renderVocab();
+      showCleanupUndo(snapshot, done < targets.length
+        ? `✓ Đã tra được ${done}/${targets.length} mục (số còn lại tra lỗi — thử lại sau).`
+        : `✓ Đã tra nghĩa cho ${done} mục.`);
+    },
+  });
 });
 
 el.stMistakeBtn.addEventListener("click", async () => {
@@ -1641,7 +1750,10 @@ el.quizStart.addEventListener("click", () => {
   if (!quizPending) return;
   const active = el.quizCountOpts.querySelector(".quiz-count.active");
   const n = Math.max(1, Math.min(parseInt(active?.dataset.n, 10) || 1, quizPending.max));
-  quiz = { questions: quizPending.build(n), idx: 0, correct: 0, wrong: [], title: quizPending.title };
+  // Hàng đợi kiểu màn chặn (gate.js): sai -> đẩy xuống cuối, làm lại tới khi
+  // đúng; hết bài chỉ khi hàng đợi rỗng, không phải khi đi hết N câu cố định.
+  const questions = quizPending.build(n);
+  quiz = { queue: questions, total: questions.length, solved: 0, wrong: [], title: quizPending.title };
   el.quizSetup.classList.add("hidden");
   el.quizPanel.classList.remove("hidden");
   showQuizQuestion();
@@ -1658,11 +1770,11 @@ function makeQuestion(word, list) {
 }
 
 function showQuizQuestion() {
-  const q = quiz.questions[quiz.idx];
+  const q = quiz.queue[0];
 
   // Câu từ SỔ LỖI (ngữ pháp/IELTS) — không gắn với từ vựng.
   if (q.type === "bank") {
-    el.quizProgress.textContent = `Câu ${quiz.idx + 1}/${quiz.questions.length} · Đúng ${quiz.correct}`;
+    el.quizProgress.textContent = `Đã thuộc ${quiz.solved}/${quiz.total} · còn ${quiz.queue.length} câu`;
     el.quizType.textContent = "🩹 Câu từng sai · " + (q.bank.kind === "ielts" ? "IELTS" : "Ngữ pháp");
     el.quizQ.textContent = q.bank.q;
     el.quizFeedback.textContent = "";
@@ -1682,7 +1794,7 @@ function showQuizQuestion() {
   }
 
   const w = q.word;
-  el.quizProgress.textContent = `Câu ${quiz.idx + 1}/${quiz.questions.length} · Đúng ${quiz.correct}`;
+  el.quizProgress.textContent = `Đã thuộc ${quiz.solved}/${quiz.total} · còn ${quiz.queue.length} câu`;
   el.quizType.textContent = QUIZ_TYPE_LABEL[q.type];
   el.quizFeedback.textContent = "";
   el.quizFeedback.className = "quiz-feedback";
@@ -1754,15 +1866,19 @@ function showQuizQuestion() {
 }
 
 async function answerMC(opt, btn) {
-  const q = quiz.questions[quiz.idx];
+  const q = quiz.queue[0];
   [...el.quizOptions.children].forEach((b) => (b.disabled = true));
 
-  // Câu từ sổ lỗi: đúng -> giãn lịch (đủ 3 lần thì xoá), sai -> mai kiểm tra lại.
+  // Câu từ sổ lỗi: đúng -> giãn lịch (đủ 3 lần thì xoá), sai -> mai kiểm tra lại
+  // TRONG SỔ LỖI (dài hạn) — độc lập với việc câu này bị đẩy xuống cuối để làm
+  // lại NGAY trong phiên hiện tại (giống cơ chế màn chặn buổi sáng: sai thì
+  // làm lại, thuộc rồi mới thôi).
   if (q.type === "bank") {
     const correctText = q.bank.o[q.bank.a];
     if (opt.correct) {
       btn.classList.add("correct");
-      quiz.correct++;
+      quiz.solved++;
+      quiz.queue.shift();
       el.quizFeedback.className = "quiz-feedback ok";
       el.quizFeedback.innerHTML = "✓ Chính xác!" + (q.bank.e ? `<br><small>${escapeHtml(q.bank.e)}</small>` : "");
     } else {
@@ -1770,7 +1886,8 @@ async function answerMC(opt, btn) {
       [...el.quizOptions.children].forEach((b) => { if (b.textContent === correctText) b.classList.add("correct"); });
       el.quizFeedback.className = "quiz-feedback no";
       el.quizFeedback.innerHTML = `✗ Đáp án: <b>${escapeHtml(correctText)}</b>` + (q.bank.e ? `<br><small>${escapeHtml(q.bank.e)}</small>` : "");
-      quiz.wrong.push({ term: q.bank.q, meaning: correctText });
+      if (!quiz.wrong.some((x) => x.term === q.bank.q)) quiz.wrong.push({ term: q.bank.q, meaning: correctText });
+      quiz.queue.push(quiz.queue.shift()); // làm lại câu này ở cuối hàng đợi
     }
     await markMistakeResult(q.bank.id, opt.correct);
     el.quizNext.classList.remove("hidden");
@@ -1781,27 +1898,38 @@ async function answerMC(opt, btn) {
   const correctText = q.type === "w2m" ? w.meaning : w.term;
   if (opt.correct) {
     btn.classList.add("correct");
-    quiz.correct++;
+    quiz.solved++;
+    quiz.queue.shift();
     feedbackOK();
     await reviewVocab(w.term, true, true); // trắc nghiệm = nhận diện
   } else {
     btn.classList.add("wrong");
     [...el.quizOptions.children].forEach((b) => { if (b.textContent === correctText) b.classList.add("correct"); });
     feedbackNo(w);
-    quiz.wrong.push(w);
+    if (!quiz.wrong.some((x) => x.term === w.term)) quiz.wrong.push(w);
+    quiz.queue.push(quiz.queue.shift()); // làm lại từ này ở cuối hàng đợi
     await reviewVocab(w.term, false);
   }
   el.quizNext.classList.remove("hidden");
 }
 
 el.quizSubmit.addEventListener("click", async () => {
-  const q = quiz.questions[quiz.idx];
+  const q = quiz.queue[0];
   const w = q.word;
   const ans = normAnswer(el.quizInput.value);
   el.quizInput.disabled = true;
   el.quizSubmit.classList.add("hidden");
-  if (ans && sameAnswerSp(el.quizInput.value, w.term)) { quiz.correct++; feedbackOK(); await reviewVocab(w.term, true); }
-  else { feedbackNo(w); quiz.wrong.push(w); await reviewVocab(w.term, false); }
+  if (ans && sameAnswerSp(el.quizInput.value, w.term)) {
+    quiz.solved++;
+    quiz.queue.shift();
+    feedbackOK();
+    await reviewVocab(w.term, true);
+  } else {
+    feedbackNo(w);
+    if (!quiz.wrong.some((x) => x.term === w.term)) quiz.wrong.push(w);
+    quiz.queue.push(quiz.queue.shift()); // làm lại từ này ở cuối hàng đợi
+    await reviewVocab(w.term, false);
+  }
   el.quizNext.classList.remove("hidden");
 });
 el.quizInput.addEventListener("keydown", (e) => {
@@ -1815,18 +1943,21 @@ function feedbackNo(w) {
 }
 
 el.quizNext.addEventListener("click", () => {
-  quiz.idx++;
-  if (quiz.idx >= quiz.questions.length) finishQuiz();
+  if (!quiz.queue.length) finishQuiz();
   else showQuizQuestion();
 });
 
 async function finishQuiz() {
   el.quizPanel.classList.add("hidden");
-  const total = quiz.questions.length;
-  const pct = Math.round((quiz.correct / total) * 100);
-  let html = `<div class="qr-score">${quiz.correct}/${total} <span>(${pct}%)</span></div>`;
+  const total = quiz.total;
+  // Hàng đợi chỉ rỗng khi TẤT CẢ đã đúng ít nhất 1 lần (giống màn chặn buổi
+  // sáng) — nên "điểm số" giờ là số từ đúng NGAY LẦN ĐẦU (không cần làm lại),
+  // không phải correct/total kiểu cũ (vốn luôn là 100% khi hàng đợi đã rỗng).
+  const firstTry = total - quiz.wrong.length;
+  const pct = Math.round((firstTry / total) * 100);
+  let html = `<div class="qr-score">${firstTry}/${total} <span>(${pct}% thuộc ngay lần đầu)</span></div>`;
   if (quiz.wrong.length) {
-    html += '<div class="qr-title">Cần ôn lại:</div><ul class="qr-list">' +
+    html += '<div class="qr-title">Đã sai lúc đầu (đã làm lại tới khi đúng):</div><ul class="qr-list">' +
       quiz.wrong.map((w) => `<li><b>${escapeHtml(w.term)}</b> — ${escapeHtml(w.meaning || "")}</li>`).join("") + "</ul>";
   } else {
     html += '<div class="qr-perfect">Tuyệt vời! 🎉</div>';
@@ -2724,7 +2855,6 @@ el.journalModal.addEventListener("click", (e) => { if (e.target === el.journalMo
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!el.journalModal.classList.contains("hidden")) closeJournalModal();
-  else if (!el.todoModal.classList.contains("hidden")) el.todoModal.classList.add("hidden");
   else if (!el.statsModal.classList.contains("hidden")) el.statsModal.classList.add("hidden");
 });
 el.jrPrev.addEventListener("click", async () => {
@@ -2790,63 +2920,24 @@ el.journalFix.addEventListener("click", async () => {
 });
 
 // ============================================================
-// VIỆC CẦN LÀM — tự hiện mỗi ngày một lần.
+// VIỆC CẦN LÀM — giờ là một TRANG RIÊNG (todo-board.html), không phải modal
+// trong side panel nữa. Side panel quá hẹp cho bảng kanban 3 cột thoải mái;
+// sửa CSS modal mấy lần cũng không đủ vì panel thật sự hẹp — trang riêng thì
+// rộng bao nhiêu tuỳ cửa sổ trình duyệt, không còn giới hạn nào cả.
 // ============================================================
-el.openTodo.addEventListener("click", () => openTodoModal());
-el.tdClose.addEventListener("click", () => el.todoModal.classList.add("hidden"));
-el.todoDone.addEventListener("click", () => el.todoModal.classList.add("hidden"));
-el.todoModal.addEventListener("click", (e) => { if (e.target === el.todoModal) el.todoModal.classList.add("hidden"); });
-
-async function openTodoModal() {
-  el.todoModal.classList.remove("hidden");
-  await renderTodos();
-  await markTodoShownToday();
-  el.todoInput.focus();
+function openTodoBoard() {
+  chrome.tabs.create({ url: chrome.runtime.getURL("pages/todo-board/todo-board.html") });
 }
-
-el.todoAdd.addEventListener("click", addTodoFromInput);
-el.todoInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addTodoFromInput(); } });
-async function addTodoFromInput() {
-  const text = el.todoInput.value.trim();
-  if (!text) return;
-  await addTodo(text);
-  el.todoInput.value = "";
-  renderTodos();
-}
-el.todoClearDone.addEventListener("click", async () => { await clearDoneTodos(); renderTodos(); });
-
-async function renderTodos() {
-  const list = await getTodos();
-  el.todoList.innerHTML = "";
-  if (!list.length) { el.todoList.innerHTML = '<p class="empty">Chưa có việc nào. Thêm việc cho hôm nay nhé!</p>'; return; }
-  const today = todayStr();
-  list.forEach((t) => {
-    const row = document.createElement("div");
-    row.className = "td-item" + (t.done ? " done" : "");
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.checked = !!t.done;
-    cb.addEventListener("change", async () => { await toggleTodo(t.id); renderTodos(); });
-    const txt = document.createElement("span");
-    txt.className = "td-text";
-    txt.textContent = t.text;
-    const tag = document.createElement("span");
-    tag.className = "td-tag";
-    if (t.date && t.date !== today) tag.textContent = "từ " + t.date; // việc tồn từ hôm trước
-    const del = document.createElement("button");
-    del.className = "note-act";
-    del.textContent = "✕";
-    del.addEventListener("click", async () => { await deleteTodo(t.id); renderTodos(); });
-    row.append(cb, txt, tag, del);
-    el.todoList.appendChild(row);
-  });
-}
+el.openTodo.addEventListener("click", openTodoBoard);
+el.todoQuickBtn.addEventListener("click", openTodoBoard); // truy cập nhanh từ bất kỳ tab nào, không cần vào Sổ tay trước
 
 // Khi mở panel: bắt buộc nhật ký (nếu tới giờ / còn nợ), rồi tới việc cần làm.
 async function dailyRoutine() {
   const req = await computeRequiredDates();
   if (req.length) { await openJournalModal(); return; }
-  if (await shouldShowTodoToday()) await openTodoModal();
+  // Mở trang riêng tự đánh dấu markTodoShownToday() khi tải xong (xem
+  // todo-board.js) nên không cần gọi lại ở đây.
+  if (await shouldShowTodoToday()) openTodoBoard();
 }
 
 // ---------- Tiện ích ----------

@@ -1,21 +1,44 @@
+/* Bảng màu lấy cảm hứng từ design system Figma (xem VoltAgent/awesome-claude-design):
+   nút chính vẫn đơn sắc, nhưng có thêm "color block" (lime/lilac/cream/mint/
+   pink/coral) tô nền cho từng khối để phân biệt, và bóng đổ rõ hơn cho độ sâu. */
 :root {
   --bg: #ffffff;
-  --fg: #1a1a1a;
+  --fg: #000000;
   --muted: #6b7280;
-  --border: #e5e7eb;
-  --surface: #f3f4f6;
-  --card: #f9fafb;
-  --primary: #2563eb;
-  --ok: #15803d;
-  --error: #b91c1c;
+  --border: #e6e6e6;
+  --surface: #f7f7f5;
+  --card: #ffffff;
+  --primary: #000000;
+  --primary-fg: #ffffff;
+  --accent: #ff3d8b;
+  --warning: #f59e0b;
+  --ok: #1ea64a;
+  --error: #ef4444;
+  --block-lime: color-mix(in srgb, #dceeb1 38%, white);
+  --block-lilac: color-mix(in srgb, #c5b0f4 38%, white);
+  --block-cream: color-mix(in srgb, #f4ecd6 55%, white);
+  --block-mint: color-mix(in srgb, #c8e6cd 38%, white);
+  --block-pink: color-mix(in srgb, #efd4d4 42%, white);
+  --block-coral: color-mix(in srgb, #f3c9b6 38%, white);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 @media (prefers-color-scheme: dark) {
   :root {
     /* --ok/--error phải khai báo lại: bản sáng (#16a34a/#dc2626) trên nền tối chỉ
      đạt ~3.2:1, mà đó lại là màu của dòng "✗ Đáp án đúng" — chữ quan trọng nhất. */
-  --ok: #4ade80; --error: #f87171;
-  --bg: #1a1a1a; --fg: #e7e7ea; --muted: #9ca3af; --border: #333;
-    --surface: #202022; --card: #242426; --primary: #3b82f6;
+  --ok: #4ade80; --error: #f87171; --warning: #fbbf24;
+  --bg: #0e0e10; --fg: #f2f2f3; --muted: #9ca3af; --border: #2a2a2e;
+    --surface: #202024; --card: #19191b;
+    /* Đảo cực --primary: nút chính SÁNG màu trên nền tối, không phải đen-trên-đen. */
+    --primary: #f2f2f3; --primary-fg: #111111;
+    --accent: #ff5c9a;
+    --block-lime: color-mix(in srgb, #dceeb1 20%, #19191b);
+    --block-lilac: color-mix(in srgb, #c5b0f4 22%, #19191b);
+    --block-cream: color-mix(in srgb, #f4ecd6 18%, #19191b);
+    --block-mint: color-mix(in srgb, #c8e6cd 20%, #19191b);
+    --block-pink: color-mix(in srgb, #efd4d4 18%, #19191b);
+    --block-coral: color-mix(in srgb, #f3c9b6 20%, #19191b);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
   }
 }
 * { box-sizing: border-box; }
@@ -35,7 +58,7 @@ body {
 
 .gate { width: 100%; max-width: 640px; }
 .g-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.g-head h1 { font-size: 24px; margin: 0 0 4px; }
+.g-head h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 4px; }
 .g-sub { margin: 0; color: var(--muted); font-size: 14px; }
 .g-skip {
   border: 1px solid var(--border); background: transparent; color: var(--muted);
@@ -49,7 +72,7 @@ body {
 
 .g-card {
   border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px;
-  background: var(--card); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: var(--card); box-shadow: var(--shadow-md);
 }
 .g-type {
   font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
@@ -107,7 +130,7 @@ body {
   transition: border-color 0.15s, background 0.15s;
 }
 .g-count-opt:hover { border-color: var(--primary); }
-.g-count-opt.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.g-count-opt.active { background: var(--primary); border-color: var(--primary); color: var(--primary-fg); }
 #gStartBtn { width: 100%; }
 
 .g-rem-done { color: #16a34a; font-weight: 700; margin-top: 12px; }
@@ -119,17 +142,18 @@ body {
   background: #dc2626; color: #fff; padding: 2px 8px; border-radius: 10px; margin-right: 6px;
 }
 .g-lesson-body {
-  max-height: 52vh; overflow-y: auto; font-size: 14.5px; line-height: 1.7;
-  border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: var(--bg);
+  max-height: 52vh; overflow-y: auto; font-size: 14.5px; line-height: 1.8;
+  border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: var(--block-cream);
 }
-.g-lesson-body h4 { font-size: 14px; margin: 14px 0 4px; color: var(--primary); }
-.g-lesson-body ul { margin: 6px 0; padding-left: 20px; }
-.g-lesson-body li { margin: 4px 0; }
-.g-lesson-body p { margin: 7px 0; }
+.g-lesson-body h4 { font-size: 14px; margin: 16px 0 5px; color: var(--primary); }
+.g-lesson-body ul { margin: 8px 0; padding-left: 20px; }
+.g-lesson-body li { margin: 6px 0; }
+.g-lesson-body p { margin: 9px 0; }
+.g-lesson-body b { font-weight: 600; }
 .g-lesson-body table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 8px 0; }
 .g-lesson-body th, .g-lesson-body td { border: 1px solid var(--border); padding: 5px 8px; text-align: left; vertical-align: top; }
 .g-lesson-body th { background: var(--surface); }
-.g-lesson-body .gr-ex { display: block; padding: 6px 10px; margin: 6px 0; background: var(--surface); border-radius: 6px; }
+.g-lesson-body .gr-ex { display: block; padding: 8px 10px; margin: 8px 0; background: var(--surface); border-radius: 6px; }
 .g-lesson-body .gr-formula { font-family: ui-monospace, Menlo, monospace; background: var(--surface); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
 .g-lesson-body .gr-note { font-size: 13px; color: var(--muted); font-style: italic; border-left: 3px solid var(--border); padding-left: 8px; }
 .g-lesson-body .gr-scroll { overflow-x: auto; }
@@ -163,6 +187,29 @@ body {
   text-decoration: underline; text-underline-offset: 3px;
 }
 .g-fix:hover { color: var(--primary); }
+
+/* Nút mở gợi ý quy tắc/nghĩa — giấu mặc định, chỉ hiện khi bấm (người học tự
+   thử trước, không bị mớm sẵn ngay từ đầu). */
+.g-reveal-hint {
+  display: block; margin-top: 10px; padding: 5px 12px; border: 1px dashed var(--border);
+  border-radius: 999px; background: none; color: var(--muted); font: inherit; font-size: 12.5px; cursor: pointer;
+}
+.g-reveal-hint:hover { color: var(--primary); border-color: var(--primary); }
+
+/* Nghe & gõ lại — luyện Listening, thay cho hiện sẵn câu đề bài. */
+.g-listen {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 22px 16px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.g-listen-play { font-size: 16px; padding: 12px 28px; }
+.g-listen-note { font-size: 13px; color: var(--muted); }
+.g-listen-reveal {
+  display: block; margin: 10px auto 0; padding: 0; border: 0; background: none;
+  color: var(--muted); font: inherit; font-size: 12.5px; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.g-listen-reveal:hover { color: var(--primary); }
 .g-mean { font-size: 21px; font-weight: 600; }
 .g-pos { font-size: 13px; color: var(--muted); margin-top: 4px; }
 .g-def { font-size: 14px; color: var(--muted); font-style: italic; margin-top: 6px; }
@@ -201,7 +248,7 @@ body {
   border: 1px solid var(--border); background: var(--bg); color: var(--fg);
   font: inherit; font-size: 15px; padding: 12px 20px; border-radius: 10px; cursor: pointer;
 }
-.g-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+.g-btn.primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); font-weight: 600; }
 #gNext { width: 100%; margin-top: 16px; }
 
 /* Việc cần làm & Nhật ký trong trang chặn */
@@ -214,8 +261,13 @@ body {
 .g-empty { color: var(--muted); font-style: italic; text-align: center; padding: 16px 0; margin: 0; }
 .g-item { display: flex; align-items: center; gap: 10px; padding: 11px 4px; border-bottom: 1px solid var(--border); }
 .g-item.done .g-item-text { text-decoration: line-through; color: var(--muted); }
+.g-item-flag { font-size: 11px; flex-shrink: 0; }
 .g-item-text { flex: 1; font-size: 15px; word-break: break-word; }
-.g-item-tag { font-size: 11px; color: #d97706; white-space: nowrap; }
+.g-item-tag { font-size: 11px; color: var(--warning); white-space: nowrap; }
+.g-item-tag.due-overdue { color: var(--error); font-weight: 600; }
+.g-item-tag.due-today { color: var(--warning); font-weight: 600; }
+.g-item-tag.due-future, .g-item-tag.due-age { color: var(--muted); }
+.g-item-tag.due-done { color: var(--muted); text-decoration: line-through; }
 .g-item-del { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 6px; }
 .g-item-del:hover { background: var(--surface); color: var(--error); }
 #gTodoDone, #gJrSave { width: 100%; margin-top: 8px; }

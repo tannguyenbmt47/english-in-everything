@@ -11,8 +11,8 @@ const { loadFiles } = require("../helpers/sandbox.js");
 
 // gate.js cần vocab.js/translator.js/cache.js nạp trước (dùng chung scope y hệt gate.html).
 const ctx = loadFiles([
-  "config.js", "translator.js", "vocab.js", "notes.js", "todo.js",
-  "mistakes.js", "grammar.js", "ielts.js", "quizbank.js", "cache.js", "gate.js",
+  "shared/config.js", "shared/tts.js", "shared/translator.js", "shared/vocab.js", "shared/notes.js", "shared/todo.js",
+  "shared/mistakes.js", "shared/grammar.js", "shared/ielts.js", "pages/gate/quizbank.js", "shared/cache.js", "pages/gate/gate.js",
 ], { url: "https://example.test/gate.html?mode=morning" });
 
 describe("editDistance / isTypoOf — phân biệt lỗi CHÍNH TẢ với nhầm sang TỪ KHÁC", () => {
@@ -117,5 +117,52 @@ describe("answerHint — gợi ý chữ cái đầu + số ô, không lộ hơn 
     const h = ctx.answerHint("knock back");
     assert.match(h, /^k( _){4}/);
     assert.match(h, /b( _){3}/);
+  });
+});
+
+describe("listenTextFor — chỉ câu điền khuyết ĐƠN GIẢN mới hợp để chuyển thành câu hỏi Nghe", () => {
+  test("câu 1 chỗ trống, đáp án ngắn -> điền sẵn đáp án đúng, trả về câu nghe được", () => {
+    const t = ctx.listenTextFor({ q: "If I ___ you, I would apologise.", o: ["were", "am", "was", "be"], a: 0 });
+    assert.equal(t, "If I were you, I would apologise.");
+  });
+  test("có nhãn dạng bài ('Key word transformation:') -> không hợp để nghe (null)", () => {
+    const t = ctx.listenTextFor({
+      q: "Key word transformation: 'She started working here in 2019.' SINCE -> 'She ___ here since 2019.'",
+      o: ["has worked", "work", "worked", "working"], a: 0,
+    });
+    assert.equal(t, null);
+  });
+  test("có câu trích dẫn kiểu viết lại câu (2 câu) -> không hợp để nghe (null)", () => {
+    const t = ctx.listenTextFor({
+      q: "'It is a fact that prices rose.' -> 'Prices ___ risen.'",
+      o: ["have", "has", "had", "having"], a: 0,
+    });
+    assert.equal(t, null);
+  });
+  test("không có chỗ trống, hoặc nhiều hơn 1 chỗ trống -> null", () => {
+    assert.equal(ctx.listenTextFor({ q: "No blank here.", o: ["a"], a: 0 }), null);
+    assert.equal(ctx.listenTextFor({ q: "___ and ___ both missing.", o: ["a"], a: 0 }), null);
+  });
+  test("đáp án quá dài (>4 từ) -> null (khó bắt bằng tai)", () => {
+    const t = ctx.listenTextFor({ q: "She ___ by the time we arrived.", o: ["had already long since left"], a: 0 });
+    assert.equal(t, null);
+  });
+  test("bỏ chú thích tiếng Việt trong ngoặc — không lẫn giọng khi đọc", () => {
+    const t = ctx.listenTextFor({ q: "The meeting ___ at 9 a.m. tomorrow (lịch cố định).", o: ["starts"], a: 0 });
+    assert.equal(t, "The meeting starts at 9 a.m. tomorrow.");
+  });
+});
+
+describe("hasUndoneTodo — BUG ĐÃ SỬA: màn chặn buổi sáng từng chỉ tính việc TẠO ĐÚNG HÔM NAY, ép người dùng gõ lại việc cũ chưa xong mỗi sáng (sinh dòng trùng)", () => {
+  test("còn việc CHƯA XONG từ HÔM QUA (không phải hôm nay) -> vẫn coi là đã lên kế hoạch, không chặn nữa", () => {
+    const list = [{ id: "1", text: "việc cũ", done: false, date: "2020-01-01" }];
+    assert.equal(ctx.hasUndoneTodo(list), true);
+  });
+  test("mọi việc đều đã xong -> chưa lên kế hoạch, vẫn phải chặn", () => {
+    const list = [{ id: "1", text: "việc cũ", done: true, date: "2020-01-01" }];
+    assert.equal(ctx.hasUndoneTodo(list), false);
+  });
+  test("danh sách rỗng -> chặn", () => {
+    assert.equal(ctx.hasUndoneTodo([]), false);
   });
 });

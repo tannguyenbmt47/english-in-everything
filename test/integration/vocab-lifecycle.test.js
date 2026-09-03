@@ -13,7 +13,7 @@ const { loadFiles } = require("../helpers/sandbox.js");
 
 describe("Vòng đời một từ: lưu -> nhiều lượt ôn đúng liên tiếp -> khoảng cách phải GIÃN RA", () => {
   test("10 lần trả lời đúng ngay lần đầu liên tiếp -> ease tăng dần, không đứng yên, không giảm", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "deteriorate", meaning: "xấu đi, suy giảm" });
 
     const eases = [];
@@ -36,7 +36,7 @@ describe("Vòng đời một từ: lưu -> nhiều lượt ôn đúng liên ti�
   });
 
   test("sai xen kẽ giữa các lần đúng -> ease giảm đúng lúc sai, KHÔNG bị kéo xuống sàn chỉ vì thỉnh thoảng quên", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "cohesion", meaning: "sự gắn kết" });
 
     const seq = [true, true, false, true, true, true, false, true, true, true];
@@ -48,7 +48,7 @@ describe("Vòng đời một từ: lưu -> nhiều lượt ôn đúng liên ti�
   });
 
   test("6 lần sai LIÊN TIẾP mới chạm ngưỡng leech (đổi sang mẹo nhớ), không phải sau vài lần lẻ tẻ", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "ambiguous", meaning: "mơ hồ, không rõ ràng" });
 
     let v;
@@ -63,7 +63,7 @@ describe("Vòng đời một từ: lưu -> nhiều lượt ôn đúng liên ti�
   });
 
   test("renameVocab (nút 'đưa về dạng gốc' / 'sửa chính tả') giữ nguyên tiến độ SM-2 đã tích luỹ", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "knocked back", meaning: "từ chối, khước từ" });
     for (let i = 0; i < 3; i++) await ctx.reviewVocab("knocked back", true, false);
     const before = (await ctx.getVocab()).find((v) => v.term === "knocked back");
@@ -79,7 +79,7 @@ describe("Vòng đời một từ: lưu -> nhiều lượt ôn đúng liên ti�
 
 describe("BUG ĐÃ SỬA — addVocab() chặn trùng lặp gần giống ngay lúc lưu, không chỉ dọn dẹp sau", () => {
   test("lưu 'make decision' rồi lưu 'make a decision' -> gộp vào MỘT mục, không tạo dòng thứ hai", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "make decision", meaning: "đưa ra quyết định" });
     await ctx.addVocab({ term: "make a decision", meaning: "đưa ra quyết định" });
     const list = await ctx.getVocab();
@@ -88,7 +88,7 @@ describe("BUG ĐÃ SỬA — addVocab() chặn trùng lặp gần giống ngay l
   });
 
   test("tiến độ ôn của mục đã có được BẢO TOÀN khi một bản gần giống khác được lưu thêm", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "take exam", meaning: "thi, làm bài kiểm tra" });
     await ctx.reviewVocab("take exam", true, false);
     await ctx.reviewVocab("take exam", true, false);
@@ -101,7 +101,7 @@ describe("BUG ĐÃ SỬA — addVocab() chặn trùng lặp gần giống ngay l
   });
 
   test("mergeDuplicateGroup: gộp dữ liệu CŨ (trước khi có bộ lọc), giữ mục nhiều lượt ôn nhất, bù trường còn thiếu", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     // Mô phỏng 2 mục đã tồn tại song song TRƯỚC khi addVocab() biết chặn trùng
     // (nạp thẳng vào storage, bỏ qua addVocab để giữ đúng kịch bản dữ liệu cũ).
     await ctx.chrome.storage.local.set({
@@ -123,14 +123,14 @@ describe("BUG ĐÃ SỬA — addVocab() chặn trùng lặp gần giống ngay l
 
 describe("dueVocab / memoryLevel — chọn đúng từ cần ôn hôm nay, phân loại đúng mức nhớ", () => {
   test("từ mới thêm luôn đến hạn ngay (nextReview = lúc thêm)", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "advocacy", meaning: "sự ủng hộ, vận động" });
     const due = ctx.dueVocab(await ctx.getVocab());
     assert.equal(due.length, 1);
   });
 
   test("sau khi ôn đúng, từ không còn đến hạn cho tới đúng ngày interval quy định", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "legislation", meaning: "pháp luật, luật pháp" });
     await ctx.reviewVocab("legislation", true, false); // interval >= 1 ngày
     const due = ctx.dueVocab(await ctx.getVocab());
@@ -138,7 +138,7 @@ describe("dueVocab / memoryLevel — chọn đúng từ cần ôn hôm nay, phâ
   });
 
   test("memoryLevel tăng dần đúng theo mốc ngày: 0 (chưa học) -> 1 (<3 ngày) -> ... theo interval hiện tại", async () => {
-    const ctx = loadFiles(["config.js", "cache.js", "vocab.js"]);
+    const ctx = loadFiles(["shared/config.js", "shared/cache.js", "shared/vocab.js"]);
     await ctx.addVocab({ term: "residential", meaning: "thuộc khu dân cư" });
     let v = (await ctx.getVocab())[0];
     assert.equal(ctx.memoryLevel(v), 0, "chưa ôn lần nào -> mức 0");

@@ -1,5 +1,8 @@
 /* Giao diện nổi trên trang web bất kỳ. Dùng tiền tố pvt- và z-index cao để
-   tránh xung đột với style của trang. */
+   tránh xung đột với style của trang. Màu hard-code (không dùng biến CSS) có
+   chủ đích: tránh lẫn với style của trang chủ khi nổi lên trang bất kỳ. Bảng
+   màu lấy cảm hứng từ design system Figma (đơn sắc đen ở lớp hành động + màu
+   block cho khối tiêu đề popup), đồng bộ với sidepanel/gate/options. */
 .pvt-bar,
 .pvt-pop,
 .pvt-toast {
@@ -8,7 +11,7 @@
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 13px;
   line-height: 1.5;
-  color: #1a1a1a;
+  color: #111111;
   box-sizing: border-box;
 }
 
@@ -16,7 +19,7 @@
   display: flex;
   gap: 2px;
   padding: 3px;
-  background: #1f2937;
+  background: #111111;
   border-radius: 8px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
@@ -38,10 +41,10 @@
   min-height: 90px;
   max-width: 92vw;
   max-height: 80vh;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.22);
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   resize: both;
   display: flex;
@@ -53,7 +56,7 @@
   justify-content: space-between;
   gap: 8px;
   padding: 8px 12px;
-  background: #f3f4f6;
+  background: #c5b0f4;
   font-size: 12.5px;
   flex-shrink: 0;
   cursor: move;
@@ -64,23 +67,25 @@
   background: transparent;
   cursor: pointer;
   font-size: 14px;
-  color: #6b7280;
+  color: #111111;
+  opacity: 0.6;
   line-height: 1;
 }
+.pvt-close:hover { opacity: 1; }
 .pvt-body { padding: 10px 12px; white-space: pre-wrap; word-break: break-word; overflow: auto; flex: 1; }
 .pvt-dim { color: #9ca3af; font-style: italic; }
-.pvt-err { color: #dc2626; }
+.pvt-err { color: #ef4444; }
 .pvt-actions { padding: 0 12px 10px; }
 .pvt-mini {
-  border: 1px solid #d1d5db;
-  background: #fff;
-  color: #1a1a1a;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111111;
   font: inherit;
   padding: 5px 10px;
   border-radius: 6px;
   cursor: pointer;
 }
-.pvt-mini:hover { background: #f3f4f6; }
+.pvt-mini:hover { background: #f8f9fa; }
 
 .pvt-toast {
   bottom: 24px;
@@ -88,11 +93,11 @@
   top: auto;
   left: auto;
   position: fixed;
-  background: #1f2937;
+  background: #111111;
   color: #fff;
   padding: 10px 16px;
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.25s, transform 0.25s;
@@ -101,8 +106,9 @@
 .pvt-toast.show { opacity: 1; transform: translateY(0); }
 
 @media (prefers-color-scheme: dark) {
-  .pvt-pop { background: #262626; border-color: #3f3f46; color: #e5e7eb; }
-  .pvt-head { background: #1f1f1f; }
-  .pvt-mini { background: #333; border-color: #4b5563; color: #e5e7eb; }
-  .pvt-mini:hover { background: #3f3f46; }
+  .pvt-pop { background: #19191b; border-color: #2a2a2e; color: #f2f2f3; }
+  .pvt-head { background: color-mix(in srgb, #c5b0f4 22%, #19191b); }
+  .pvt-close { color: #f2f2f3; }
+  .pvt-mini { background: #19191b; border-color: #2a2a2e; color: #f2f2f3; }
+  .pvt-mini:hover { background: #202024; }
 }

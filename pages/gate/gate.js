@@ -85,6 +85,32 @@ function onClick(btn, handler) {
   });
 }
 
+// ---------- Ghi kho từ vựng an toàn giữa nhiều tab ----------
+// BUG THẬT đã sửa: trang này (gate.html) là một TAB RIÊNG, có thể đang mở CÙNG
+// LÚC với việc tra từ ở tab khác (background.js) — cả hai đều đọc/sửa/ghi cùng
+// một danh sách từ vựng. Trước đây gate.js tự gọi reviewVocab()/renameVocab()
+// tại chỗ, ghi thẳng vào chrome.storage.local: nếu lượt ghi ở tab kia xen vào
+// giữa lúc gate.js đọc và ghi, một trong hai lượt sẽ bị GHI ĐÈ MẤT (mất tiến độ
+// ôn tập hoặc mất từ mới) mà không có lỗi nào báo ra.
+// Sửa: gửi thao tác ghi qua background.js — nơi vocab.js xếp mọi lượt ghi vào
+// MỘT hàng đợi tuần tự (withVocabLock), dù bắt nguồn từ tab nào. Nếu kênh
+// message lỗi (vd: đang chạy test, không có background.js) thì tự ghi tại chỗ
+// để không chặn phiên học — nhánh dự phòng, không phải đường chạy chính.
+async function syncReviewVocab(term, known, helped) {
+  try {
+    const r = await chrome.runtime.sendMessage({ type: "reviewVocab", term, known, helped });
+    if (r && r.ok) return r.list;
+  } catch {}
+  return reviewVocab(term, known, helped);
+}
+async function syncRenameVocab(oldTerm, newTerm) {
+  try {
+    const r = await chrome.runtime.sendMessage({ type: "renameVocab", oldTerm, newTerm });
+    if (r && r.ok) return r.list;
+  } catch {}
+  return renameVocab(oldTerm, newTerm);
+}
+
 const GATE_DEFAULTS = {
   enabled: false,
   recallMode: true, // bắt GÕ đáp án thay vì chọn -> chống đoán bừa
@@ -239,7 +265,8 @@ async function generateHardQuestions(count, topic, level, kind) {
           'với câu ngữ pháp thuần / word formation / key word transformation thì để "save": "" (chuỗi rỗng). Tuyệt đối KHÔNG đặt "save" là dạng đã chia thì hay cả câu. ' +
           'Mỗi phần tử CŨNG thêm trường "hint": gợi ý QUY TẮC/CÔNG THỨC ngữ pháp cần dùng để điền đúng (vd "Điều kiện loại 3: if + quá khứ hoàn thành, would/could HAVE + V3"), ' +
           'giúp người học biết cần chia ĐỘNG TỪ GÌ trước khi làm bài — TUYỆT ĐỐI KHÔNG được viết ra đáp án cụ thể hay từ/cụm cần điền trong "hint", chỉ nêu TÊN quy tắc + công thức chung chung. ' +
-          'Trả về DUY NHẤT một mảng JSON: [{"q":"đề bài bằng tiếng Anh","o":["A","B","C","D"],"a":chỉ số đáp án đúng (0-3),"hint":"gợi ý quy tắc, không lộ đáp án","e":"giải thích ngắn bằng tiếng Việt","save":"dạng gốc để lưu hoặc chuỗi rỗng"}]. Không thêm chữ nào ngoài JSON.',
+          'Trường "e" (giải thích, hiện SAU khi người học đã trả lời — được PHÉP nêu đáp án): KHÔNG được chỉ nhắc lại quy tắc của đáp án đúng một cách chung chung. PHẢI chỉ đích danh phương án nhiễu GẦN GIỐNG đáp án đúng nhất (thường khác đúng một điểm: sai thì, sai trợ động từ, thiếu/thừa "have", chia sai dạng từ, đảo ngữ sai trợ động từ…) và nói RÕ vì sao phương án đó sai trong đúng câu này — vd nếu đáp án đúng là "has expanded" mà có phương án nhiễu "did expand" (đảo ngữ quá khứ đơn, một cấu trúc ĐÚNG NGỮ PHÁP trong câu khác), phải giải thích: "did expand" không sai vì đảo ngữ, mà sai vì thì không khớp với vế còn lại của câu ("has also increased") — chứ không phải chỉ nói "dùng đảo ngữ: has expanded" rồi dừng. Mục tiêu: người học đọc xong phải hiểu vì sao lựa chọn (rất có thể) mình vừa chọn cụ thể là sai, không chỉ học lại một công thức đã biết. ' +
+          'Trả về DUY NHẤT một mảng JSON: [{"q":"đề bài bằng tiếng Anh","o":["A","B","C","D"],"a":chỉ số đáp án đúng (0-3),"hint":"gợi ý quy tắc, không lộ đáp án","e":"giải thích CHỈ RÕ vì sao phương án nhiễu gần đúng nhất lại sai, không chỉ nhắc lại quy tắc","save":"dạng gốc để lưu hoặc chuỗi rỗng"}]. Không thêm chữ nào ngoài JSON.',
       },
     ],
   });
@@ -370,9 +397,30 @@ function promptHtml(text) {
   return parts.join("") || gapHtml(text);
 }
 
+// ---------- Nghe & gõ lại ----------
+// Chỉ những câu điền khuyết ĐƠN GIẢN (1 câu, 1 chỗ trống, đáp án ngắn) mới hợp
+// để nghe — dạng "Key word transformation" (2 câu + từ khóa IN HOA) đọc lên rất
+// rối, không đoán nổi ranh giới câu. Trả về câu ĐÃ ĐIỀN sẵn đáp án đúng (người
+// học nghe trọn câu, rồi phải tự gõ lại đúng từ đã nghe) hoặc null nếu không hợp.
+function listenTextFor(item) {
+  let s = String(item.q || "").replace(/\\n/g, " ").trim();
+  if (/^[A-Za-z][A-Za-z\s/-]{2,34}:\s+/.test(s)) return null; // có nhãn dạng bài riêng
+  if ((s.match(/['"“‘]/g) || []).length >= 2) return null; // có câu trích dẫn -> dạng viết lại câu
+  if ((s.match(/_{2,}/g) || []).length !== 1) return null; // phải đúng 1 chỗ trống
+  const answer = item.o[item.a];
+  if (!answer || answer.split(/\s+/).length > 4 || answer.length > 24) return null; // đáp án quá dài, nghe khó bắt
+  return s
+    .replace(/_{2,}/, answer)
+    .replace(/\([^)]*[^\x00-\x7f][^)]*\)/g, "") // bỏ chú thích tiếng Việt trong ngoặc (đọc lẫn giọng rất chối)
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,!?;:])/g, "$1") // bỏ khoảng trắng thừa để lại trước dấu câu
+    .trim();
+}
+
 // item: {q,o,a,e}. bankKind: "grammar" | "ielts". fromMistake: câu lấy từ sổ lỗi.
 function bankQuestion(item, typeLabel, bankKind, fromMistake) {
   const answer = item.o[item.a];
+  const listenText = listenTextFor(item);
   return {
     kind: "bank",
     bankKind: bankKind || "grammar",
@@ -388,6 +436,10 @@ function bankQuestion(item, typeLabel, bankKind, fromMistake) {
     // thiếu không phải NGHĨA mà là biết cần chia động từ theo quy tắc nào.
     ruleHint: item.hint || "",
     explain: item.e || "",
+    // ~1/4 số câu đủ điều kiện chuyển sang "Nghe & gõ lại" để luyện Listening
+    // (đang chiếm 0% thời lượng luyện dù chiếm 25% điểm IELTS).
+    listenText,
+    listenMode: !!listenText && Math.random() < 0.25,
   };
 }
 
@@ -521,10 +573,9 @@ async function initTodoGate() {
   });
   onClick(el.todoDone, async () => {
     const list = await getTodos();
-    const todayItems = list.filter((t) => t.date === todayStr());
-    if (!todayItems.length) {
+    if (!hasUndoneTodo(list)) {
       el.todoHint.className = "g-feedback no";
-      el.todoHint.textContent = "Hãy thêm ít nhất một việc cho hôm nay.";
+      el.todoHint.textContent = "Hãy thêm ít nhất một việc cần làm.";
       el.todoInput.focus();
       return;
     }
@@ -537,21 +588,28 @@ async function initTodoGate() {
   async function addFromInput() {
     const text = el.todoInput.value.trim();
     if (!text) return;
-    await addTodo(text);
+    const { duplicate } = await addTodo(text);
     el.todoInput.value = "";
-    el.todoHint.textContent = "";
+    el.todoHint.textContent = duplicate ? "Việc này đã có trong danh sách rồi." : "";
     await renderGateTodos();
   }
 }
 
+// BUG ĐÃ SỬA: trước đây bắt phải có việc TẠO ĐÚNG HÔM NAY mới cho qua, nên
+// việc cũ chưa xong (tạo hôm qua) không được tính — người dùng buộc phải gõ
+// lại y hệt việc đó để "mở khoá", tạo ra các dòng trùng lặp. Giờ chỉ cần còn
+// ít nhất một việc CHƯA XONG, bất kể tạo từ khi nào.
+function hasUndoneTodo(list) {
+  return list.some((t) => !t.done);
+}
+
 async function renderGateTodos() {
-  const list = await getTodos();
+  const list = sortTodos(await getTodos());
   el.todoList.innerHTML = "";
   if (!list.length) {
     el.todoList.innerHTML = '<p class="g-empty">Chưa có việc nào.</p>';
     return;
   }
-  const today = todayStr();
   list.forEach((t) => {
     const row = document.createElement("div");
     row.className = "g-item" + (t.done ? " done" : "");
@@ -559,17 +617,22 @@ async function renderGateTodos() {
     cb.type = "checkbox";
     cb.checked = !!t.done;
     cb.addEventListener("change", async () => { await toggleTodo(t.id); renderGateTodos(); });
+    const flag = document.createElement("span");
+    flag.className = "g-item-flag";
+    flag.textContent = PRIORITY_ICON[todoPriority(t)];
+    flag.title = PRIORITY_LABEL[todoPriority(t)];
     const txt = document.createElement("span");
     txt.className = "g-item-text";
     txt.textContent = t.text;
     const tag = document.createElement("span");
-    tag.className = "g-item-tag";
-    if (t.date && t.date !== today) tag.textContent = "từ " + t.date;
+    const badge = todoDueBadge(t);
+    tag.className = "g-item-tag" + (badge.cls ? " due-" + badge.cls : "");
+    tag.textContent = badge.text;
     const del = document.createElement("button");
     del.className = "g-item-del";
     del.textContent = "✕";
     onClick(del, async () => { await deleteTodo(t.id); renderGateTodos(); return LOCK; });
-    row.append(cb, txt, tag, del);
+    row.append(cb, flag, txt, tag, del);
     el.todoList.appendChild(row);
   });
 }
@@ -998,7 +1061,11 @@ function render() {
   confuseToken++; // bỏ kết quả tra "nhầm từ" của câu trước nếu về muộn
   hintToken++;    // ... gợi ý nghĩa cũng vậy
   el.type.textContent = q.typeLabel;
-  el.q.innerHTML = q.prompt;
+  if (q.kind === "bank" && q.listenMode && q.listenText) {
+    renderListenIntro(q);
+  } else {
+    el.q.innerHTML = q.prompt;
+  }
   el.feedback.textContent = "";
   el.feedback.className = "g-feedback";
   el.next.classList.add("hidden");
@@ -1012,11 +1079,23 @@ function render() {
   if (useInput) {
     // NHỚ LẠI: tự gõ đáp án, kèm gợi ý chữ cái đầu + số ô.
     el.q.innerHTML += `<div class="g-hint">${esc(answerHint(q.answer))}</div>`;
-    // Gợi ý QUY TẮC ngữ pháp cần dùng — hiện NGAY, không cần đợi gì (đã có sẵn
-    // trong dữ liệu câu hỏi). Đây chính là thứ người học thiếu khi "không biết
-    // điền sao": chữ cái đầu + số ô không nói lên PHẢI CHIA ĐỘNG TỪ THEO KIỂU GÌ.
-    if (q.kind === "bank" && q.ruleHint) {
-      el.q.innerHTML += `<div class="g-mean-hint">📐 <b>${esc(q.ruleHint)}</b></div>`;
+    // Gợi ý QUY TẮC ngữ pháp + gợi ý NGHĨA — GIẤU mặc định, chỉ hiện khi bấm
+    // nút (người học muốn tự thử trước, không muốn bị mớm sẵn ngay từ đầu).
+    // Kiểm tra sẵn có gì để hiện không TRƯỚC khi vẽ nút, để khỏi vẽ một nút
+    // "gợi ý" rồi bấm vào chẳng hiện gì.
+    const hasRuleHint = q.kind === "bank" && !!q.ruleHint;
+    const hasMeaningHint = q.kind === "bank" && worthMeaningHint(q.answer);
+    if (hasRuleHint || hasMeaningHint) {
+      const revealBtn = document.createElement("button");
+      revealBtn.type = "button";
+      revealBtn.className = "g-reveal-hint";
+      revealBtn.textContent = "💡 Bí quá? Hiện gợi ý";
+      revealBtn.addEventListener("click", () => {
+        revealBtn.remove();
+        if (hasRuleHint) el.q.innerHTML += `<div class="g-mean-hint">📐 <b>${esc(q.ruleHint)}</b></div>`;
+        if (hasMeaningHint) showMeaningHint(q);
+      });
+      el.q.appendChild(revealBtn);
     }
     el.inputWrap.classList.remove("hidden");
     el.input.value = "";
@@ -1025,9 +1104,6 @@ function render() {
     el.hint.classList.toggle("hidden", !q.options);
     el.hint.textContent = "Hiện lựa chọn";
     if (q.kind === "vocab") addFixSpelling(q);
-    // Câu ngân hàng (điền chỗ trống): đề bài không đủ để suy ra từ -> gợi ý nghĩa.
-    // Câu từ vựng thì bản thân đề đã là nghĩa rồi, không cần.
-    if (q.kind === "bank") showMeaningHint(q);
     el.input.focus();
   } else {
     el.options.classList.remove("hidden");
@@ -1042,6 +1118,29 @@ function render() {
   updateCounter();
 }
 
+// Thay vì hiện sẵn câu đề bài, phát âm cả câu (đã điền đáp án đúng) và bắt nghe
+// rồi gõ lại từ còn thiếu — Nghe đang chiếm 0% luyện tập dù chiếm 25% điểm IELTS.
+// Có nút "Hiện đề bài" cho ai thật sự bí, không bắt ép phải đoán mù.
+function renderListenIntro(q) {
+  el.q.innerHTML = `
+    <div class="g-listen">
+      <button type="button" class="g-btn g-listen-play">🔊 Nghe câu</button>
+      <div class="g-listen-note">Nghe rồi gõ lại ĐÚNG từ còn thiếu bên dưới.</div>
+    </div>
+    <button type="button" class="g-listen-reveal">👁️ Không nghe rõ? Hiện đề bài</button>
+  `;
+  const playBtn = el.q.querySelector(".g-listen-play");
+  const revealBtn = el.q.querySelector(".g-listen-reveal");
+  onClick(playBtn, () => speakEn(q.listenText));
+  onClick(revealBtn, () => {
+    const box = document.createElement("div");
+    box.innerHTML = q.prompt;
+    revealBtn.replaceWith(box);
+    return LOCK; // đã lộ đề, khỏi cần bấm lại
+  });
+  speakEn(q.listenText); // tự phát ngay khi câu hỏi hiện ra
+}
+
 // Từ tách từ PDF đôi khi sai chính tả ("off-theshelf"), hoặc lưu nhầm dạng đã chia
 // ("knocked back"). Cho sửa ngay tại đây thay vì bắt học thuộc một từ sai.
 function addFixSpelling(q) {
@@ -1054,7 +1153,7 @@ function addFixSpelling(q) {
     // Có dạng gốc thì điền sẵn để bấm Enter là xong.
     const next = (prompt("Sửa lại từ (giữ nguyên tiến độ ôn):", base || q.term) || "").trim();
     if (!next || next === q.term) return;
-    await renameVocab(q.term, next);
+    await syncRenameVocab(q.term, next);
     q.term = next;
     q.answer = next;
     render(); // vẽ lại gợi ý chữ cái theo từ mới
@@ -1162,7 +1261,7 @@ async function showMeaningHint(q) {
 // NHỚ (gốc từ + liên tưởng + ví dụ). Mẹo sinh một lần rồi lưu vào mục từ vựng,
 // lần sau lấy lại từ kho nên không tốn thêm lượt gọi API nào.
 async function markVocabWrong(q) {
-  const list = await reviewVocab(q.term, false);
+  const list = await syncReviewVocab(q.term, false);
   const v = list.find((x) => x.term.toLowerCase() === String(q.term).toLowerCase());
   if (!v || !isLeech(v)) return;
 
@@ -1364,7 +1463,7 @@ async function handleSubmit() {
     el.hint.classList.add("hidden");
     solved++;
     queue.shift();
-    if (q.kind === "vocab") { try { await reviewVocab(q.term, true, usedHelp || q.failed); } catch {} }
+    if (q.kind === "vocab") { try { await syncReviewVocab(q.term, true, usedHelp || q.failed); } catch {} }
     if (q.fromMistake) { try { await markMistakeResult(q.mistakeId, true); } catch {} }
     updateCounter();
     el.next.classList.remove("hidden");
@@ -1425,7 +1524,7 @@ async function answer(opt, btn, q) {
     solved++;
     queue.shift();
     // Chọn A/B/C/D là NHẬN DIỆN, bằng chứng nhớ yếu hơn tự gõ ra -> không thưởng ease.
-    if (q.kind === "vocab") { try { await reviewVocab(q.term, true, true); } catch {} }
+    if (q.kind === "vocab") { try { await syncReviewVocab(q.term, true, true); } catch {} }
     if (q.fromMistake) { try { await markMistakeResult(q.mistakeId, true); } catch {} }
   } else {
     btn.classList.add("wrong");

@@ -1,0 +1,199 @@
+/* ============================================================
+   todo-board.css — trang RIÊNG cho "Việc cần làm" (kanban mini). Trước đây
+   nhét trong một modal bên side panel nên chật, đổi CSS mấy lần cũng không đủ
+   rộng vì panel thật sự hẹp. Trang riêng thì rộng bao nhiêu tuỳ cửa sổ trình
+   duyệt, không còn giới hạn nào cả.
+   ============================================================ */
+/* Bảng màu lấy cảm hứng từ design system Figma (xem VoltAgent/awesome-claude-design):
+   mỗi CỘT trong bảng kanban có màu nền riêng để phân biệt (không còn 3 cột
+   trắng/xám giống hệt nhau), thẻ việc có bóng đổ rõ để "nổi" khối thay vì phẳng. */
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: #6b7280;
+  --border: #e6e6e6;
+  --primary: #000000;
+  --primary-fg: #ffffff;
+  --card: #ffffff;
+  --surface: #f7f7f5;
+  --accent: #ff3d8b;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --ok: #1ea64a;
+  /* Cột: Cần làm = tím nhạt, Đang làm = san hô ấm (khẩn trương), Đã xong = bạc hà (hoàn thành). */
+  --col-todo: color-mix(in srgb, #c5b0f4 38%, white);
+  --col-doing: color-mix(in srgb, #f3c9b6 38%, white);
+  --col-done: color-mix(in srgb, #c8e6cd 38%, white);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0e10;
+    --fg: #f2f2f3;
+    --muted: #9ca3af;
+    --border: #2a2a2e;
+    /* Đảo cực --primary: nút chính SÁNG màu trên nền tối, không phải đen-trên-đen. */
+    --primary: #f2f2f3;
+    --primary-fg: #111111;
+    --card: #19191b;
+    --surface: #202024;
+    --accent: #ff5c9a;
+    --warning: #fbbf24;
+    --error: #f87171;
+    --ok: #4ade80;
+    --col-todo: color-mix(in srgb, #c5b0f4 22%, #19191b);
+    --col-doing: color-mix(in srgb, #f3c9b6 20%, #19191b);
+    --col-done: color-mix(in srgb, #c8e6cd 20%, #19191b);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg); color: var(--fg);
+}
+
+.tb-head { padding: 20px clamp(16px, 4vw, 40px) 4px; }
+.tb-head h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; margin: 0; }
+.tb-main { padding: 12px clamp(16px, 4vw, 40px) 40px; max-width: 1400px; margin: 0 auto; }
+
+.tb-btn {
+  padding: 9px 18px; font-size: 13.5px; font-family: inherit; border: 1px solid var(--border);
+  border-radius: 999px; background: var(--card); color: var(--fg); cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, filter 0.15s;
+}
+.tb-btn:hover { border-color: color-mix(in srgb, var(--fg) 22%, var(--border)); }
+.tb-btn:disabled { opacity: 0.5; cursor: default; }
+.tb-btn.primary {
+  background: var(--primary); color: var(--primary-fg); border-color: var(--primary);
+  font-weight: 600; box-shadow: var(--shadow-sm);
+}
+.tb-btn.primary:hover { filter: brightness(1.06); }
+.tb-btn.ghost { background: transparent; }
+
+.hidden { display: none !important; }
+.empty { color: var(--muted); text-align: center; margin-top: 40px; font-style: italic; }
+
+/* ---------- Thêm việc ---------- */
+.td-compose { display: flex; gap: 8px; margin-bottom: 18px; align-items: center; }
+.td-compose input {
+  flex: 1; padding: 11px 16px; border: 1px solid var(--border); border-radius: 9px;
+  background: var(--card); color: var(--fg); font: inherit; font-size: 15px;
+}
+.td-priority-pick { display: flex; gap: 3px; flex-shrink: 0; }
+.td-pri-opt {
+  border: 1px solid transparent; background: none; border-radius: 6px;
+  font-size: 16px; padding: 6px 8px; cursor: pointer; opacity: 0.45;
+}
+.td-pri-opt.active { opacity: 1; border-color: var(--border); background: var(--card); }
+.tb-actions { display: flex; justify-content: flex-start; margin-top: 16px; }
+
+/* ---------- Bảng kanban: 3 cột chia đều, PHÌNH theo cửa sổ ---------- */
+.td-list { margin-bottom: 0; }
+.td-board { display: flex; gap: 16px; align-items: flex-start; }
+.td-col {
+  flex: 1 1 0; min-width: 220px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  display: flex; flex-direction: column; max-height: min(720px, 76vh);
+}
+/* Mỗi cột một màu — phân biệt ngay bằng mắt, không cần đọc chữ tiêu đề. */
+.td-col[data-col="todo"] { background: var(--col-todo); }
+.td-col[data-col="doing"] { background: var(--col-doing); }
+.td-col[data-col="done"] { background: var(--col-done); }
+.td-col.drag-over { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent) inset; }
+.td-col-head {
+  font-size: 13px; font-weight: 700; color: var(--fg); text-transform: uppercase;
+  letter-spacing: 0.02em; padding: 14px 16px; border-bottom: 1px solid color-mix(in srgb, var(--fg) 10%, transparent); flex-shrink: 0;
+}
+.td-col-body { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 120px; }
+.td-col-empty { font-size: 13px; color: var(--fg); opacity: 0.55; font-style: italic; text-align: center; margin: 20px 0; }
+
+.td-task {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 13px 14px; cursor: grab; transition: background-color 0.3s, opacity 0.15s, box-shadow 0.15s, transform 0.15s;
+  border-left: 4px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.td-task:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.td-task.dragging { opacity: 0.4; }
+.td-task.pri-high { border-left-color: var(--error); }
+.td-task.pri-medium { border-left-color: var(--warning); }
+.td-task.pri-low { border-left-color: var(--border); }
+.td-task.done { opacity: 0.7; }
+.td-task.done .td-text { text-decoration: line-through; color: var(--muted); }
+.td-task.td-flash { background-color: color-mix(in srgb, var(--primary) 22%, var(--card)); }
+
+.td-task-top { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.td-flag { border: 0; background: none; cursor: pointer; font-size: 14px; padding: 2px; line-height: 1; flex-shrink: 0; }
+.td-task-del { margin-left: auto; border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 13px; padding: 2px 5px; border-radius: 5px; flex-shrink: 0; }
+.td-task-del:hover { background: var(--surface); color: var(--error); }
+.td-text { font-size: 15px; word-break: break-word; line-height: 1.42; }
+.td-due {
+  display: block; margin-top: 9px; font-size: 12px; border: 0; background: none; cursor: pointer;
+  color: var(--muted); padding: 3px 5px; border-radius: 5px; text-align: left; width: 100%;
+}
+.td-due:hover { background: var(--surface); }
+.td-due.empty { opacity: 0.4; }
+.td-due.due-overdue { color: var(--error); font-weight: 600; opacity: 1; }
+.td-due.due-today { color: var(--warning); font-weight: 600; opacity: 1; }
+.td-due.due-future, .td-due.due-age { color: var(--muted); }
+.td-due.due-done { color: var(--muted); text-decoration: line-through; }
+.td-due-input { font: inherit; font-size: 12px; border: 1px solid var(--border); border-radius: 5px; background: var(--card); color: var(--fg); margin-top: 6px; width: 100%; box-sizing: border-box; }
+
+.td-label-pill {
+  display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px;
+  border-radius: 999px; margin-bottom: 6px;
+  background: color-mix(in srgb, var(--pill-color) 18%, transparent);
+  color: var(--pill-color);
+}
+
+/* ---------- Popup chi tiết ---------- */
+.tb-modal {
+  position: fixed; inset: 0; z-index: 1100; background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.tb-modal-card {
+  position: relative; width: 100%; max-width: 480px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); max-height: 90vh; overflow-y: auto;
+}
+.tb-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.tb-modal-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.tb-close { border: 0; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer; }
+
+#tdDetailText {
+  width: 100%; box-sizing: border-box; resize: vertical; min-height: 48px;
+  font: inherit; font-size: 16px; font-weight: 600; padding: 9px 11px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--fg);
+  margin-bottom: 14px;
+}
+.td-detail-row { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+.td-detail-lbl { font-size: 12.5px; color: var(--muted); width: 66px; flex-shrink: 0; }
+.td-detail-label-input, #tdDetailDue {
+  flex: 1; padding: 8px 11px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--card); color: var(--fg); font: inherit; font-size: 14px;
+}
+.td-detail-clear { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 6px; border-radius: 5px; }
+.td-detail-clear:hover { background: var(--surface); color: var(--error); }
+.td-status-pick { display: flex; gap: 4px; flex: 1; }
+.td-status-opt {
+  flex: 1; border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  border-radius: 7px; padding: 7px 4px; font-size: 12px; cursor: pointer;
+}
+.td-status-opt.active { border-color: var(--primary); color: var(--fg); background: color-mix(in srgb, var(--primary) 12%, var(--card)); font-weight: 600; }
+#tdDetailDesc {
+  width: 100%; box-sizing: border-box; min-height: 100px; resize: vertical; margin-top: 6px; margin-bottom: 10px;
+  font: inherit; font-size: 14px; padding: 9px 11px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--card); color: var(--fg);
+}
+.td-detail-meta { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+
+/* Panel hẹp (cửa sổ trình duyệt thu nhỏ) — 3 cột vẫn tự co, không cuộn ngang
+   trừ khi cực hẹp. */
+@media (max-width: 700px) {
+  .td-board { flex-direction: column; }
+  .td-col { max-height: none; }
+}

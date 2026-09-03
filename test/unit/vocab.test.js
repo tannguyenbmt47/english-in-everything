@@ -10,7 +10,7 @@ const { test, describe } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadFiles } = require("../helpers/sandbox.js");
 
-const ctx = loadFiles(["vocab.js"]);
+const ctx = loadFiles(["shared/vocab.js"]);
 
 describe("isCleanLexicalItem / isClauseLike / isJunkTerm — cổng vào/ra của kho từ vựng", () => {
   // Đây là cổng cho saveWrongWord() (gate.js) quyết định lưu gì, và cổng cho
@@ -164,5 +164,88 @@ describe("isLeech — ngưỡng đổi sang mẹo nhớ", () => {
   });
   test("đủ 6 lần sai thì là leech", () => {
     assert.equal(ctx.isLeech({ lapses: 6 }), true);
+  });
+});
+
+describe("withVocabLock — BUG ĐÃ SỬA: hai lượt ghi kho từ vựng xen kẽ từng GHI ĐÈ và XOÁ MẤT lẫn nhau (lost update)", () => {
+  // Trước khi có khoá: addVocab/reviewVocabSM2 đều đọc TOÀN BỘ danh sách, sửa
+  // trong bộ nhớ rồi ghi đè lại. Gọi hai lượt mà KHÔNG await lần lượt (Promise.all)
+  // mô phỏng đúng tình huống thật: gate.js (một tab) và background.js (tra từ ở
+  // tab khác) cùng ghi gần như đồng thời. Không có khoá -> lượt ghi sau cùng xoá
+  // mất thay đổi của lượt kia.
+  test("hai addVocab() chạy ĐỒNG THỜI trên hai từ khác nhau -> cả hai đều được lưu", async () => {
+    const local = loadFiles(["shared/vocab.js"]);
+    await Promise.all([
+      local.addVocab({ term: "concurrentAlpha", meaning: "a" }),
+      local.addVocab({ term: "concurrentBeta", meaning: "b" }),
+    ]);
+    const list = await local.getVocab();
+    assert.ok(list.some((v) => v.term === "concurrentAlpha"), "mất từ 'concurrentAlpha' do hai lượt ghi xen kẽ đè lên nhau");
+    assert.ok(list.some((v) => v.term === "concurrentBeta"), "mất từ 'concurrentBeta' do hai lượt ghi xen kẽ đè lên nhau");
+  });
+
+  test("nhiều reviewVocabSM2() chạy ĐỒNG THỜI trên các từ khác nhau -> không mất tiến độ ôn tập của từ nào", async () => {
+    const local = loadFiles(["shared/vocab.js"]);
+    await Promise.all([
+      local.addVocab({ term: "raceOne" }),
+      local.addVocab({ term: "raceTwo" }),
+      local.addVocab({ term: "raceThree" }),
+    ]);
+    await Promise.all([
+      local.reviewVocabSM2("raceOne", 5),
+      local.reviewVocabSM2("raceTwo", 5),
+      local.reviewVocabSM2("raceThree", 5),
+    ]);
+    const list = await local.getVocab();
+    for (const term of ["raceOne", "raceTwo", "raceThree"]) {
+      const v = list.find((x) => x.term === term);
+      assert.ok(v, `mất mục từ vựng "${term}" — bị xoá khỏi danh sách do ghi đè xen kẽ`);
+      assert.equal(v.reps, 1, `tiến độ ôn tập (reps) của "${term}" bị mất do một lượt ghi song song khác đè lên`);
+    }
+    // Số liệu thống kê (STATS_KEY) cũng đọc/sửa/ghi kiểu tương tự -> phải cộng đủ 3, không bị mất lượt nào.
+    const stats = await local.getTodayStats();
+    assert.equal(stats.today.reviewed, 3, "bộ đếm 'đã ôn hôm nay' bị mất lượt do ghi đè xen kẽ (đua trên STATS_KEY)");
+  });
+});
+
+describe("isMissingMeaning — kiểu phát hiện MỚI cho nút 'Dọn từ đáng ngờ' (từ chưa có nghĩa)", () => {
+  test("chưa có trường meaning, hoặc chỉ toàn khoảng trắng -> thiếu nghĩa", () => {
+    assert.equal(ctx.isMissingMeaning({ term: "a" }), true);
+    assert.equal(ctx.isMissingMeaning({ term: "a", meaning: "" }), true);
+    assert.equal(ctx.isMissingMeaning({ term: "a", meaning: "   " }), true);
+  });
+  test("có nghĩa thật -> không thiếu", () => {
+    assert.equal(ctx.isMissingMeaning({ term: "a", meaning: "một" }), false);
+  });
+});
+
+describe("restoreVocabList — BUG ĐÃ SỬA: nút Hoàn tác sau khi dọn dẹp phải ghi qua khoá tuần tự như mọi hàm ghi khác", () => {
+  test("ghi đè đúng snapshot cũ, getVocab() trả lại đúng danh sách đã khôi phục", async () => {
+    const local = loadFiles(["shared/vocab.js"]);
+    await local.addVocab({ term: "before" });
+    const snapshot = await local.getVocab();
+    await local.addVocab({ term: "after" }); // mô phỏng một lượt dọn dẹp làm đổi kho
+    let list = await local.getVocab();
+    assert.equal(list.length, 2);
+
+    await local.restoreVocabList(snapshot);
+    list = await local.getVocab();
+    assert.equal(list.length, 1);
+    assert.equal(list[0].term, "before");
+  });
+
+  test("restoreVocabList cũng đi qua withVocabLock — chạy đồng thời với addVocab không làm mất dữ liệu của nhau", async () => {
+    const local = loadFiles(["shared/vocab.js"]);
+    await local.addVocab({ term: "keep-a" });
+    await local.addVocab({ term: "keep-b" });
+    const snapshot = await local.getVocab();
+    await Promise.all([
+      local.restoreVocabList(snapshot),
+      local.addVocab({ term: "concurrent-new" }),
+    ]);
+    // Kết quả phụ thuộc thứ tự hàng đợi, nhưng QUAN TRỌNG là không được văng lỗi
+    // và danh sách cuối cùng phải là MỘT trong hai trạng thái hợp lệ, không rác/hỏng.
+    const list = await local.getVocab();
+    assert.ok(list.length === 2 || list.length === 3, `danh sách sau khi ghi đồng thời bị hỏng, length=${list.length}`);
   });
 });

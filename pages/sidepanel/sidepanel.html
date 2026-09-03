@@ -14,6 +14,7 @@
       <button id="webBtn" class="icon-act" title="Dịch trang web đang mở">🌐</button>
       <button id="pasteBtn" class="icon-act" title="Dán văn bản để dịch">📋</button>
       <button id="pomoBtn" class="icon-act" title="Pomodoro (đồng hồ tập trung)">🍅</button>
+      <button id="todoQuickBtn" class="icon-act" title="Việc cần làm">✅</button>
       <button id="helpBtn" class="icon-act" title="Hướng dẫn sử dụng">❔</button>
       <button id="settingsBtn" class="icon-act" title="Cấu hình">⚙️</button>
     </div>
@@ -340,6 +341,9 @@
         <button id="stBaseBtn" class="btn ghost">Đưa về dạng gốc (knocked back → knock back)</button>
         <div id="stDupInfo" class="st-retest"></div>
         <button id="stDupBtn" class="btn ghost">Gộp từ trùng lặp gần giống (make decision ↔ make a decision)</button>
+        <div id="stMissingInfo" class="st-retest"></div>
+        <button id="stMissingBtn" class="btn ghost">Quét từ thiếu nghĩa (tra lỗi giữa chừng / thêm thủ công bỏ dở)</button>
+        <div id="stCleanupUndo" class="st-cleanup-undo hidden"></div>
       </div>
 
       <div class="st-sec">
@@ -390,21 +394,18 @@
     </div>
   </div>
 
-  <!-- ============ VIỆC CẦN LÀM ============ -->
-  <div id="todoModal" class="modal hidden">
-    <div class="modal-card td-card">
+  <!-- ============ XEM TRƯỚC DỌN TỪ VỰNG (dùng chung cho 4 loại dọn dẹp) ============ -->
+  <div id="cleanupModal" class="modal hidden">
+    <div class="modal-card cleanup-card">
       <div class="modal-head">
-        <strong>✅ Việc cần làm hôm nay</strong>
-        <button id="tdClose" class="fc-close">✕</button>
+        <strong id="cleanupTitle">Dọn từ vựng</strong>
+        <button id="cleanupClose" class="fc-close">✕</button>
       </div>
-      <div class="td-compose">
-        <input type="text" id="todoInput" placeholder="Thêm việc… (Enter để lưu)" />
-        <button id="todoAdd" class="btn primary">Thêm</button>
-      </div>
-      <div id="todoList" class="td-list"></div>
+      <button id="cleanupToggleAll" class="cleanup-toggle-all">Bỏ chọn tất cả</button>
+      <div id="cleanupList" class="cleanup-list"></div>
       <div class="modal-actions">
-        <button id="todoClearDone" class="btn ghost">Xóa việc đã xong</button>
-        <button id="todoDone" class="btn primary">Xong</button>
+        <button id="cleanupCancel" class="btn ghost">Huỷ</button>
+        <button id="cleanupApply" class="btn primary">Áp dụng</button>
       </div>
     </div>
   </div>
@@ -520,19 +521,20 @@
     </div>
   </div>
 
-  <script src="lib/pdf.min.js"></script>
-  <script src="config.js"></script>
-  <script src="cache.js"></script>
-  <script src="vocab.js"></script>
-  <script src="notes.js"></script>
-  <script src="todo.js"></script>
-  <script src="mistakes.js"></script>
-  <script src="grammar.js"></script>
-  <script src="ielts.js"></script>
+  <script src="../../lib/pdf.min.js"></script>
+  <script src="../../shared/config.js"></script>
+  <script src="../../shared/tts.js"></script>
+  <script src="../../shared/cache.js"></script>
+  <script src="../../shared/vocab.js"></script>
+  <script src="../../shared/notes.js"></script>
+  <script src="../../shared/todo.js"></script>
+  <script src="../../shared/mistakes.js"></script>
+  <script src="../../shared/grammar.js"></script>
+  <script src="../../shared/ielts.js"></script>
   <script src="ielts-topics.js"></script>
   <script src="rag.js"></script>
   <script src="layout.js"></script>
-  <script src="translator.js"></script>
+  <script src="../../shared/translator.js"></script>
   <script src="sidepanel.js"></script>
 </body>
 </html>
