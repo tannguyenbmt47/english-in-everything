@@ -51,6 +51,7 @@ async function addMistake(item, kind) {
       o: item.o,
       a: item.a,
       e: item.e || "",
+      hint: item.hint || "", // gợi ý quy tắc ngữ pháp — giữ lại để ôn lại vẫn thấy
       kind: kind || "grammar",
       streak: 0,
       wrongCount: 1,

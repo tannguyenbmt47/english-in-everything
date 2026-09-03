@@ -82,6 +82,48 @@ describe("BUG ĐÃ SỬA — hai từ trong kho cùng một nghĩa tiếng Việ
   });
 });
 
+describe("BUG ĐÃ SỬA — câu ngữ pháp điền khuyết thiếu gợi ý QUY TẮC (không biết điền sao)", () => {
+  test("bankQuestion() mang ruleHint từ item.hint sang, hiện được trước khi trả lời", () => {
+    const ctx = loadFiles(FILES, { url: "https://example.test/gate.html?mode=morning" });
+    const item = { q: "If it ___ tomorrow, we will cancel the trip.", o: ["rain", "rains", "will rain", "rained"], a: 1,
+      hint: "Điều kiện loại 1: if + hiện tại đơn, will + V.", e: "Điều kiện loại 1: If + hiện tại đơn, will + V." };
+    const q = ctx.bankQuestion(item, "Ngữ pháp", "grammar");
+    assert.equal(q.ruleHint, item.hint);
+    assert.ok(q.ruleHint.length > 0);
+  });
+
+  test("mistakes.js giữ lại hint khi lưu câu sai, không mất gợi ý lúc ôn lại", async () => {
+    const ctx = loadFiles(FILES, { url: "https://example.test/gate.html?mode=morning" });
+    const item = { q: "Test question ___.", o: ["a", "b", "c", "d"], a: 1, hint: "Gợi ý quy tắc XYZ.", e: "Giải thích đầy đủ." };
+    await ctx.addMistake(item, "grammar");
+    const saved = (await ctx.getMistakes())[0];
+    assert.equal(saved.hint, "Gợi ý quy tắc XYZ.");
+  });
+
+  test("câu điều kiện hỗn hợp (quá khứ→hiện tại) trong ngân hàng offline gọi ĐÚNG tên, không nhầm 'loại 3'", () => {
+    const ctx = loadFiles(FILES, { url: "https://example.test/gate.html?mode=morning" });
+    const mixed = ctx.GRAMMAR_BANK.find((it) => it.q.includes("negative effects of globalisation"));
+    assert.ok(mixed, "phải có câu điều kiện hỗn hợp trong ngân hàng");
+    const answer = mixed.o[mixed.a];
+    assert.doesNotMatch(answer, /have/i, "vế kết quả của điều kiện HỖN HỢP (quá khứ→hiện tại) không có 'have'");
+    assert.doesNotMatch(mixed.hint.toLowerCase(), /loại 3(?!\s*thu)/, "không được gọi nhầm là 'loại 3' khi đáp án thiếu 'have'");
+    assert.match(mixed.hint, /hỗn hợp/i, "phải gọi đúng tên là điều kiện hỗn hợp");
+  });
+
+  test("mọi câu trong GRAMMAR_BANK/IELTS_BANK đều có hint không rỗng và không lộ nguyên văn đáp án", () => {
+    const ctx = loadFiles(FILES, { url: "https://example.test/gate.html?mode=morning" });
+    for (const it of [...ctx.GRAMMAR_BANK, ...ctx.IELTS_BANK]) {
+      assert.ok(it.hint && it.hint.trim().length > 0, `thiếu hint: "${it.q}"`);
+      const answer = it.o[it.a];
+      // Hint không được chứa NGUYÊN VĂN đáp án (cho phép chứa từng chữ riêng lẻ
+      // trong công thức, nhưng không được lặp lại cả cụm đáp án).
+      if (answer.split(" ").length > 1) {
+        assert.doesNotMatch(it.hint.toLowerCase(), new RegExp(answer.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `hint lộ đáp án "${answer}": "${it.q}"`);
+      }
+    }
+  });
+});
+
 describe("Sổ lỗi & vòng lặp ôn lại — mistakes.js thật", () => {
   test("một câu ngữ pháp trả lời sai -> vào sổ lỗi; đúng đủ 3 lần liên tiếp -> tự xoá khỏi sổ", async () => {
     const ctx = loadFiles(FILES, { url: "https://example.test/gate.html?mode=morning" });

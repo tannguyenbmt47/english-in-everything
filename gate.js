@@ -215,7 +215,11 @@ async function generateHardQuestions(count, topic, level, kind) {
         content:
           `Bạn là chuyên gia khảo thí tiếng Anh, soạn câu hỏi GỐC (tự viết, không trích từ đề thi có sẵn) hiệu chỉnh đúng thang ${levelNote}. ` +
           "Bám sát mức độ từ vựng/ngữ pháp của thang CEFR đó: B2 dùng từ thông dụng-trung cấp, C1 dùng từ học thuật/ít gặp, collocation tinh tế, sắc thái nghĩa. " +
-          "Phương án nhiễu phải hợp lý và cùng trường nghĩa, không lộ liễu.",
+          "Phương án nhiễu phải hợp lý và cùng trường nghĩa, không lộ liễu. " +
+          "QUAN TRỌNG VỀ ĐỘ CHÍNH XÁC: câu và đáp án phải khớp ĐÚNG quy tắc bạn nêu trong lời giải thích — " +
+          "vd nếu gọi là 'điều kiện loại 3' thì vế kết quả PHẢI có dạng 'would/could/might HAVE + V3' (không được thiếu 'have'); " +
+          "nếu vế kết quả không có 'have' (dạng 'would/could + V nguyên mẫu') thì đó là ĐIỀU KIỆN HỖN HỢP (quá khứ→hiện tại), phải gọi đúng tên đó, không được gọi nhầm là 'loại 3'. " +
+          "Tự kiểm tra lại từng câu trước khi trả về: công thức nêu trong \"hint\"/\"e\" phải mô tả ĐÚNG những gì xuất hiện trong chính câu \"q\" đó.",
       },
       {
         role: "user",
@@ -233,7 +237,9 @@ async function generateHardQuestions(count, topic, level, kind) {
           "Với dạng key word transformation, viết đề đúng khuôn: \"Key word transformation: <yêu cầu>. '<câu gốc>' TỪKHÓA -> '<câu đích có ___>'\". " +
           'Mỗi phần tử thêm trường "save": DẠNG TỪ ĐIỂN GỐC (nguyên mẫu, số ít) của TỪ/CỤM cần học nếu đây là câu học từ vựng/collocation/phrasal verb (vd "come off", "mitigate", "take into account"); ' +
           'với câu ngữ pháp thuần / word formation / key word transformation thì để "save": "" (chuỗi rỗng). Tuyệt đối KHÔNG đặt "save" là dạng đã chia thì hay cả câu. ' +
-          'Trả về DUY NHẤT một mảng JSON: [{"q":"đề bài bằng tiếng Anh","o":["A","B","C","D"],"a":chỉ số đáp án đúng (0-3),"e":"giải thích ngắn bằng tiếng Việt","save":"dạng gốc để lưu hoặc chuỗi rỗng"}]. Không thêm chữ nào ngoài JSON.',
+          'Mỗi phần tử CŨNG thêm trường "hint": gợi ý QUY TẮC/CÔNG THỨC ngữ pháp cần dùng để điền đúng (vd "Điều kiện loại 3: if + quá khứ hoàn thành, would/could HAVE + V3"), ' +
+          'giúp người học biết cần chia ĐỘNG TỪ GÌ trước khi làm bài — TUYỆT ĐỐI KHÔNG được viết ra đáp án cụ thể hay từ/cụm cần điền trong "hint", chỉ nêu TÊN quy tắc + công thức chung chung. ' +
+          'Trả về DUY NHẤT một mảng JSON: [{"q":"đề bài bằng tiếng Anh","o":["A","B","C","D"],"a":chỉ số đáp án đúng (0-3),"hint":"gợi ý quy tắc, không lộ đáp án","e":"giải thích ngắn bằng tiếng Việt","save":"dạng gốc để lưu hoặc chuỗi rỗng"}]. Không thêm chữ nào ngoài JSON.',
       },
     ],
   });
@@ -377,6 +383,10 @@ function bankQuestion(item, typeLabel, bankKind, fromMistake) {
     prompt: promptHtml(item.q),
     options: shuffle(item.o.map((text, i) => ({ text, correct: i === item.a }))),
     answer,
+    // Gợi ý QUY TẮC (không lộ đáp án) — hiện ngay từ đầu, khác với "explain" chỉ
+    // hiện SAU khi trả lời. Câu điền khuyết ngữ pháp không giống câu từ vựng: cái
+    // thiếu không phải NGHĨA mà là biết cần chia động từ theo quy tắc nào.
+    ruleHint: item.hint || "",
     explain: item.e || "",
   };
 }
@@ -1002,6 +1012,12 @@ function render() {
   if (useInput) {
     // NHỚ LẠI: tự gõ đáp án, kèm gợi ý chữ cái đầu + số ô.
     el.q.innerHTML += `<div class="g-hint">${esc(answerHint(q.answer))}</div>`;
+    // Gợi ý QUY TẮC ngữ pháp cần dùng — hiện NGAY, không cần đợi gì (đã có sẵn
+    // trong dữ liệu câu hỏi). Đây chính là thứ người học thiếu khi "không biết
+    // điền sao": chữ cái đầu + số ô không nói lên PHẢI CHIA ĐỘNG TỪ THEO KIỂU GÌ.
+    if (q.kind === "bank" && q.ruleHint) {
+      el.q.innerHTML += `<div class="g-mean-hint">📐 <b>${esc(q.ruleHint)}</b></div>`;
+    }
     el.inputWrap.classList.remove("hidden");
     el.input.value = "";
     el.input.disabled = false;
