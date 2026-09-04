@@ -8,7 +8,9 @@
 .pvt-toast {
   position: absolute;
   z-index: 2147483647;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Noto Sans trước system-ui: xem ghi chú trong sidepanel.css — font "Ubuntu"
+     (mà system-ui có thể trỏ tới trên Linux) thiếu glyph "ữ/ừ/ệ" liền mạch. */
+  font-family: "Noto Sans", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   font-size: 13px;
   line-height: 1.5;
   color: #111111;

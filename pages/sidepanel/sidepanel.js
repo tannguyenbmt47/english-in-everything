@@ -39,6 +39,7 @@ const el = {
   viewGrammar: document.getElementById("viewGrammar"),
   grammarSearch: document.getElementById("grammarSearch"),
   grammarBody: document.getElementById("grammarBody"),
+  grammarBookBtn: document.getElementById("grammarBookBtn"),
   tabNotes: document.getElementById("tabNotes"),
   viewNotes: document.getElementById("viewNotes"),
   noteInput: document.getElementById("noteInput"),
@@ -1775,7 +1776,9 @@ function showQuizQuestion() {
   // Câu từ SỔ LỖI (ngữ pháp/IELTS) — không gắn với từ vựng.
   if (q.type === "bank") {
     el.quizProgress.textContent = `Đã thuộc ${quiz.solved}/${quiz.total} · còn ${quiz.queue.length} câu`;
-    el.quizType.textContent = "🩹 Câu từng sai · " + (q.bank.kind === "ielts" ? "IELTS" : "Ngữ pháp");
+    el.quizType.textContent = q.bank.kind === "topic"
+      ? "🎯 Luyện tập · " + (q.bank.topicTitle || "Ngữ pháp")
+      : "🩹 Câu từng sai · " + (q.bank.kind === "ielts" ? "IELTS" : "Ngữ pháp");
     el.quizQ.textContent = q.bank.q;
     el.quizFeedback.textContent = "";
     el.quizFeedback.className = "quiz-feedback";
@@ -2578,41 +2581,315 @@ async function ingestPdfUrlToKB(url) {
 }
 
 // ============================================================
-// NGỮ PHÁP — nội dung tĩnh (grammar.js), dựng 1 lần + tìm kiếm.
+// NGỮ PHÁP — lộ trình khoá học: lưới thẻ đánh số theo từng nhóm
+// (📘 Ngữ pháp / 🎯 IELTS), bấm vào xem chi tiết bài học (nội dung
+// tĩnh grammar.js) + luyện tập theo chủ điểm (grammar-bank.js, tự
+// bù thêm câu bằng AI khi luyện nếu kho viết tay chưa đủ).
 // ============================================================
 let grammarBuilt = false;
 function renderGrammar() {
   if (grammarBuilt || typeof GRAMMAR_DATA === "undefined") return;
   grammarBuilt = true;
   el.grammarBody.innerHTML = "";
+
+  const roadmap = document.createElement("div");
+  roadmap.className = "gr-roadmap";
+  const detail = document.createElement("div");
+  detail.className = "gr-detail hidden";
+  el.grammarBody.append(roadmap, detail);
+
   GRAMMAR_DATA.forEach((g) => {
     const gh = document.createElement("div");
     gh.className = "gr-group";
     gh.textContent = g.group;
-    el.grammarBody.appendChild(gh);
-    g.topics.forEach((t) => {
-      const d = document.createElement("details");
-      d.className = "gr-topic";
-      const s = document.createElement("summary");
-      s.textContent = t.title;
-      const c = document.createElement("div");
-      c.className = "gr-content";
-      c.innerHTML = t.html;
-      d.append(s, c);
-      d.dataset.search = (t.title + " " + c.textContent).toLowerCase();
-      el.grammarBody.appendChild(d);
+    roadmap.appendChild(gh);
+    const grid = document.createElement("div");
+    grid.className = "gr-cards";
+    roadmap.appendChild(grid);
+    g.topics.forEach((t, i) => {
+      const card = document.createElement("button");
+      card.className = "gr-card";
+      card.type = "button";
+      card.dataset.id = t.id;
+      card.dataset.search = (t.title + " " + t.html.replace(/<[^>]+>/g, " ")).toLowerCase();
+      card.innerHTML =
+        `<span class="gr-card-num">${i + 1}</span>` +
+        `<span class="gr-card-title">${escapeHtml(t.title)}</span>` +
+        `<span class="gr-card-check">✓</span>`;
+      card.addEventListener("click", () => openGrammarDetail(g, t, roadmap, detail));
+      grid.appendChild(card);
     });
   });
+
+  refreshGrammarProgress();
 }
+
+async function refreshGrammarProgress() {
+  const r = await chrome.storage.local.get("grammarProgress");
+  const progress = r.grammarProgress || {};
+  el.grammarBody.querySelectorAll(".gr-card").forEach((c) => {
+    c.classList.toggle("done", !!progress[c.dataset.id]);
+  });
+}
+
+async function markGrammarPracticed(topicId) {
+  const r = await chrome.storage.local.get("grammarProgress");
+  const progress = r.grammarProgress || {};
+  progress[topicId] = true;
+  await chrome.storage.local.set({ grammarProgress: progress });
+  const card = el.grammarBody.querySelector(`.gr-card[data-id="${topicId}"]`);
+  if (card) card.classList.add("done");
+}
+
+function openGrammarDetail(group, topic, roadmap, detail) {
+  const isIelts = group.group.includes("IELTS");
+  detail.innerHTML =
+    `<button type="button" class="gr-back">← Lộ trình</button>` +
+    `<h3 class="gr-detail-title">${escapeHtml(topic.title)}</h3>` +
+    `<div class="gr-content">${markupGrammarExamples(topic.html)}</div>` +
+    (isIelts ? "" : `<button type="button" class="gr-practice-btn">🎯 Luyện tập chủ điểm này</button>`);
+  detail.querySelector(".gr-back").addEventListener("click", () => {
+    detail.classList.add("hidden");
+    roadmap.classList.remove("hidden");
+  });
+  const practiceBtn = detail.querySelector(".gr-practice-btn");
+  if (practiceBtn) practiceBtn.addEventListener("click", () => startTopicPractice(topic.id, topic.title));
+  roadmap.classList.add("hidden");
+  detail.classList.remove("hidden");
+  detail.scrollTop = 0;
+}
+
+// ---------- Sách tra cứu gốc (ảnh trang PDF thật + mục lục + tìm kiếm) ----------
+// Chỉ mục lục (grammar-book-meta.js) là nội dung tự viết nên nằm trong code;
+// ẢNH TRANG + chỉ mục tìm kiếm là tài liệu bên thứ ba, nạp cục bộ từ
+// assets/grammar-book-12/ (đã gitignore — xem .gitignore) chứ không đóng gói
+// trong code, để không đưa lên repo public. Nếu thư mục đó chưa có trên máy
+// (vd sau khi clone repo ở máy khác) thì UI tự báo thiếu thay vì vỡ.
+let grammarBookOpen = false;
+let grammarBookCurrentPage = 1;
+let grammarBookSearchIndex = null; // null = chưa nạp, false = nạp lỗi/thiếu file
+
+function renderBookView() {
+  if (el.grammarBody.querySelector(".gr-book")) return;
+  const meta = typeof GRAMMAR_BOOK_META !== "undefined" ? GRAMMAR_BOOK_META : null;
+  const total = meta ? meta.totalPages : 0;
+
+  const book = document.createElement("div");
+  book.className = "gr-book hidden";
+  book.innerHTML =
+    `<div class="gb-credit">${meta ? escapeHtml(meta.credit) : ""}</div>` +
+    `<div class="gb-toc">` +
+    `<div class="gb-search-wrap"><input type="search" class="gb-search" placeholder="Tìm trong ${total} trang…" />` +
+    `<div class="gb-searchresults hidden"></div></div>` +
+    `<div class="gb-toclist"></div>` +
+    `</div>` +
+    `<div class="gb-page hidden">` +
+    `<div class="gb-nav">` +
+    `<button type="button" class="gb-toclink">📑 Mục lục</button>` +
+    `<button type="button" class="gb-prev">←</button>` +
+    `<input type="number" class="gb-pageinput" min="1" />` +
+    `<span class="gb-pagetotal">/ ${total}</span>` +
+    `<button type="button" class="gb-next">→</button>` +
+    `</div>` +
+    `<div class="gb-imgwrap"><img class="gb-img" alt="Trang sách" /></div>` +
+    `<div class="gb-missing hidden">Chưa có dữ liệu cục bộ cho sách này trên máy này (thư mục assets/grammar-book-12/ — ảnh trang không đưa lên repo public nên phải có sẵn cục bộ mới dùng được).</div>` +
+    `</div>`;
+  el.grammarBody.appendChild(book);
+
+  const tocEl = book.querySelector(".gb-toc");
+  const pageEl = book.querySelector(".gb-page");
+  const img = book.querySelector(".gb-img");
+  const missing = book.querySelector(".gb-missing");
+  const pageInput = book.querySelector(".gb-pageinput");
+  const prevBtn = book.querySelector(".gb-prev");
+  const nextBtn = book.querySelector(".gb-next");
+  const toclinkBtn = book.querySelector(".gb-toclink");
+  const list = book.querySelector(".gb-toclist");
+
+  (meta ? meta.toc : []).forEach((item) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "gb-tocitem" + (item.major ? " major" : "");
+    b.innerHTML = `<span class="gb-tocpage">${item.page}</span><span>${escapeHtml(item.title)}</span>`;
+    b.addEventListener("click", () => showPage(item.page));
+    list.appendChild(b);
+  });
+
+  function showPage(n) {
+    n = Math.max(1, Math.min(total, n));
+    grammarBookCurrentPage = n;
+    tocEl.classList.add("hidden");
+    pageEl.classList.remove("hidden");
+    pageInput.value = n;
+    prevBtn.disabled = n <= 1;
+    nextBtn.disabled = n >= total;
+    missing.classList.add("hidden");
+    img.classList.remove("hidden");
+    img.src = chrome.runtime.getURL(`${meta.assetDir}/pg-${String(n).padStart(3, "0")}.jpg`);
+  }
+  img.addEventListener("error", () => {
+    img.classList.add("hidden");
+    missing.classList.remove("hidden");
+  });
+  toclinkBtn.addEventListener("click", () => { pageEl.classList.add("hidden"); tocEl.classList.remove("hidden"); });
+  prevBtn.addEventListener("click", () => showPage(grammarBookCurrentPage - 1));
+  nextBtn.addEventListener("click", () => showPage(grammarBookCurrentPage + 1));
+  pageInput.addEventListener("change", () => showPage(parseInt(pageInput.value, 10) || 1));
+
+  const searchInput = book.querySelector(".gb-search");
+  const searchResults = book.querySelector(".gb-searchresults");
+  let searchTimer = null;
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimer);
+    const q = searchInput.value.trim();
+    if (!q) { searchResults.classList.add("hidden"); return; }
+    searchTimer = setTimeout(() => runBookSearch(q, searchResults, showPage, meta), 150);
+  });
+
+  book._showToc = () => { pageEl.classList.add("hidden"); tocEl.classList.remove("hidden"); };
+}
+
+async function runBookSearch(q, resultsEl, showPage, meta) {
+  if (grammarBookSearchIndex === null) {
+    try {
+      const res = await fetch(chrome.runtime.getURL(`${meta.assetDir}/search-index.json`));
+      if (!res.ok) throw new Error("missing");
+      grammarBookSearchIndex = await res.json();
+    } catch {
+      grammarBookSearchIndex = false;
+    }
+  }
+  if (!grammarBookSearchIndex) {
+    resultsEl.innerHTML = `<div class="gb-sr-empty">Chưa có dữ liệu tìm kiếm cục bộ trên máy này.</div>`;
+    resultsEl.classList.remove("hidden");
+    return;
+  }
+  const ql = q.toLowerCase();
+  const matches = [];
+  for (let i = 0; i < grammarBookSearchIndex.length; i++) {
+    const idx = grammarBookSearchIndex[i].toLowerCase().indexOf(ql);
+    if (idx !== -1) {
+      const start = Math.max(0, idx - 35);
+      const snippet = (start > 0 ? "…" : "") + grammarBookSearchIndex[i].slice(start, idx + q.length + 50).replace(/\s+/g, " ") + "…";
+      matches.push({ page: i + 1, snippet });
+      if (matches.length >= 30) break;
+    }
+  }
+  resultsEl.innerHTML = "";
+  if (!matches.length) {
+    resultsEl.innerHTML = `<div class="gb-sr-empty">Không tìm thấy "${escapeHtml(q)}"</div>`;
+  } else {
+    const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    matches.forEach((m) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "gb-sr-item";
+      const hi = escapeHtml(m.snippet).replace(re, (x) => `<mark>${x}</mark>`);
+      b.innerHTML = `<span class="gb-sr-page">Trang ${m.page}</span><br>${hi}`;
+      b.addEventListener("click", () => { showPage(m.page); resultsEl.classList.add("hidden"); });
+      resultsEl.appendChild(b);
+    });
+  }
+  resultsEl.classList.remove("hidden");
+}
+
+el.grammarBookBtn.addEventListener("click", () => {
+  const roadmap = el.grammarBody.querySelector(".gr-roadmap");
+  const detail = el.grammarBody.querySelector(".gr-detail");
+  grammarBookOpen = !grammarBookOpen;
+  if (grammarBookOpen) {
+    renderBookView();
+    roadmap?.classList.add("hidden");
+    detail?.classList.add("hidden");
+    el.grammarBody.querySelector(".gr-book")?.classList.remove("hidden");
+    el.grammarSearch.classList.add("hidden");
+    el.grammarBookBtn.textContent = "← Lộ trình";
+  } else {
+    el.grammarBody.querySelector(".gr-book")?.classList.add("hidden");
+    roadmap?.classList.remove("hidden");
+    el.grammarSearch.classList.remove("hidden");
+    el.grammarBookBtn.textContent = "📖 Sách gốc";
+  }
+});
+
 el.grammarSearch.addEventListener("input", () => {
   const q = el.grammarSearch.value.trim().toLowerCase();
-  el.grammarBody.querySelectorAll(".gr-group").forEach((gh) => (gh.style.display = q ? "none" : ""));
-  el.grammarBody.querySelectorAll(".gr-topic").forEach((d) => {
-    const match = !q || d.dataset.search.includes(q);
-    d.style.display = match ? "" : "none";
-    d.open = !!q && match;
+  const roadmap = el.grammarBody.querySelector(".gr-roadmap");
+  const detail = el.grammarBody.querySelector(".gr-detail");
+  if (!roadmap || !detail) return;
+  if (!detail.classList.contains("hidden")) {
+    detail.classList.add("hidden");
+    roadmap.classList.remove("hidden");
+  }
+  roadmap.querySelectorAll(".gr-cards").forEach((grid) => {
+    let visible = 0;
+    grid.querySelectorAll(".gr-card").forEach((c) => {
+      const match = !q || c.dataset.search.includes(q);
+      c.style.display = match ? "" : "none";
+      if (match) visible++;
+    });
+    const gh = grid.previousElementSibling;
+    if (gh && gh.classList.contains("gr-group")) gh.style.display = visible ? "" : "none";
   });
 });
+
+// ---------- Luyện tập theo chủ điểm (sinh thêm bằng AI nếu kho viết tay thiếu) ----------
+async function generateTopicPractice(topicId, topicTitle, need) {
+  const cfg = await getConfig();
+  if (!cfg.apiKey || need <= 0) return [];
+  const raw = await chatOnce({
+    config: cfg,
+    messages: [
+      {
+        role: "system",
+        content:
+          "Bạn là chuyên gia khảo thí tiếng Anh, soạn câu hỏi GỐC (tự viết, không trích từ đề thi/sách có sẵn) hiệu chỉnh đúng thang CEFR B2 lên C1. " +
+          "Hỏi tình huống dễ nhầm, ngoại lệ, hoặc phân biệt hai cấu trúc gần giống nhau — không hỏi khái niệm quá cơ bản. " +
+          "Phương án nhiễu phải hợp lý, cùng trường nghĩa, không lộ liễu. " +
+          'Tự kiểm tra lại từng câu trước khi trả về: công thức nêu trong "hint"/"e" phải mô tả ĐÚNG những gì xuất hiện trong chính câu "q" đó.',
+      },
+      {
+        role: "user",
+        content:
+          `Tạo ${need} câu trắc nghiệm 4 lựa chọn (đúng 1 đáp án), MỖI CÂU chỉ có DUY NHẤT MỘT chỗ trống "___", về đúng chủ điểm ngữ pháp: "${topicTitle}". ` +
+          "Các lựa chọn là MỘT TỪ hoặc cụm ngắn (tối đa 4 từ). Không dùng ký tự xuống dòng trong chuỗi. " +
+          'Mỗi phần tử thêm trường "hint": gợi ý QUY TẮC/CÔNG THỨC cần dùng để điền đúng — TUYỆT ĐỐI KHÔNG được viết ra đáp án cụ thể hay từ/cụm cần điền trong "hint", chỉ nêu tên quy tắc + công thức chung chung. ' +
+          'Trường "e" (giải thích, hiện SAU khi trả lời — được PHÉP nêu đáp án): PHẢI chỉ đích danh phương án nhiễu gần đúng nhất và nói rõ vì sao nó sai trong đúng câu này, không chỉ nhắc lại quy tắc của đáp án đúng. ' +
+          'Trả về DUY NHẤT một mảng JSON: [{"q":"đề bài bằng tiếng Anh có chứa ___","o":["A","B","C","D"],"a":chỉ số đáp án đúng (0-3),"hint":"gợi ý quy tắc, không lộ đáp án","e":"giải thích chỉ rõ vì sao phương án nhiễu gần đúng nhất lại sai"}]. Không thêm chữ nào ngoài JSON.',
+      },
+    ],
+  });
+  const arr = extractJsonArray(raw);
+  return arr.filter(
+    (x) => x && x.q && Array.isArray(x.o) && x.o.length >= 2 && typeof x.a === "number" && x.a >= 0 && x.a < x.o.length
+  );
+}
+
+async function startTopicPractice(topicId, topicTitle) {
+  let pool = (typeof GRAMMAR_TOPIC_BANK !== "undefined" ? GRAMMAR_TOPIC_BANK[topicId] : null) || [];
+  pool = pool.slice();
+  if (pool.length < 30) {
+    const cfg = await getConfig();
+    if (cfg.apiKey) {
+      setStatus("Đang sinh thêm câu luyện…");
+      try {
+        const more = await generateTopicPractice(topicId, topicTitle, 100 - pool.length);
+        pool = pool.concat(more);
+      } catch (err) {
+        console.error(err);
+      }
+      setStatus("");
+    }
+  }
+  if (!pool.length) { setStatus("Chủ điểm này chưa có câu luyện tập.", true); return; }
+  shuffle(pool);
+  openQuizSetup({
+    title: topicTitle,
+    max: pool.length,
+    build: (n) => pool.slice(0, n).map((item) => ({ type: "bank", bank: { ...item, kind: "topic", topicTitle } })),
+  });
+  await markGrammarPracticed(topicId);
+}
 
 // ============================================================
 // SỔ TAY — Ghi chú, Nhật ký (popup + lịch), Việc cần làm.

@@ -50,7 +50,9 @@ body {
   justify-content: center;
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Noto Sans trước system-ui: xem ghi chú trong sidepanel.css — font "Ubuntu"
+     (mà system-ui có thể trỏ tới trên Linux) thiếu glyph "ữ/ừ/ệ" liền mạch. */
+  font-family: "Noto Sans", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   line-height: 1.6;
   padding: 40px 20px;
 }
@@ -157,6 +159,7 @@ body {
 .g-lesson-body .gr-formula { font-family: ui-monospace, Menlo, monospace; background: var(--surface); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
 .g-lesson-body .gr-note { font-size: 13px; color: var(--muted); font-style: italic; border-left: 3px solid var(--border); padding-left: 8px; }
 .g-lesson-body .gr-scroll { overflow-x: auto; }
+.g-lesson-body del { color: var(--error); text-decoration-thickness: 1.5px; }
 #gLessonDone { width: 100%; margin-top: 14px; }
 
 /* Chế độ NHỚ LẠI — gõ đáp án */
@@ -252,24 +255,109 @@ body {
 #gNext { width: 100%; margin-top: 16px; }
 
 /* Việc cần làm & Nhật ký trong trang chặn */
-.g-compose { display: flex; gap: 8px; margin-bottom: 16px; }
+.g-compose { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; }
 .g-compose input {
   flex: 1; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
   background: var(--bg); color: var(--fg); font: inherit; font-size: 15px;
 }
+.g-priority-pick { display: flex; gap: 3px; flex-shrink: 0; }
+.g-pri-opt {
+  border: 1px solid transparent; background: none; border-radius: 6px;
+  font-size: 15px; padding: 6px 7px; cursor: pointer; opacity: 0.45; line-height: 1;
+}
+.g-pri-opt.active { opacity: 1; border-color: var(--border); background: var(--card); }
 .g-list { margin-bottom: 14px; }
 .g-empty { color: var(--muted); font-style: italic; text-align: center; padding: 16px 0; margin: 0; }
-.g-item { display: flex; align-items: center; gap: 10px; padding: 11px 4px; border-bottom: 1px solid var(--border); }
-.g-item.done .g-item-text { text-decoration: line-through; color: var(--muted); }
-.g-item-flag { font-size: 11px; flex-shrink: 0; }
-.g-item-text { flex: 1; font-size: 15px; word-break: break-word; }
+.g-item-flag { border: 0; background: none; cursor: pointer; font-size: 13px; padding: 2px; line-height: 1; flex-shrink: 0; }
+.g-item-text { font-size: 15px; word-break: break-word; margin-bottom: 6px; }
 .g-item-tag { font-size: 11px; color: var(--warning); white-space: nowrap; }
 .g-item-tag.due-overdue { color: var(--error); font-weight: 600; }
 .g-item-tag.due-today { color: var(--warning); font-weight: 600; }
 .g-item-tag.due-future, .g-item-tag.due-age { color: var(--muted); }
 .g-item-tag.due-done { color: var(--muted); text-decoration: line-through; }
-.g-item-del { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 6px; }
+.g-item-del { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 6px; margin-left: auto; }
 .g-item-del:hover { background: var(--surface); color: var(--error); }
+
+/* Bước 1 (việc cần làm) dạng bảng Kanban mini — kéo thả thẻ giữa 3 cột, cùng
+   cơ chế/ dữ liệu với trang todo-board.html (groupTodosByStatus, setTodoStatus). */
+.gate.kanban-wide { max-width: 900px; }
+.g-board { display: flex; gap: 14px; align-items: flex-start; }
+.g-col {
+  flex: 1 1 0; min-width: 200px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  display: flex; flex-direction: column; max-height: min(560px, 62vh);
+}
+.g-col[data-col="todo"] { background: var(--block-lilac); }
+.g-col[data-col="doing"] { background: var(--block-coral); }
+.g-col[data-col="done"] { background: var(--block-mint); }
+.g-col.drag-over { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent) inset; }
+.g-col-head {
+  font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+  padding: 12px 14px; border-bottom: 1px solid color-mix(in srgb, var(--fg) 10%, transparent); flex-shrink: 0;
+}
+.g-col-body { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 100px; }
+.g-col-empty { font-size: 12.5px; opacity: 0.55; font-style: italic; text-align: center; margin: 18px 0; }
+
+.g-task {
+  background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--border);
+  border-radius: 12px; padding: 11px 12px; cursor: pointer; box-shadow: var(--shadow-md);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.g-task:hover { transform: translateY(-1px); }
+.g-task.dragging { opacity: 0.4; cursor: grabbing; }
+.g-task.pri-high { border-left-color: var(--error); }
+.g-task.pri-medium { border-left-color: var(--warning); }
+.g-task.pri-low { border-left-color: var(--border); }
+.g-task.done { opacity: 0.7; }
+.g-task.done .g-item-text { text-decoration: line-through; color: var(--muted); }
+.g-task-top { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.g-label-pill {
+  display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px;
+  border-radius: 999px; margin-bottom: 6px;
+  background: color-mix(in srgb, var(--pill-color) 18%, transparent); color: var(--pill-color);
+}
+
+/* Popup chi tiết một việc (bấm vào thẻ) — cùng khuôn với todo-board.html */
+.g-modal {
+  position: fixed; inset: 0; z-index: 1100; background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.g-modal-card {
+  position: relative; width: 100%; max-width: 480px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+  box-shadow: var(--shadow-md); max-height: 90vh; overflow-y: auto;
+}
+.g-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.g-modal-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.g-modal-close { border: 0; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer; }
+.g-btn.ghost { background: transparent; }
+
+#gTdDetailText {
+  width: 100%; box-sizing: border-box; resize: vertical; min-height: 48px;
+  font: inherit; font-size: 16px; font-weight: 600; padding: 9px 11px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--fg);
+  margin-bottom: 14px;
+}
+.g-td-detail-row { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+.g-td-detail-lbl { font-size: 12.5px; color: var(--muted); width: 66px; flex-shrink: 0; }
+.g-td-detail-label-input, #gTdDetailDue {
+  flex: 1; padding: 8px 11px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--card); color: var(--fg); font: inherit; font-size: 14px;
+}
+.g-td-detail-clear { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 6px; border-radius: 5px; }
+.g-td-detail-clear:hover { background: var(--surface); color: var(--error); }
+.g-status-pick { display: flex; gap: 4px; flex: 1; }
+.g-status-opt {
+  flex: 1; border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  border-radius: 7px; padding: 7px 4px; font-size: 12px; cursor: pointer;
+}
+.g-status-opt.active { border-color: var(--primary); color: var(--fg); background: color-mix(in srgb, var(--primary) 12%, var(--card)); font-weight: 600; }
+#gTdDetailDesc {
+  width: 100%; box-sizing: border-box; min-height: 100px; resize: vertical; margin-top: 6px; margin-bottom: 10px;
+  font: inherit; font-size: 14px; padding: 9px 11px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--card); color: var(--fg);
+}
+.g-td-detail-meta { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
 #gTodoDone, #gJrSave { width: 100%; margin-top: 8px; }
 #gJrText {
   width: 100%; min-height: 160px; padding: 14px; box-sizing: border-box; resize: vertical;

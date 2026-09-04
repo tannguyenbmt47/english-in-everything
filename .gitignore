@@ -3,6 +3,13 @@
 backup/
 *storage-backup*.json
 
+# Tài liệu tham khảo của bên thứ ba (không phải nội dung tự viết, chỉ dùng cá
+# nhân cho tính năng "Sách tra cứu" ở tab Ngữ pháp) — TUYỆT ĐỐI không đưa lên
+# repo public. Chỉ số mục lục (grammar-book-meta.js) là do tự viết nên vẫn
+# commit bình thường; ảnh trang + chỉ mục tìm kiếm thì không.
+*.pdf
+assets/grammar-book-12/
+
 # Rác hệ điều hành / editor
 .DS_Store
 Thumbs.db

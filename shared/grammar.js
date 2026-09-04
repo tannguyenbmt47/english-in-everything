@@ -3,11 +3,20 @@
 // Dữ liệu tĩnh; render ở tab "Ngữ pháp". Diễn giải chi tiết, nhiều ví dụ có dịch nghĩa.
 // ============================================================
 
-const GRAMMAR_DATA = [
+// Trong nội dung dưới đây, câu ví dụ SAI được đánh dấu bằng ~~...~~ (quy ước
+// viết tay) — chuyển thành <del> thật trước khi innerHTML, nếu không người
+// đọc thấy nguyên hai dấu ngã chứ không phải chữ gạch ngang. Dùng ở CẢ
+// gate.js (màn chặn buổi sáng) LẪN sidepanel.js (tab Ngữ pháp).
+function markupGrammarExamples(html) {
+  return String(html || "").replace(/~~([^~]+?)~~/g, "<del>$1</del>");
+}
+
+var GRAMMAR_DATA = [
   {
     group: "📘 Ngữ pháp tiếng Anh",
     topics: [
       {
+        id: "nen-tang",
         title: "Nền tảng: thành phần & trật tự câu",
         html: `
 <p>Trước khi đi vào từng chủ điểm, bạn cần nắm "bộ khung" của một câu tiếng Anh — mọi quy tắc khác (thì, bị động, mệnh đề quan hệ…) đều xây trên nền này. Bài này hơi dài vì nó phải tự đứng được một mình: mọi thuật ngữ dùng ở đây (chủ ngữ, tân ngữ, mệnh đề…) sẽ được định nghĩa ngay khi xuất hiện, không giả định bạn đã biết.</p>
@@ -94,6 +103,7 @@ const GRAMMAR_DATA = [
 </ul>`,
       },
       {
+        id: "tu-loai",
         title: "Từ loại (Parts of Speech) — nhận diện & vị trí",
         html: `
 <p>Cùng một gốc từ, tiếng Anh đổi đuôi để đổi <b>chức năng</b> trong câu: <i>succeed → success → successful → successfully</i>. Chọn sai đuôi là câu sai ngữ pháp dù đúng nghĩa. Điều quan trọng nhất: <b>đừng đoán theo nghĩa, hãy nhìn vị trí của chỗ trống</b>.</p>
@@ -147,6 +157,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Mẹo tự kiểm tra: đọc lại câu và hỏi "từ này đang mô tả CÁI GÌ?". Mô tả một danh từ → tính từ. Mô tả cách một việc diễn ra → trạng từ. Là bản thân sự vật/sự việc → danh từ.</p>`,
       },
       {
+        id: "cau-tao-tu",
         title: "Cấu tạo từ (Word Formation): hậu tố & tiền tố",
         html: `
 <p>Biết bộ đuôi từ là giải quyết được phần lớn bài word formation, và viết cũng chính xác hơn nhiều. Học theo <b>đuôi</b> chứ đừng học thuộc từng từ rời rạc.</p>
@@ -210,6 +221,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Cách luyện hiệu quả nhất: mỗi lần học từ mới, viết luôn cả họ từ (verb – noun – adjective – adverb) thay vì chỉ một dạng. Đề thi thường hỏi đúng dạng bạn chưa từng viết ra.</p>`,
       },
       {
+        id: "tong-hop-thi",
         title: "12 thì — bảng tổng hợp & cách chọn thì",
         html: `
 <p><b>Thì (tense)</b> là hình thức biến đổi của động từ để cho biết hành động xảy ra <b>khi nào</b> (hiện tại/quá khứ/tương lai) VÀ ở <b>trạng thái nào</b> (đơn giản/đang diễn ra/đã hoàn tất/hoàn tất-và-kéo dài) — hai khái niệm này gộp lại thành cái người học hay gọi chung là "thì", nhưng thực ra gồm hai lớp riêng: <b>mốc thời gian (tense)</b> và <b>thể (aspect)</b>. Tiếng Anh có 3 mốc thời gian, mỗi mốc có 4 thể, ghép lại thành đúng 12 thì cần nhớ.</p>
@@ -251,6 +263,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Ví dụ áp dụng: "Tôi đã sống ở đây 10 năm rồi (và vẫn đang sống)." → Bước 1: hiện tại (vẫn đang tiếp diễn tới giờ). Bước 2: đã "xong" một phần, có kết quả tính đến giờ → hoàn thành. Bước 3: câu nhấn ĐỘ DÀI ("10 năm") → chọn hiện tại hoàn thành TIẾP DIỄN: <i>I have been living here for 10 years.</i> Ba bài dưới đây sẽ giải thích cặn kẽ từng thì theo đúng ba mốc thời gian, kèm các cặp thì hay bị nhầm lẫn với nhau.</p>`,
       },
       {
+        id: "thi-hien-tai",
         title: "Nhóm thì HIỆN TẠI (chi tiết 4 thì)",
         html: `
 <h4>1. Hiện tại đơn (Present Simple)</h4>
@@ -298,6 +311,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Phân biệt với hiện tại hoàn thành đơn: <i>I have read three books this month</i> (hoàn thành đơn — nhấn KẾT QUẢ: đã đọc xong 3 cuốn, đếm được số lượng) ≠ <i>I have been reading this book all afternoon</i> (hoàn thành tiếp diễn — nhấn QUÁ TRÌNH đọc, có thể chưa đọc xong). Không dùng thể này với động từ trạng thái (đã nêu ở mục 2): "~~I have been knowing him for years~~" sai, phải là <i>I have known him for years.</i></p>`,
       },
       {
+        id: "thi-qua-khu",
         title: "Nhóm thì QUÁ KHỨ (chi tiết 4 thì)",
         html: `
 <h4>1. Quá khứ đơn (Past Simple)</h4>
@@ -339,6 +353,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Phân biệt với quá khứ hoàn thành đơn: <i>I had finished the report by noon</i> (nhấn KẾT QUẢ — báo cáo đã xong) ≠ <i>I had been writing the report all morning</i> (nhấn QUÁ TRÌNH viết kéo dài cả buổi sáng, có thể vẫn chưa xong hẳn).</p>`,
       },
       {
+        id: "thi-tuong-lai",
         title: "Nhóm thì TƯƠNG LAI (chi tiết 4 thì + các cách nói khác về tương lai)",
         html: `
 <p>Tương lai là mốc thời gian DUY NHẤT trong tiếng Anh có nhiều hơn một cách diễn đạt cho cùng một ý — vì bản thân "tương lai" chưa xảy ra, cách bạn CHỌN diễn đạt nó thể hiện quan điểm của bạn về mức độ chắc chắn/dự định. Đây cũng là điểm hay bị hỏi trong đề Reading/Writing vì có nhiều lựa chọn gần nghĩa.</p>
@@ -394,6 +409,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Mẹo lên band: dùng ĐA DẠNG các cách diễn đạt tương lai (không chỉ mỗi "will") trong Writing Task 2 khi bàn về xu hướng/dự đoán ("is likely to", "is expected to", "is projected to" cũng là những lựa chọn học thuật rất tốt, xem thêm ở bài "Động từ khiếm khuyết").</p>`,
       },
       {
+        id: "hoa-hop-chu-vi",
         title: "Sự hòa hợp Chủ ngữ – Động từ",
         html: `
 <p><b>"Hòa hợp" (agreement)</b> nghĩa là động từ phải chia theo <b>số</b> (số ít/số nhiều) của chủ ngữ (xem lại khái niệm Chủ ngữ ở bài "Nền tảng"). Nghe thì đơn giản — "she works", "they work" — nhưng có nhiều tình huống dễ đánh lừa mắt vì chủ ngữ THẬT bị che khuất bởi các từ đứng gần động từ hơn.</p>
@@ -426,6 +442,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Bài tập tự kiểm tra: gạch chân chủ ngữ THẬT trong câu "The results of the experiment, which took several years to complete, ___ surprising." — đáp án là "were" (chia theo "the results" số nhiều, bỏ qua toàn bộ cụm "of the experiment" và mệnh đề quan hệ chen giữa).</p>`,
       },
       {
+        id: "dieu-kien",
         title: "Câu điều kiện (Conditionals)",
         html: `
 <p>Câu điều kiện gồm hai <b>mệnh đề</b> (xem lại khái niệm Mệnh đề ở bài "Nền tảng"): mệnh đề <b>if</b> (nêu điều kiện) và mệnh đề chính (nêu kết quả nếu điều kiện đó xảy ra). Chọn đúng loại nào phụ thuộc vào việc điều kiện đó <b>có khả năng xảy ra hay chỉ là giả định</b>, và <b>thuộc mốc thời gian nào</b>.</p>
@@ -455,6 +472,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Lỗi hay gặp nhất: dùng "will" ngay trong mệnh đề "if" ở loại 1 — "~~If it will rain, we will stay home~~" SAI, mệnh đề "if" không bao giờ chia "will" (trừ khi "will" mang nghĩa "sẵn lòng/đồng ý" chứ không phải thì tương lai: "If you <b>will</b> just wait a moment…" — rất hiếm gặp).</p>`,
       },
       {
+        id: "bi-dong",
         title: "Câu bị động (Passive Voice)",
         html: `
 <p>Trong câu <b>chủ động (active voice)</b>, chủ ngữ là người/vật THỰC HIỆN hành động: <i>The committee approved the plan.</i> (Ủy ban [chủ ngữ, người thực hiện] phê duyệt kế hoạch.) Trong câu <b>bị động (passive voice)</b>, chủ ngữ là người/vật CHỊU hành động đó — tức Tân ngữ của câu chủ động (xem lại khái niệm Tân ngữ ở bài "Nền tảng") được đưa lên làm chủ ngữ mới.</p>
@@ -485,6 +503,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Chỉ <b>ngoại động từ</b> (có tân ngữ — xem bài "Nền tảng") mới chuyển sang bị động được, vì bị động cần "mượn" tân ngữ làm chủ ngữ mới. "He slept" không có dạng bị động vì "sleep" là <b>nội động từ</b>, không có tân ngữ để mượn. Tương tự "happen, occur, exist, seem, appear, belong to" đều không có dạng bị động.</p>`,
       },
       {
+        id: "tuong-thuat",
         title: "Câu tường thuật (Reported Speech)",
         html: `
 <p><b>Lời nói trực tiếp (direct speech)</b> là trích dẫn nguyên văn lời ai đó, đặt trong dấu ngoặc kép: <i>She said, "I am tired."</i> <b>Lời nói gián tiếp / câu tường thuật (reported/indirect speech)</b> là thuật lại Ý của lời nói đó bằng lời của người kể, không trích nguyên văn: <i>She said (that) she was tired.</i> Vì thời điểm nói đã lùi vào quá khứ so với lúc thuật lại, ta thường phải <b>lùi thì một bậc</b> và đổi các đại từ, trạng từ chỉ thời gian/nơi chốn cho phù hợp với góc nhìn mới.</p>
@@ -515,6 +534,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">KHÔNG lùi thì khi lời nói gốc là một chân lý/sự thật luôn đúng, không phụ thuộc thời gian: <i>The teacher said the Earth is round.</i> (không bắt buộc phải nói "was round" dù về mặt kỹ thuật lùi thì cũng không sai).</p>`,
       },
       {
+        id: "menh-de-quan-he",
         title: "Mệnh đề quan hệ (Relative Clauses)",
         html: `
 <p><b>Mệnh đề quan hệ</b> là một <b>mệnh đề</b> (xem lại khái niệm này ở bài "Nền tảng" — có đủ chủ ngữ + động từ chia) dùng để <b>bổ nghĩa cho một danh từ</b> đứng ngay trước nó, thay vì phải tách thành một câu riêng biệt. Nhờ đó câu văn gọn hơn và tự nhiên/"cao cấp" hơn về mặt văn phong. Nó luôn bắt đầu bằng một <b>đại từ quan hệ (relative pronoun)</b>.</p>
@@ -547,6 +567,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Chỉ rút gọn được khi đại từ quan hệ đóng vai trò CHỦ NGỮ của mệnh đề quan hệ (who/which/that làm chủ ngữ) — không rút gọn được khi nó là tân ngữ hoặc dùng "whose".</p>`,
       },
       {
+        id: "gerund-infinitive",
         title: "Danh động từ & Động từ nguyên mẫu (Gerund / Infinitive)",
         html: `
 <p>Khi một động từ (gọi là "động từ 2") đi ngay sau một động từ khác (động từ chính) trong cùng một mệnh đề, nó KHÔNG được giữ nguyên dạng mà phải chuyển thành một trong hai dạng: <b>V-ing (danh động từ — gerund)</b> hoặc <b>to V (động từ nguyên mẫu có "to" — to-infinitive)</b>. Danh động từ V-ing thực chất hoạt động NHƯ MỘT DANH TỪ trong câu (có thể làm chủ ngữ, tân ngữ — xem lại bài "Nền tảng"), còn to-V mang tính hướng tới một mục đích/ý định chưa xảy ra. Vấn đề là: mỗi động từ chính "kén" một dạng cố định phía sau, không có quy tắc chung — phải học thuộc theo nhóm nghĩa.</p>
@@ -573,6 +594,7 @@ const GRAMMAR_DATA = [
 </ul>`,
       },
       {
+        id: "modal-verbs",
         title: "Động từ khiếm khuyết (Modal Verbs)",
         html: `
 <p><b>Động từ khiếm khuyết (modal verbs)</b> — can, could, may, might, must, should, will, would, shall — là nhóm trợ động từ ĐẶC BIỆT: chúng không tự mang nghĩa hành động, mà thêm một lớp <b>SẮC THÁI</b> vào động từ chính đứng sau: khả năng, sự cho phép, nghĩa vụ, lời khuyên, hoặc mức độ chắc chắn của người nói. Đặc điểm ngữ pháp riêng: sau modal verb LUÔN LÀ động từ nguyên mẫu KHÔNG "to" (bare infinitive), và modal verb không bao giờ thêm "-s" dù chủ ngữ là ngôi thứ ba số ít: <i>She can swim.</i> (không phải "She cans swim" hay "She can to swim").</p>
@@ -604,6 +626,7 @@ const GRAMMAR_DATA = [
 <p class="gr-ex">She <b>must have left</b> early. <i>(Chắc chắn cô ấy đã rời đi sớm — suy luận về quá khứ.)</i> / He <b>might have forgotten</b>. <i>(Có thể anh ấy đã quên.)</i> / They <b>can't have known</b>. <i>(Chắc chắn họ đã không biết.)</i> / You <b>should have called</b> me. <i>(Đáng lẽ bạn nên gọi tôi — trách móc nhẹ vì việc đó đã KHÔNG xảy ra.)</i></p>`,
       },
       {
+        id: "mao-tu",
         title: "Mạo từ (a / an / the / zero)",
         html: `
 <p><b>Mạo từ (article)</b> là từ nhỏ đứng trước danh từ để báo hiệu người nghe/đọc có XÁC ĐỊNH ĐƯỢC chính xác danh từ đó là gì/cái nào hay không. Đây là điểm ngữ pháp tuy nhỏ nhưng RẤT dễ mất điểm vì tiếng Việt hoàn toàn không có khái niệm tương đương — người Việt học tiếng Anh thường hoặc bỏ sót mạo từ, hoặc dùng sai loại.</p>
@@ -634,6 +657,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Mẹo lên band: mạo từ là điểm CỰC KỲ nhỏ nhưng bị soi rất kỹ ở Grammatical Range & Accuracy. Cách luyện hiệu quả nhất không phải học quy tắc suông mà là ĐỌC NHIỀU và chú ý xem người bản ngữ dùng "a/an/the/zero" ở đâu trong ngữ cảnh tương tự bài bạn đang viết.</p>`,
       },
       {
+        id: "so-sanh",
         title: "So sánh (Comparison)",
         html: `
 <p>Cấu trúc so sánh giúp diễn đạt mức độ HƠN – KÉM – BẰNG NHAU giữa hai hay nhiều đối tượng. Cách chia phụ thuộc vào <b>số âm tiết</b> của tính từ/trạng từ đang so sánh (âm tiết — syllable — là một "nhịp" phát âm trong từ, vd "tall" có 1 âm tiết, "beautiful" có 3 âm tiết: beau-ti-ful).</p>
@@ -669,6 +693,7 @@ const GRAMMAR_DATA = [
 </ul>`,
       },
       {
+        id: "lien-tu",
         title: "Liên từ & mệnh đề (Conjunctions)",
         html: `
 <p><b>Liên từ (conjunction)</b> là từ dùng để NỐI hai ý/hai mệnh đề lại với nhau, thể hiện mối quan hệ logic giữa chúng (nguyên nhân, tương phản, mục đích…). Dùng đúng liên từ giúp bài viết mạch lạc; lỗi phổ biến nhất là NHẦM LẪN giữa (a) liên từ đi với một MỆNH ĐỀ đầy đủ (có chủ ngữ + động từ chia — xem bài "Nền tảng") và (b) giới từ đi với một DANH TỪ/cụm danh từ/V-ing — hai nhóm này không thể dùng thay thế nhau dù đôi khi dịch ra tiếng Việt nghe giống nhau.</p>
@@ -697,6 +722,7 @@ const GRAMMAR_DATA = [
 <p>Các từ nối sau đứng đầu câu mới (giống "however"), dùng để thêm một luận điểm/ý bổ sung cùng chiều với ý trước: <b>moreover, furthermore, in addition, besides, what is more, additionally</b>. Ví dụ: <i>Studying abroad broadens one's worldview. Moreover, it improves language skills significantly.</i></p>`,
       },
       {
+        id: "dao-ngu",
         title: "Đảo ngữ (Inversion) — nâng cao",
         html: `
 <p><b>Đảo ngữ (inversion)</b> là đưa một <b>trạng từ mang nghĩa phủ định/hạn định</b> (never, rarely, only…) hoặc cả một cụm nhấn mạnh lên ĐẦU câu (thay vì vị trí bình thường của nó), rồi ĐẢO trợ động từ ra TRƯỚC chủ ngữ — cấu trúc lúc này trông giống hệt một câu hỏi dù thực chất vẫn là câu khẳng định. Đây là "vũ khí" ghi điểm ở tiêu chí "đa dạng cấu trúc câu" trong IELTS Writing/Speaking band 7+, nhưng chỉ nên dùng 1-2 lần trong cả bài, dùng quá nhiều sẽ khiến văn phong gượng ép.</p>
@@ -727,6 +753,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Đây chính là lý do ví dụ "Not only <b>did</b> she win" ở trên phải mượn "did" — câu gốc "She won" là quá khứ đơn của động từ thường, không có trợ động từ sẵn để đảo.</p>`,
       },
       {
+        id: "luong-tu",
         title: "Đếm được / không đếm được & Lượng từ",
         html: `
 <p>Danh từ tiếng Anh chia thành hai loại quan trọng, quyết định việc chọn lượng từ (many/much…), mạo từ (a/an — xem bài "Mạo từ"), và cả cách chia động từ (xem bài "Sự hòa hợp"):</p>
@@ -766,6 +793,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Mẹo lên band: trong Writing Task 1 khi mô tả số liệu, dùng "the majority of / a significant proportion of / a small number of" thay vì lặp lại "many/a lot of" nhiều lần — vừa chính xác hơn về mặt học thuật, vừa đa dạng từ vựng.</p>`,
       },
       {
+        id: "cau-uoc",
         title: "Câu ước & giả định (Wish / Subjunctive)",
         html: `
 <p>Cấu trúc "wish" (ước) và <b>thức giả định (subjunctive mood)</b> dùng để diễn đạt điều <b>TRÁI VỚI THỰC TẾ</b> — một mong muốn, một điều tưởng tượng, hoặc một lời khuyên mang tính giả định. Về bản chất, các cấu trúc này dùng chung LOGIC LÙI THÌ với câu điều kiện loại 2/3 (xem lại bài "Câu điều kiện"): muốn diễn tả điều không có thật, tiếng Anh "lùi" động từ về một thì quá khứ hơn bình thường — đây không phải lỗi chia sai thì, mà là QUY TẮC NGỮ PHÁP của thức giả định.</p>
@@ -787,6 +815,7 @@ const GRAMMAR_DATA = [
 </ul>`,
       },
       {
+        id: "gioi-tu",
         title: "Giới từ thường gặp (Prepositions)",
         html: `
 <p><b>Giới từ (preposition)</b> là từ đứng trước danh từ/đại từ/V-ing để chỉ mối quan hệ về thời gian, nơi chốn, hoặc cách thức (in, on, at, for, of, with, by…). Đây là phần "khó nhằn" nhất với người học vì cách dùng nhiều khi phụ thuộc THÓI QUEN ngôn ngữ chứ không theo quy tắc logic tuyệt đối, và giới từ tiếng Việt hiếm khi dịch 1-1 sang tiếng Anh.</p>
@@ -831,6 +860,7 @@ const GRAMMAR_DATA = [
     group: "🎯 IELTS — Quy tắc & Chiến lược (2026)",
     topics: [
       {
+        id: "ielts-tong-quan",
         title: "Tổng quan format & thang điểm",
         html: `
 <p>IELTS gồm 4 kỹ năng, tổng <b>~2 giờ 45 phút</b>. Có 2 loại: <b>Academic</b> (du học) và <b>General Training</b> (định cư/làm việc) — khác nhau ở Reading & Writing.</p>
@@ -845,6 +875,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">*Bản thi trên máy tính: không có 10 phút chuyển đáp án riêng (điền trực tiếp); bản giấy có 10 phút.</p>`,
       },
       {
+        id: "ielts-cap-nhat-2026",
         title: "Cập nhật 2026 cần biết",
         html: `
 <ul>
@@ -856,6 +887,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Lưu ý: định dạng IELTS ổn định nhiều năm; hãy luôn kiểm tra ielts.org / trung tâm để có thông tin mới nhất trước ngày thi.</p>`,
       },
       {
+        id: "ielts-listening",
         title: "Listening — chiến lược",
         html: `
 <ul>
@@ -867,6 +899,7 @@ const GRAMMAR_DATA = [
 </ul>`,
       },
       {
+        id: "ielts-reading",
         title: "Reading — chiến lược",
         html: `
 <ul>
@@ -879,6 +912,7 @@ const GRAMMAR_DATA = [
 </ul>`,
       },
       {
+        id: "ielts-writing-task1",
         title: "Writing Task 1 (Academic) — quy tắc",
         html: `
 <p><b>Yêu cầu:</b> ≥ <b>150 từ</b>, ~<b>20 phút</b>. Mô tả biểu đồ/bảng/quy trình/bản đồ một cách khách quan. <b>Không nêu ý kiến cá nhân.</b></p>
@@ -893,6 +927,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Tiêu chí chấm: Task Achievement · Coherence & Cohesion · Lexical Resource · Grammatical Range & Accuracy (mỗi phần 25%) — xem bảng band chi tiết ở bài "Tiêu chí chấm".</p>`,
       },
       {
+        id: "ielts-writing-task2",
         title: "Writing Task 2 — quy tắc & dạng đề",
         html: `
 <p><b>Yêu cầu:</b> ≥ <b>250 từ</b>, ~<b>40 phút</b>, chiếm <b>2/3 điểm Writing</b>. Bài luận trình bày quan điểm.</p>
@@ -909,6 +944,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Ngay ở band 7, giám khảo vẫn trừ vì <b>khái quát hóa quá mức</b> ("all students...", "everyone knows...") hoặc ý phụ lan man thiếu trọng tâm. Mỗi đoạn thân bài nên xoay quanh đúng MỘT ý chính, có dẫn chứng cụ thể (số liệu, ví dụ thật) thay vì phát biểu chung chung.</p>`,
       },
       {
+        id: "ielts-speaking",
         title: "Speaking — 3 phần & chiến lược",
         html: `
 <ul>
@@ -920,6 +956,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note">Giám khảo phân biệt band chủ yếu qua <b>LÝ DO</b> bạn ngập ngừng, không phải số lần: ngập ngừng để tìm TỪ hoặc NGỮ PHÁP cơ bản kéo bạn về band 5–6; ngập ngừng để tìm Ý TIẾP THEO trong lúc câu trước vẫn trôi chảy là bình thường ngay cả ở band 7–8. Đừng cố nói không ngừng nghỉ — hãy để chỗ ngừng đúng lúc, đúng lý do.</p>`,
       },
       {
+        id: "ielts-band-descriptors",
         title: "Tiêu chí chấm (Band Descriptors) — theo bảng chính thức IELTS.org",
         html: `
 <p>Writing & Speaking đều chấm theo <b>4 tiêu chí bằng nhau (25% mỗi tiêu chí)</b>. Bảng dưới đây tóm tắt bằng tiếng Việt điểm KHÁC NHAU cốt lõi giữa các band 5–8, dựa theo "Band Descriptors (public version)" chính thức của IELTS (British Council · IDP · Cambridge — công bố tại ielts.org).</p>
@@ -994,6 +1031,7 @@ const GRAMMAR_DATA = [
 <p class="gr-note"><b>Ranh giới 6 → 7 quan trọng nhất, ở cả Writing lẫn Speaking, KHÔNG phải "ít lỗi hơn"</b> mà là: (1) mỗi đoạn/mỗi câu trả lời có đúng MỘT ý trung tâm rõ ràng, không lan man; (2) ngập ngừng/tự sửa — nếu có — xảy ra vì đang tìm Ý tiếp theo để nói, chứ không phải vì bí từ hay bí ngữ pháp cơ bản; (3) bắt đầu dùng được từ/cấu trúc ít thông dụng một cách có ý thức (biết khi nào nên và không nên dùng), chứ không chỉ nhồi từ khó.</p>`,
       },
       {
+        id: "ielts-linking-phrases",
         title: "Từ nối & cụm hữu ích (Writing/Speaking)",
         html: `
 <ul>

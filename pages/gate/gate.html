@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="gate.css" />
 </head>
 <body>
-  <main class="gate">
+  <main class="gate" id="gGate">
     <header class="g-head">
       <div>
         <h1 id="gTitle">Buổi sáng — học trước đã 💪</h1>
@@ -57,6 +57,11 @@
     <section id="gTodo" class="g-card hidden">
       <div class="g-type">Bước 1 — Việc cần làm hôm nay</div>
       <div class="g-compose">
+        <div id="gTodoPriorityPick" class="g-priority-pick">
+          <button type="button" class="g-pri-opt" data-pri="high" title="Ưu tiên cao">🔴</button>
+          <button type="button" class="g-pri-opt active" data-pri="medium" title="Ưu tiên vừa">🟡</button>
+          <button type="button" class="g-pri-opt" data-pri="low" title="Ưu tiên thấp">⚪</button>
+        </div>
         <input type="text" id="gTodoInput" placeholder="Thêm việc… (Enter để lưu)" autocomplete="off" />
         <button id="gTodoAdd" class="g-btn">Thêm</button>
       </div>
@@ -64,6 +69,53 @@
       <div id="gTodoHint" class="g-feedback"></div>
       <button id="gTodoDone" class="g-btn primary">Xong — tiếp tục</button>
     </section>
+
+    <!-- ============ CHI TIẾT MỘT VIỆC (bấm vào thẻ trong bảng Kanban ở Bước 1) ============ -->
+    <div id="gTodoDetailModal" class="g-modal hidden">
+      <div class="g-modal-card">
+        <div class="g-modal-head">
+          <strong>Chi tiết việc</strong>
+          <button id="gTdDetailClose" class="g-modal-close">✕</button>
+        </div>
+        <textarea id="gTdDetailText" class="g-td-detail-text" rows="2" placeholder="Tên việc…"></textarea>
+
+        <div class="g-td-detail-row">
+          <span class="g-td-detail-lbl">Nhãn</span>
+          <input type="text" id="gTdDetailLabel" class="g-td-detail-label-input" list="gTdLabelList" placeholder="vd: eDA, Robot…" maxlength="30" />
+          <datalist id="gTdLabelList"></datalist>
+        </div>
+        <div class="g-td-detail-row">
+          <span class="g-td-detail-lbl">Ưu tiên</span>
+          <div id="gTdDetailPriority" class="g-priority-pick">
+            <button type="button" class="g-pri-opt" data-pri="high" title="Ưu tiên cao">🔴</button>
+            <button type="button" class="g-pri-opt" data-pri="medium" title="Ưu tiên vừa">🟡</button>
+            <button type="button" class="g-pri-opt" data-pri="low" title="Ưu tiên thấp">⚪</button>
+          </div>
+        </div>
+        <div class="g-td-detail-row">
+          <span class="g-td-detail-lbl">Trạng thái</span>
+          <div id="gTdDetailStatus" class="g-status-pick">
+            <button type="button" class="g-status-opt" data-status="todo">📋 Cần làm</button>
+            <button type="button" class="g-status-opt" data-status="doing">🔥 Đang làm</button>
+            <button type="button" class="g-status-opt" data-status="done">✅ Đã xong</button>
+          </div>
+        </div>
+        <div class="g-td-detail-row">
+          <span class="g-td-detail-lbl">Hạn chót</span>
+          <input type="date" id="gTdDetailDue" />
+          <button type="button" id="gTdDetailDueClear" class="g-td-detail-clear" title="Bỏ hạn chót">✕</button>
+        </div>
+
+        <span class="g-td-detail-lbl">Mô tả</span>
+        <textarea id="gTdDetailDesc" class="g-td-detail-desc" placeholder="Ghi chú thêm, checklist, link…"></textarea>
+        <div id="gTdDetailMeta" class="g-td-detail-meta"></div>
+
+        <div class="g-modal-actions">
+          <button id="gTdDetailDelete" class="g-btn ghost">Xoá việc</button>
+          <button id="gTdDetailDoneBtn" class="g-btn primary">Đóng</button>
+        </div>
+      </div>
+    </div>
 
     <section id="gJournal" class="g-card hidden">
       <div class="g-type">Nhật ký</div>

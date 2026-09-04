@@ -52,7 +52,9 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
 body {
-  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Noto Sans trước: xem ghi chú trong sidepanel.css — font "Ubuntu" (mà
+     system-ui/sans-serif có thể trỏ tới trên Linux) thiếu glyph "ữ/ừ/ệ" liền mạch. */
+  font: 14px/1.5 "Noto Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   background: var(--bg); color: var(--fg);
 }
 

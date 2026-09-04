@@ -20,6 +20,7 @@ const NEXT_RAW = params.get("next") || "";
 const NEXT = /^https?:\/\//i.test(NEXT_RAW) ? NEXT_RAW : "";
 
 const el = {
+  gate: document.getElementById("gGate"),
   title: document.getElementById("gTitle"),
   sub: document.getElementById("gSub"),
   skip: document.getElementById("gSkip"),
@@ -38,11 +39,25 @@ const el = {
   remText: document.getElementById("gRemText"),
   remDone: document.getElementById("gRemDone"),
   todoPane: document.getElementById("gTodo"),
+  todoPriorityPick: document.getElementById("gTodoPriorityPick"),
   todoInput: document.getElementById("gTodoInput"),
   todoAdd: document.getElementById("gTodoAdd"),
   todoList: document.getElementById("gTodoList"),
   todoHint: document.getElementById("gTodoHint"),
   todoDone: document.getElementById("gTodoDone"),
+  todoDetailModal: document.getElementById("gTodoDetailModal"),
+  tdDetailClose: document.getElementById("gTdDetailClose"),
+  tdDetailText: document.getElementById("gTdDetailText"),
+  tdDetailLabel: document.getElementById("gTdDetailLabel"),
+  tdLabelList: document.getElementById("gTdLabelList"),
+  tdDetailPriority: document.getElementById("gTdDetailPriority"),
+  tdDetailStatus: document.getElementById("gTdDetailStatus"),
+  tdDetailDue: document.getElementById("gTdDetailDue"),
+  tdDetailDueClear: document.getElementById("gTdDetailDueClear"),
+  tdDetailDesc: document.getElementById("gTdDetailDesc"),
+  tdDetailMeta: document.getElementById("gTdDetailMeta"),
+  tdDetailDelete: document.getElementById("gTdDetailDelete"),
+  tdDetailDoneBtn: document.getElementById("gTdDetailDoneBtn"),
   jrPane: document.getElementById("gJournal"),
   jrDate: document.getElementById("gJrDate"),
   jrDone: document.getElementById("gJrDone"),
@@ -557,15 +572,35 @@ function vocabQuestion(word, pool) {
 
 // ============================================================
 // Chế độ VIỆC CẦN LÀM — bắt lập danh sách trước khi làm gì khác.
+// Dựng dạng bảng Kanban mini (Cần làm/Đang làm/Đã xong, kéo thả được) — cùng
+// kiểu với trang todo-board.html, chỉ khác namespace CSS (g-* thay vì td-*)
+// vì đây là file/trang riêng. gate.html là tab TOÀN MÀN HÌNH (không hẹp như
+// side panel) nên đủ chỗ cho 3 cột — xem .gate.kanban-wide trong gate.css.
 // ============================================================
+const GATE_TODO_COLUMNS = [
+  { key: "todo", title: "📋 Cần làm" },
+  { key: "doing", title: "🔥 Đang làm" },
+  { key: "done", title: "✅ Đã xong" },
+];
+
+let gateComposePriority = "medium";
+
 async function initTodoGate() {
   el.title.textContent = "Hôm nay bạn định làm gì? ✅";
-  el.sub.textContent = "Lập danh sách việc cần làm trước đã — ít nhất 1 việc.";
+  el.sub.textContent = "Lập danh sách việc cần làm trước đã — ít nhất 1 việc. Kéo thả thẻ giữa các cột khi đổi trạng thái, bấm vào thẻ để sửa chi tiết.";
   el.card.classList.add("hidden");
   el.todoPane.classList.remove("hidden");
+  el.gate.classList.add("kanban-wide");
   el.bar.style.width = "20%";
   await renderGateTodos();
   el.todoInput.focus();
+
+  el.todoPriorityPick.querySelectorAll(".g-pri-opt").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      gateComposePriority = btn.dataset.pri;
+      el.todoPriorityPick.querySelectorAll(".g-pri-opt").forEach((b) => b.classList.toggle("active", b === btn));
+    });
+  });
 
   onClick(el.todoAdd, addFromInput);
   el.todoInput.addEventListener("keydown", (e) => {
@@ -588,7 +623,7 @@ async function initTodoGate() {
   async function addFromInput() {
     const text = el.todoInput.value.trim();
     if (!text) return;
-    const { duplicate } = await addTodo(text);
+    const { duplicate } = await addTodo(text, gateComposePriority);
     el.todoInput.value = "";
     el.todoHint.textContent = duplicate ? "Việc này đã có trong danh sách rồi." : "";
     await renderGateTodos();
@@ -603,39 +638,223 @@ function hasUndoneTodo(list) {
   return list.some((t) => !t.done);
 }
 
+async function moveGateTodoToColumn(id, colKey, wasDone) {
+  if (colKey === "done") {
+    if (!wasDone) await toggleTodo(id);
+  } else {
+    if (wasDone) await toggleTodo(id);
+    await setTodoStatus(id, colKey);
+  }
+  renderGateTodos();
+}
+
+function buildGateTodoCard(t) {
+  const card = document.createElement("div");
+  card.className = "g-task" + (t.done ? " done" : "") + " pri-" + todoPriority(t);
+  card.dataset.id = t.id;
+  card.draggable = true;
+  card.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", t.id);
+    e.dataTransfer.effectAllowed = "move";
+    setTimeout(() => card.classList.add("dragging"), 0);
+  });
+  card.addEventListener("dragend", () => card.classList.remove("dragging"));
+  card.addEventListener("click", (e) => {
+    if (e.target.closest("input, button")) return;
+    openGateTodoDetail(t.id);
+  });
+
+  const top = document.createElement("div");
+  top.className = "g-task-top";
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.checked = !!t.done;
+  cb.addEventListener("change", async () => { await toggleTodo(t.id); renderGateTodos(); });
+  const flag = document.createElement("button");
+  flag.type = "button";
+  flag.className = "g-item-flag";
+  flag.title = PRIORITY_LABEL[todoPriority(t)] + " — bấm để đổi";
+  flag.textContent = PRIORITY_ICON[todoPriority(t)];
+  flag.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    const order = ["high", "medium", "low"];
+    const next = order[(order.indexOf(todoPriority(t)) + 1) % order.length];
+    await setTodoPriority(t.id, next);
+    renderGateTodos();
+  });
+  const del = document.createElement("button");
+  del.className = "g-item-del";
+  del.textContent = "✕";
+  onClick(del, async () => { await deleteTodo(t.id); renderGateTodos(); return LOCK; });
+  top.append(cb, flag, del);
+
+  if (t.label) {
+    const lbl = document.createElement("span");
+    lbl.className = "g-label-pill";
+    lbl.textContent = t.label;
+    lbl.style.setProperty("--pill-color", todoLabelColor(t.label));
+    card.append(top, lbl);
+  } else {
+    card.append(top);
+  }
+
+  const txt = document.createElement("div");
+  txt.className = "g-item-text";
+  txt.textContent = t.text;
+
+  const tag = document.createElement("span");
+  const badge = todoDueBadge(t);
+  tag.className = "g-item-tag" + (badge.cls ? " due-" + badge.cls : "");
+  tag.textContent = badge.text;
+
+  card.append(txt, tag);
+  return card;
+}
+
+function buildGateTodoColumn(col, items) {
+  const wrap = document.createElement("div");
+  wrap.className = "g-col";
+  wrap.dataset.col = col.key;
+
+  const head = document.createElement("div");
+  head.className = "g-col-head";
+  head.textContent = `${col.title} (${items.length})`;
+  wrap.append(head);
+
+  const body = document.createElement("div");
+  body.className = "g-col-body";
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "g-col-empty";
+    empty.textContent = "— thả việc vào đây —";
+    body.append(empty);
+  } else {
+    items.forEach((t) => body.append(buildGateTodoCard(t)));
+  }
+  wrap.append(body);
+
+  wrap.addEventListener("dragover", (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; wrap.classList.add("drag-over"); });
+  wrap.addEventListener("dragleave", (e) => { if (!wrap.contains(e.relatedTarget)) wrap.classList.remove("drag-over"); });
+  wrap.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    wrap.classList.remove("drag-over");
+    const id = e.dataTransfer.getData("text/plain");
+    if (!id) return;
+    const list = await getTodos();
+    const t = list.find((x) => x.id === id);
+    if (!t) return;
+    const currentCol = t.done ? "done" : todoStatus(t);
+    if (currentCol === col.key) return;
+    await moveGateTodoToColumn(id, col.key, t.done);
+  });
+
+  return wrap;
+}
+
 async function renderGateTodos() {
-  const list = sortTodos(await getTodos());
+  const list = await getTodos();
   el.todoList.innerHTML = "";
   if (!list.length) {
     el.todoList.innerHTML = '<p class="g-empty">Chưa có việc nào.</p>';
     return;
   }
-  list.forEach((t) => {
-    const row = document.createElement("div");
-    row.className = "g-item" + (t.done ? " done" : "");
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.checked = !!t.done;
-    cb.addEventListener("change", async () => { await toggleTodo(t.id); renderGateTodos(); });
-    const flag = document.createElement("span");
-    flag.className = "g-item-flag";
-    flag.textContent = PRIORITY_ICON[todoPriority(t)];
-    flag.title = PRIORITY_LABEL[todoPriority(t)];
-    const txt = document.createElement("span");
-    txt.className = "g-item-text";
-    txt.textContent = t.text;
-    const tag = document.createElement("span");
-    const badge = todoDueBadge(t);
-    tag.className = "g-item-tag" + (badge.cls ? " due-" + badge.cls : "");
-    tag.textContent = badge.text;
-    const del = document.createElement("button");
-    del.className = "g-item-del";
-    del.textContent = "✕";
-    onClick(del, async () => { await deleteTodo(t.id); renderGateTodos(); return LOCK; });
-    row.append(cb, flag, txt, tag, del);
-    el.todoList.appendChild(row);
-  });
+  const { doing, todo, done } = groupTodosByStatus(list);
+  const byKey = { todo, doing, done };
+  const board = document.createElement("div");
+  board.className = "g-board";
+  GATE_TODO_COLUMNS.forEach((col) => board.append(buildGateTodoColumn(col, byKey[col.key])));
+  el.todoList.append(board);
 }
+
+// ---------- Popup chi tiết một việc (bấm vào thẻ) — cùng cơ chế todo-board.js ----------
+let gateDetailTodoId = null;
+
+async function openGateTodoDetail(id) {
+  const list = await getTodos();
+  const t = list.find((x) => x.id === id);
+  if (!t) return;
+  gateDetailTodoId = id;
+
+  el.tdDetailText.value = t.text;
+  el.tdDetailLabel.value = t.label || "";
+  el.tdLabelList.innerHTML = allTodoLabels(list).map((l) => `<option value="${esc(l)}">`).join("");
+  el.tdDetailPriority.querySelectorAll(".g-pri-opt").forEach((b) => b.classList.toggle("active", b.dataset.pri === todoPriority(t)));
+  const col = t.done ? "done" : todoStatus(t);
+  el.tdDetailStatus.querySelectorAll(".g-status-opt").forEach((b) => b.classList.toggle("active", b.dataset.status === col));
+  el.tdDetailDue.value = t.due || "";
+  el.tdDetailDesc.value = t.desc || "";
+
+  const meta = [`Tạo lúc: ${fmtGateTime(t.createdAt)}`];
+  if (t.done && t.doneAt) meta.push(`Hoàn thành lúc: ${fmtGateTime(t.doneAt)}`);
+  el.tdDetailMeta.textContent = meta.join(" · ");
+
+  el.todoDetailModal.classList.remove("hidden");
+}
+
+function closeGateTodoDetail() {
+  el.todoDetailModal.classList.add("hidden");
+  gateDetailTodoId = null;
+  renderGateTodos();
+}
+
+function fmtGateTime(ts) {
+  if (!ts) return "";
+  const d = new Date(ts);
+  return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+el.tdDetailClose.addEventListener("click", closeGateTodoDetail);
+el.tdDetailDoneBtn.addEventListener("click", closeGateTodoDetail);
+el.todoDetailModal.addEventListener("click", (e) => { if (e.target === el.todoDetailModal) closeGateTodoDetail(); });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !el.todoDetailModal.classList.contains("hidden")) closeGateTodoDetail();
+});
+
+el.tdDetailText.addEventListener("blur", async () => {
+  if (!gateDetailTodoId || !el.tdDetailText.value.trim()) return;
+  await setTodoText(gateDetailTodoId, el.tdDetailText.value.trim());
+});
+el.tdDetailLabel.addEventListener("blur", async () => {
+  if (!gateDetailTodoId) return;
+  await setTodoLabel(gateDetailTodoId, el.tdDetailLabel.value);
+});
+el.tdDetailDesc.addEventListener("blur", async () => {
+  if (!gateDetailTodoId) return;
+  await setTodoDesc(gateDetailTodoId, el.tdDetailDesc.value);
+});
+el.tdDetailDue.addEventListener("change", async () => {
+  if (!gateDetailTodoId) return;
+  await setTodoDue(gateDetailTodoId, el.tdDetailDue.value);
+});
+el.tdDetailDueClear.addEventListener("click", async () => {
+  if (!gateDetailTodoId) return;
+  el.tdDetailDue.value = "";
+  await setTodoDue(gateDetailTodoId, "");
+});
+el.tdDetailPriority.querySelectorAll(".g-pri-opt").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    if (!gateDetailTodoId) return;
+    await setTodoPriority(gateDetailTodoId, btn.dataset.pri);
+    el.tdDetailPriority.querySelectorAll(".g-pri-opt").forEach((b) => b.classList.toggle("active", b === btn));
+  });
+});
+el.tdDetailStatus.querySelectorAll(".g-status-opt").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    if (!gateDetailTodoId) return;
+    const list = await getTodos();
+    const t = list.find((x) => x.id === gateDetailTodoId);
+    if (!t) return;
+    await moveGateTodoToColumn(gateDetailTodoId, btn.dataset.status, t.done);
+    el.tdDetailStatus.querySelectorAll(".g-status-opt").forEach((b) => b.classList.toggle("active", b === btn));
+  });
+});
+el.tdDetailDelete.addEventListener("click", async () => {
+  if (!gateDetailTodoId) return;
+  await deleteTodo(gateDetailTodoId);
+  gateDetailTodoId = null;
+  el.todoDetailModal.classList.add("hidden");
+  renderGateTodos();
+});
 
 // ============================================================
 // Chế độ NHẬT KÝ — viết cho hôm nay và bù các ngày còn thiếu.
@@ -728,6 +947,7 @@ function finishGate(title, sub) {
   el.card.classList.add("hidden");
   el.todoPane.classList.add("hidden");
   el.jrPane.classList.add("hidden");
+  el.gate.classList.remove("kanban-wide");
   el.done.classList.remove("hidden");
   el.bar.style.width = "100%";
   el.count.textContent = "";
@@ -830,7 +1050,7 @@ async function showGrammarLesson(s) {
   el.card.classList.add("hidden");
   el.startPane.classList.add("hidden");
   el.lessonTitle.innerHTML = (weak ? '<span class="g-weak-tag">Điểm yếu</span> ' : "") + esc(t.title);
-  el.lessonBody.innerHTML = t.html;
+  el.lessonBody.innerHTML = markupGrammarExamples(t.html);
   el.lessonPane.classList.remove("hidden");
   el.bar.style.width = "8%";
   window.scrollTo(0, 0);
